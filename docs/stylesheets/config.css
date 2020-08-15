@@ -5,11 +5,11 @@ button.md-clipboard
 
 div.arithmatex {
   overflow: visible !important;
-  width: auto !important;
 }
 
 .katex-display {
   overflow: visible !important;
+  width: auto !important;
 }
 
 .codehilite .p, .highlight .p {

@@ -1,0 +1,100 @@
+button.md-clipboard
+{
+  color: #AEFBFF;
+}
+
+div.arithmatex {
+  overflow: visible !important;
+}
+
+.katex-display {
+  overflow: visible !important;
+}
+
+.codehilite .p, .highlight .p {
+  color: #fff !important;
+}
+
+.markdown-body .task-list-item {
+  list-style-type: none !important;
+}
+
+.markdown-body .task-list-item input[type="checkbox"] {
+  margin: 0 4px 0.25em -20px;
+  vertical-align: middle;
+}
+
+.markdown-body .task-list-control {
+  display: inline; /* Ensure label is inline incase theme sets it to block.*/
+}
+
+.markdown-body .task-list-control {
+  position: relative;
+  display: inline-block;
+  color: #555;
+  cursor: pointer;
+}
+
+.markdown-body .task-list-control input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  z-index: -1; /* Put the input behind the label so it doesn't overlay text */
+}
+
+.markdown-body .task-list-indicator {
+  position: absolute;
+  top: -8px;
+  left: -18px;
+  display: block;
+  width:  14px;
+  height: 14px;
+  color: #eee;
+  background-color: #eee;
+  border-radius: .25rem;
+}
+
+.markdown-body .task-list-control input[type="checkbox"]:checked + .task-list-indicator::before {
+  display: block;
+  margin-top: -4px;
+  margin-left: 2px;
+  font-size: 16px;
+  line-height: 1;
+  content: "✔";
+  color: #1EBB52;
+}
+
+.fa-check-circle
+{
+  color: #1EBB52;
+}
+.fa-check
+{
+  color: #555;
+}
+
+.tldr {
+  /* background-color: azure !important; */
+  font-weight: 900 !important;
+  font-size: .78rem !important;
+  /* font-size: .64rem; */
+  border-bottom: .05rem solid #448aff !important;
+  box-shadow: 0 1.5rem 1.9rem rgba(0,0,0,.05),0 0 1.1rem rgba(0,0,0,.1) !important;
+}
+
+.md-typeset {
+  font-size: .68rem !important;
+}
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 60%;
+}
+
+.centersmall {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 40%;
+}

@@ -76,6 +76,7 @@ extra_javascript:
 extra_css:
   - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css
   - stylesheets/gradient-dark.css
+  - stylesheets/config.css
 
 extra:
   social:

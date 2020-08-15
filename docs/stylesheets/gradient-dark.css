@@ -154,6 +154,10 @@ div.arithmatex {
   overflow: visible !important;
 }
 
+.MathJax{
+  overflow: visible !important;
+}
+
 .codehilite .p, .highlight .p {
   color: #fff !important;
 }

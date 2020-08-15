@@ -150,6 +150,10 @@ div.arithmatex {
   overflow-y: visible !important;
 }
 
+.md-typeset div.arithmatex > * {
+  overflow: visible !important;
+}
+
 .codehilite .p, .highlight .p {
   color: #fff !important;
 }

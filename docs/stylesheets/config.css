@@ -5,6 +5,7 @@ button.md-clipboard
 
 div.arithmatex {
   overflow: visible !important;
+  width: auto !important;
 }
 
 .katex-display {

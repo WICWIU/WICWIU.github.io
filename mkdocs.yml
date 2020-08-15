@@ -68,11 +68,13 @@ theme:
 
 extra_javascript:
   - https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js
+  - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.js
   - javascripts/config.js
   - javascripts/all.js
-  - https://polyfill.io/v3/polyfill.min.js?features=es6
-  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+  # - https://polyfill.io/v3/polyfill.min.js?features=es6
+  # - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 extra_css:
+  - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css
   - stylesheets/gradient-dark.css
 
 extra:

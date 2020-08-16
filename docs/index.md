@@ -32,9 +32,9 @@
 
 이곳은 [**WICWIU**](https://github.com/WICWIU/WICWIU) 개발 팀원이 [**WICWIU**](https://github.com/WICWIU/WICWIU) 를 분석하고 인공신경망을 구현하는 코딩을 할 때, 그 과정을 기록하고 공유하여 다른 팀원과 지식을 동기화시키기 위한 공간입니다.
 
-| fewshot 팀 | 
-|:---:|
-| [Fewshot Diary](sync/fewshot/step1-1.md){: .md-button .md-button--primary } |
+| fewshot 팀 | Coding Convention |
+|:---:|:---:|
+| [Fewshot Diary](sync/fewshot/step1-1.md){: .md-button .md-button--primary } |[Coding Convention](sync/convention/convention.md){: .md-button .md-button--primary } |
 
 !!! info
 

@@ -10,6 +10,8 @@ nav:
   - Home: index.md
   - About: about.md
   - API: api.md
+  - 논문 정리: 
+    - ResNet: paper/resnet.md
   # - WICWIU 딥러닝 가이드: usage/usage.md
   - WICWIU 개발 가이드: 
     - WICWIU: 
@@ -66,12 +68,15 @@ theme:
 
 extra_javascript:
   - https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js
+  - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.js
   - javascripts/config.js
   - javascripts/all.js
-  - https://polyfill.io/v3/polyfill.min.js?features=es6
-  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+  # - https://polyfill.io/v3/polyfill.min.js?features=es6
+  # - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 extra_css:
+  - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css
   - stylesheets/gradient-dark.css
+  - stylesheets/config.css
 
 extra:
   social:

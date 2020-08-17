@@ -34,7 +34,7 @@
 
 | fewshot 팀 | Coding Convention |
 |:---:|:---:|
-| [Fewshot Diary](sync/fewshot/step1-1.md){: .md-button .md-button--primary } |[Coding Convention](sync/convention/step1.md){: .md-button .md-button--primary } |
+| [Fewshot Diary](sync/fewshot/step1-1.md){: .md-button .md-button--primary } |[Coding Convention](sync/convention/step1-1.md){: .md-button .md-button--primary } |
 
 !!! info
 

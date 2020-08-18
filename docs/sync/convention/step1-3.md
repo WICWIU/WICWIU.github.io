@@ -406,6 +406,103 @@ end-user 를 위하여 I/O 스트림을 사용하지 말고 개발자를 위하�
 
 ## Type deduction
 
+가독성이 좋아지거나 성능 향상이 기대될 때에만 type deduction 을 사용해라.
+
+단지 코딩할 때 더 편하다는 이유로 type deduction 을 사용하지 마라.
+
+!!! example
+
+    다음과 같은 함수 템플릿에서 명확한 타입 지정없이 `0` 만 전달하면 컴파일러가 type deduction 을 한다.
+
+    ```cpp 
+    template <typename T>
+    void f(T t);
+
+    f(0);  // Invokes f<int>(0)
+    ```
+
+    함수 템플릿의 type deduction 은 거의 대부분의 상황에서 해도 좋다.
+
+!!! example
+
+    다음과 같이 `auto` 로 변수를 선언하면 컴파일러가 알아서 type deduction 을 해준다.
+
+    ```cpp 
+    auto a = 42;  // a is an int
+    auto& b = a;  // b is an int&
+    auto c = b;   // c is an int
+    auto d{42};   // d is an int, not a std::initializer_list<int>
+    ```
+
+    다음의 코드를 보자.
+
+    ```cpp 
+    std::unique_ptr<WidgetWithBellsAndWhistles> widget_ptr =
+    absl::make_unique<WidgetWithBellsAndWhistles>(arg1, arg2);
+    absl::flat_hash_map<std::string,
+                        std::unique_ptr<WidgetWithBellsAndWhistles>>::const_iterator
+    it = my_map_.find(key);
+    std::array<int, 6> numbers = {4, 8, 15, 16, 23, 42};
+    ```
+
+    위 코드를 다음과 같이 type deduction 하면 코드가 더 분명해지고 가독성이 좋아진다. 그렇기 때문에 이런 식의 type deduction 은 해도 좋다. 
+
+    ```cpp 
+    auto widget_ptr = absl::make_unique<WidgetWithBellsAndWhistles>(arg1, arg2);
+    auto it = my_map_.find(key);
+    std::array numbers = {4, 8, 15, 16, 23, 42};
+    ```
+
+!!! example
+
+    다음과 같이 함수 반환형에도 type deduction 을 사용할 수 있다. 
+
+    ```cpp 
+    auto f() { return 0; }  // The return type of f is int
+    ```
+
+    함수 반환형의 type deduction 은 함수가 매우 작을 때에만 사용해라.
+
+!!! example
+
+    다음과 같이 람다 표현식에도 `auto` 를 사용할 수 있다.
+
+    ```cpp 
+    // Sort `vec` in decreasing order
+    std::sort(vec.begin(), vec.end(), [](auto lhs, auto rhs) { return lhs > rhs; });
+    ```
+
+    람다 표현식의 파라미터에 type deduction 을 사용하는 것은 타입 에러가 나지 않도록 주의해라. 이 겨웅 대부분의 상황에서 type deduction 을 하지 않고 그냥 자료형을 명시적으로 선언하는 것이 좋다.
+
+!!! example
+
+    다음은 Lambda capture 의 type deduction 예시이다.
+
+    ```cpp 
+    [x = 42, y = "foo"] { ... }  // x is an int, and y is a const char*
+    ```
+
+!!! example
+
+    `tuple`, `struct`, `array` 나 `map` 같은 것에서도 `auto` 를 사용할 수 있다. 
+
+    ```cpp 
+    auto [iter, success] = my_map.insert({key, value});
+    if (!success) {
+        iter->second = value;
+    }
+    ```
+
+    이 경우의 type deduction 은 가독성을 높혀준다. `struct` 에서도 type deduction 을 할 수도 있지만 다음과 같이 어떤 필드인지 주석을 달아줘라. 
+
+    ```cpp 
+    auto [/*field_name1=*/ bound_name1, /*field_name2=*/ bound_name2] = ...
+    ```
+
+하지만 type deduction 은 종종 코드를 모호하게 만든다. 코드를 읽는 사람은 type 을 결정하는 코드와 실행 흐름을 일일이 찾아내야만 한다.
+
+그러므로 type deduction 을 사용하면 코드가 더 명확해지고 안전해질 때에만 사용해라. 단지 더 편하다는 이유로 type deduction 을 사용하지 마라.
+
 ### Function template argument deduction
 
 ### Local variable type deduction

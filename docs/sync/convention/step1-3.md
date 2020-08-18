@@ -165,17 +165,136 @@ Ownership 을 공유해야 한다면 `std::shared_ptr` 을 사용해라.
 
 ## Rvalue References
 
+Rvalue 참조자를 아래에서 정의하는 특별한 경우에서만 사용해라. Rvalue 참조자는 오직 임시 객체에만 사용되는 참조자이다.
+
+(https://google.github.io/styleguide/cppguide.html#Rvalue_references)
+
 ## Friends
+
+`friend` 키워드는 반드시 같은 파일 내에서 사용해라. 
+
+*Why:*
+
+:	이로써 코드를 읽는 사람이 다른 파일을 찾아볼 필요가 없도록 해라.
 
 ## Exceptions
 
+^^`C++` 의 예외를 사용하지 마라.^^ 즉, `try-catch` 문과 `throw` 키워드를 사용하지 마라.
+
+*Why:*
+
+:	`C++` 의 예외는 고수준에서 일어나서는 안되는 상황을 처리할 수 있게 해준다. **Python**, **Java** 같은 다른 언어에서도 예외가 사용되므로 **C++** 에서 예외를 사용하면 코드가 일관성이 있어진다. 
+
+    하지만 만약 당신이 예외를 발생시키기 위하여 `throw` 를 사용한다면 그것을 호출하는 모든 함수를 점검해야만 한다. 그 결과 모든 호출 함수들이 기본적인 예외 처리문이라도 지니고 있어야 한다. 그렇지 않으면 프로그램은 곧바로 종료된다.
+
+    일반적으로 예외는 프로그램의 실행 흐름을 어렵게 만들어서 코드를 읽는 사람이 코드를 이해하기 어려워 진다. 예외는 함수의 실행 흐름을 당신이 예측하지 못하는 곳으로 넘어가게 한다. 이는 곧바로 유지보수와 디버깅을 어렵게 만들고 개발 비용을 높인다. 아마 당신은 이 문제를 어떤 상황에서 언제 예외를 사용해야 할지 정함으로써 해결할 수도 있을 거라고 생각할 것이다. 하지만 그것을 정립하고 그것을 다른 사람에게 이해시키고 기억시키는 비용이 더 많이 들어갈 것이다.
+
+    또 예외를 사용하면 바이너리 프로시져에 데이터가 추가되고 컴파일 시간이 늘어나며 주소 공간도 커진다.
+
+    또 예외를 사용하도록 하면 개발자는 `throw` 를 적절하지 못한 때에 사용할 수도 있고, 안전하지 못한 상황에서 사용할 수도 있다. 가령 적절하지 못한 파라미터가 입력되었을 때 그것은 예외로 던져져서는 안된다. 
+
+    그리고 예외에 관련된 제한 규칙을 만들려면 이 코딩 컨벤션 문서가 막대하게 더 커질 것이다.
+
+즉, 예외를 사용했을 때 발생하는 효용보다 발생하는 비용이 압도적으로 더 크다는 것이다. 우리는 에러처리 코드나 `assert` 를 사용하는 것이 더 좋다고 본다. 이것은 철학적이나 도의적인 결론이 아니라 순전히 우리(**Google**)의 경험적이고 실용적인 결론이다. 왜냐하면 지금까지 예외를 사용하는 프로젝트를 사용해야 할 때면 우리는 매번 막대한 어려움을 겪었기 때문이다.
+
+이 금지 규칙은 앞으로 계속 추가되는 `C++` 의 예외 처리 문법에도 똑같이 적용된다. 앞으로도 `C++` 의 예외를 절대로 사용하지 말아라.
+
+!!! example
+
+    `C++11` 에서는 `std::exception_ptr` 과 `std::nested_exception` 이 추가되었다. 하지만 사용하지 마라.
+
 ## noexcept
+
+(일단 Pass)
 
 ## Run-Time Type Information (RTTI)
 
+RTTI 를 사용하지 마라. 즉, `typeid` 키워드와 `dynamic_cast` 형변환을 사용하지 마라.
+
+RTTI 를 유닛 테스트, 테스트 코드에서는 사용해라.
+
+*Why:*
+
+:	물론 `dynamic_cast` 는 다음과 같이 추상 클래스의 포인터를 하위 클래스로 형변환 할 때 적절하게 사용될 수 있다.
+
+    ```cpp 
+    bool Base::Equal(Base* other) = 0;
+    bool Derived::Equal(Base* other) {
+    Derived* that = dynamic_cast<Derived*>(other);
+    if (that == nullptr)
+        return false;
+    ...
+    }
+    ```
+
+    하지만 RTTI 는 런타임 상에서 객체의 타입을 조사하는데 이것은 곧 설계 문제를 뜻한다. 런타임에서 당신의 클래스 구조를 알 수 있다는 말은 당신이 클래스를 잘못 설계했다는 것이다.
+
+    또한 무분별한 RTTI 으 사용은 프로젝트의 유지보수성을 떨어뜨린다. 왜냐하면 코드를 읽는 사람이 프로젝트를 분석하면서 `typeid` 나 `dynamic_cast` 가 나올 때마다 포인터가 실제로 갖고 있는 객체에 따라 분기를 나눠가면서 분석해야 하기 때문이다. 가령 다음과 같은 코드를 보자.
+
+    ```cpp 
+    if (typeid(*data) == typeid(D1)) {
+    ...
+    } else if (typeid(*data) == typeid(D2)) {
+    ...
+    } else if (typeid(*data) == typeid(D3)) {
+    ...
+    ```
+
+    위와 같은 코드의 `typeid` 와 `dynamic_cast` 는 객체의 타입이 런타임 상에서 결정되므로 프로그램 로직에 따라 완전히 결정되지 않는다는 것을 의미한다. 이것은 코드를 읽는 사람 입장에서는 정말 개똥같은 상황이다. 심지어 하위 클래스를 이후에 확장했다면 위와 같은 모든 코드를 다 수정해야만 한다.
+
+만약 RTTI 를 사용해야겠다는 생각이 들거든 다음의 대안을 고려해봐라. `virtual` 메소드를 사용하는 것은 클래스 타입에 따라 코드 실행을 바꿔주는 적절한 방법이다.
+
+만약 프로그램의 로직 자체가 상위 클래스의 포인터에 하위 클래스의 객체가 저장되었음을 완벽하게 보장한다면, 그때는 코드 분석이 모호해지지 않으므로 `dynamic_cast` 를 사용해도 상관없다. 하지만 당신은 이런 경우 성능 향상을 위하여 `static_cast` 를 사용하게 될 것이다. 
+
 ## Casting
 
+`C` 스타일 형변환을 사용하지 말고 `C++` 스타일의 형변환을 사용해라.
+
+*Why:*
+
+:	`C` 스타일 형변환은 매우 모호하다. 이로써 여러가지 문제가 발생한다. 데이터가 손실되는 것은 물론이고 어떤 의도로 작성된 코드인지 이해하기 힘들 수도 있다.
+
+!!! example
+
+    가령 `C++` 스타일 형변환은 `static_cast<float>(double_value)` 이다. 
+    
+    또 `int64 y = int64{1} << 42` 와 같은 brace initialization 도 `C++` 형변환이다.
+
+    이러한 `C++` 스타일 형변환을 사용해라.
+
+    하지만 `(int)x` 같은 `C` 스타일 형변환은 사용하지 마라.
+
+산술 타입의 데이터를 형변환 할 때 `int64{x}` 와 같은 brace initialization 을 사용해라.
+
+*Why:*
+
+:	brace initialization 은 데이터 손실이 일어나면 컴파일이 되지 않도록 해주기 때문에 가장 안전하다.
+
+`static_cast` 는 상위 클래스의 포인터를 하위 클래스로 형변환할 때, 또는 하위 클래스의 포인터를 상위 클래스로 형변환할 때 사용해라. 단, 이때 상위 클래스 포인터를 하위 클래스 포인터로 형변환 한다면 객체가 반드시 하위 클래스이어야 한다.
+
+`const` 의 의미를 제거해야 하는 상황에서 `const_case` 형변환을 사용해라.
+
+위험한 형변환이나 `int` 를 포인터로 형변환 하는 등 가끔 말도 안 되는 형변환이 필요할 때 `  reinterpret_cast` 를 사용해라. 단, `reinterpret_cast` 는 당신이 지금 하고 있는 행동이 무엇인지 완벽하게 이해하고 있을 때 사용해라. 또한 `reinterpret_cast` 를 사용하기 전에 `absl::bit_cast` 를 사용할 수 있는 상황인지 점검해봐라.
+
+비트수준의 데이터를 다른 타입으로 바꾸어야 할 때 `absl::bit_cast` 를 사용해라.
+
+!!! example
+
+    `double` 타입의 데이터를 `int64` 로 바꾸고 싶을 때 `absl::bit_cast` 를 사용해라.
+
+`dynamic_cast` 에 대한 가이드는 RTTI 섹션을 보아라.
+
 ## Streams
+
+상황에 따라 스트림을 적절히 사용해라. 스트림이란 `<iostream>` 헤더로 추가되는 `C++`의 표준 I/O 기능이다. 구글의 많은 프로젝트가 디버깅 로그와 테스트 코드 진단을 위하여 스트림을 사용한다.
+
+`printf` 를 사용하지말고 `<<` 또는 `>>` 를 사용해라.
+
+*Why:*
+
+:	`printf` 는 사용하기 어렵고 이식성이 매우 떨어진다. 심지어 `std::string` 을 사용할 수도 없고 user-defined 타입은 당연히 사용 불가능하다. 스트림은 콘솔 I/O 를 위하여 `std::cin`, `std::cout`, `std::cerr`, `std::clog` 를 제공하는데 이것을 사용해라.
+
+`<<` 를 오버로딩 한다면 스트림을 위하여서만 오버로딩해라.
 
 ## Preincrement and Predecrement
 
@@ -237,29 +356,245 @@ Ownership 을 공유해야 한다면 `std::shared_ptr` 을 사용해라.
 
 ## General Naming Rules
 
+^^일반적인 네이밍 규칙은 그 변수의 의미를 영어로 작성한 후 공백을 지우는 것^^ 이다. 그리고 아래에서 설명해줄 네이밍의 타입에 따라서 camel case 또는 Pascal case 를 사용해라.
+
+후임 개발자가 읽었을 때 이해하기 어려운 약칭과 줄임말로 네이밍을 하지 마라.
+
+만약 Wikipedia 에 존재하는 약칭이나 줄임말이라면 써도 좋다.
+
+일반적으로 네이밍의 정확성은 그 네이밍이 사용되는 스코프에 비례하여 지어져야 한다. 
+
+!!! example
+
+    `3` 줄의 코드에서 쓰이고 말 변수라면 `n` 이라는 이름을 붙혀도 좋다.
+
+    하지만 전반적인 프로젝트에서 계속 사용되는 변수라면 `n` 이라는 이름은 너무 모호하기에 사용해서는 안된다.
+
+물론 널리 알려인 약칭으로 네이밍을 해도 된다.
+
+!!! example
+
+    `i` 는 iteration 변수로 널리 알려져 있으니 써도 된다.
+
+    `T` 는 템플릿 변수로 널리 알려져 있기 때문에 써도 좋다.
+
 ## File Names
+
+`C++` 파일은 반드시 `.cc` 로 끝나야 하고 헤더 파일은 반드시 `.h` 로 끝나야 한다.
+
+파일 이름은 반드시 소문자여야 한다. 그리고 `_` 와 `-` 를 포함시킬 수 있다. 하지만 `_` 를 쓰는 게 더 좋다.
+
+!!! example
+
+    다음과 같이 파일 이름을 지어라.
+
+    ```shell
+    my_useful_class.cc
+    my-useful-class.cc
+    myusefulclass.cc
+    myusefulclass_test.cc // _unittest and _regtest are deprecated.
+    ```
+
+`/usr/include` 에 이미 존재하는 이름을 절대로 쓰지 말아라.
+
+!!! example
+
+    유닉스 시스템 헤더 파일의 디렉토리인 `/usr/include` 에는 `db.h` 가 있다. 그러므로 절대로 `db.h` 라는 파일 이름을 짓지 말아라.
+
+파일 이름을 매우 자세하게 지어라.
+
+!!! example
+
+    `logs.h` 이 아니라 `http_server_logs.h` 으로 파일 이름을 지어라. 
+
+일반적으로 대표적인 클래스를 파일 이름으로 지어라.
+
+!!! example
+
+    `FooBar` 클래스를 선언하는 헤더 파일의 이름을 `foo_bar.h` 로 짓고 구현하는 파일 이름을 `foo_bar.cc` 로 지어라.
 
 ## Type Names
 
+타입 이름은 Pascal case 로 지어라. 타입 이름에는 `class`, `struct`, `type aliase`, `enum`, `template parameter` 등이 있다.
+
+!!! example
+
+    다음과 같이 타입 이름을 지어라.
+
+    ```cpp 
+    // classes and structs
+    class UrlTable { ...
+    class UrlTableTester { ...
+    struct UrlTableProperties { ...
+
+    // typedefs
+    typedef hash_map<UrlTableProperties *, std::string> PropertiesMap;
+
+    // using aliases
+    using PropertiesMap = hash_map<UrlTableProperties *, std::string>;
+
+    // enums
+    enum class UrlTableError { ...
+    ```
+
 ## Variable Names
+
+변수 이름은 snake case 로 지어라. 변수 이름에는 함수의 변수, 함수의 파라미터, 클래스 멤버 변수 등이 포함된다. 
 
 ### Common Variable names
 
+!!! example
+
+    ```cpp 
+    std::string table_name;  // OK - lowercase with underscore.`
+    ```
+
+    변수 이름을 위와 같이 짓고 다음과 같이 짓지 마라.
+
+    ```cpp 
+    std::string tableName;   // Bad - mixed case.
+    ```
+
 ### Class Data Members
 
+클래스의 멤버 변수의 이름도 snake case 로 짓되 마지막에 `_` 를 하나 더 붙혀라.
+
+!!! example
+
+    클래스의 데이터 멤버는 다음과 같이 이름을 지어라. 이름의 끝에 꼭 `_` 를 붙혀라.
+
+    ```cpp 
+    class TableInfo {
+        ...
+    private:
+        std::string table_name_;  // OK - underscore at end.
+        static Pool<TableInfo>* pool_;  // OK.
+    };
+    ```
+
+    `static` 이든 `static` 이 아니든 이렇게 지어라.
+    
 ### Struct Data Members
+
+!!! example
+
+    `struct` 의 멤버 변수의 이름을 다음과 같이 지어라.
+
+    ```cpp 
+    struct UrlTableProperties {
+        std::string name;
+        int num_entries;
+        static Pool<UrlTableProperties>* pool;
+    };
+    ```
 
 ## Constant Names
 
-## Function Names
+상수로 선언된 변수 즉, `constexpr` 이나 `const` 로 선언된 변수의 이름에는 `k` 를 맨 앞에 붙이고 Pascal case 로 지어라.
+
+모든 [Static storage duration](https://en.cppreference.com/w/cpp/language/storage_duration#Storage_duration) 을 갖는 변수, 즉 `static` 변수나 전역 변수를 이렇게 네이밍 해라.
+
+단, 대문자로 단어를 구분할 수 없는 문자라면 `_` 를 사용해도 좋다.
+
+!!! example
+
+    ```cpp
+    const int kDaysInAWeek = 7;
+    const int kAndroid8_0_0 = 24;  // Android 8.0.0
+    ```
+
+## Function, Method Names
+
+함수와 메소드의 이름은 camel case 로 네이밍해라.
+
+!!! example
+
+    다음과 같이 함수 이름을 지어라.
+
+    ```cpp 
+    addTableEntry()
+    deleteUrl()
+    openFileOrDie()
+    ```
+
+    다음과 같이 메소드 이름을 지어라.
+
+    ```cpp 
+    class MyAwesomeClass {
+    ...
+    void myAwesomeMethod { ... }
+    ...
+    }
+    ```
 
 ## Namespace Names
 
+`namespace` 의 이름은 snake case 로 지어라. 하지만 `namespace` 의 이름은 `_` 가 필요없도록 짧고 간단할수록 좋다.
+
+가장 최상위 `namespace` 는 프로젝트의 이름으로 지어라.
+
+하위 `namespace` 는 세부 프로젝트의 이름이나 팀의 이름으로 지어라.
+
+!!! example
+
+    `websearch::index` 이나 `websearch::index_util` 와 같이 네이밍해라.
+
 ## Enumerator Names
+
+Enumerator 변수의 이름은 상수와 같이 네이밍해라. 즉 `k` 를 맨 앞에 쓰고 Pascal case 로 네이밍해라. 
+
+!!! example
+
+    ```cpp 
+    enum class UrlTableError {
+        kOk = 0,
+        kOutOfMemory,
+        kMalformedInput,
+    };
+    ```
+
+    위와 같이 네이밍하고 다음과 같이 네이밍하지 마라.
+
+    ```cpp 
+    enum class AlternateUrlTableError {
+        OK = 0,
+        OUT_OF_MEMORY = 1,
+        MALFORMED_INPUT = 2,
+    };
+    ```
+
+*Why:*
+
+:	2009년 1월까지, `enum` 변수의 이름은 매크로의 네이밍과 같았다. 하지만 이 네이밍은 충돌을 일으켰고 막대한 비용이 소모되었다. 그러므로 이렇게 네이밍 하라는 것이다. 
 
 ## Macro Names
 
+일반적으로 매크로는 사용되어서는 안된다. 하지만 정말로 필요한 경우 매크로를 모두 대문자로 네이밍하고 단어 중간을 `_` 로 구분지어라. 
+
+!!! example
+
+    정말로 매크로가 필요하다면 다음과 같이 네이밍해라.
+
+    ```cpp 
+    #define ROUND(x) ...
+    #define PI_ROUNDED 3.0
+    ```
+
 ## Exceptions to Naming Rules
+
+당신이 기존의 `C` 와 `C++` 에 이미 존재하는 비슷한 무언가를 네이밍한다면 기존의 `C` 와 `C++` 에서 따르는 네이밍 컨벤션을 따라도 좋다.
+
+!!! example
+    
+    `bigopen()` : function name, follows form of `open()`
+
+    `uint` : typedef
+
+    `bigpos` : struct or class, follows form of pos
+
+    `sparse_hash_map` : STL-like entity; follows STL naming conventions
+
+    `LONGLONG_MAX` : a constant, as in INT_MAX 
 
 ---
 
@@ -364,3 +699,27 @@ Ownership 을 공유해야 한다면 `std::shared_ptr` 을 사용해라.
 ---
 
 # Parting Words
+
+---
+
+# 총평 
+
+Google C++ Style Guide 는 코딩 경험이 부족한 우리에게 전 세계 1티어 개발자들의 경험을 흡수할 수 있게 해주었다. 다른 언어 개발자도 한번쯤 읽어서 구글 개발자들의 경험적 산물을 배워갈만한 정말 좋은 가이드이다. 우리는 곧바로 [**WICWIU**](https://github.com/WICWIU/WICWIU) 에 Google C++ Style Guide 를 적용시키고 싶다.
+
+하지만 Google C++ Style Guide 는 이미 언급했듯이 너무 단순하고 당연해서 굳이 언급하지 않아도 되는 코딩 컨벤션은 정말로 언급하지 않았다. 가령 `goto` 문이 매우 안좋은 코드라는 것은 널리 알려져 있으므로 언급하지 않았다. 하지만 `goto` 문을 쓰지 말라는 규칙을 명시해두어야 할 정도로 우리 학부생들은 코딩 경험이 극히 부족하다. 
+
+그렇기 때문에 사소하고 불필요해 보여도 안좋은 코드를 안좋은 코드라고 알리기 위하여 몇 가지 코딩 컨벤션을 추가할 필요가 있다. 
+
+- 변수를 선언할 때 모든 변수를 mutable 로 하고 예외적으로 immutable 로 선언하는 것이 아니라, 모든 변수를 immutable 로 선언하고 예외적으로 mutable 로 선언해라.
+
+- 함수와 메소드를 선언할 때 모든 함수를 non-const 로 선언하고 예외적으로 const 를 선언하는 것이 아니라 모든 함수를 const 로 선언하고 예외적으로 non-const 를 선언해라.
+
+- 클래스를 선언할 때 모든 멤버 변수를 public 으로 선언하고 예외적으로 private 으로 선언하는 것이 아니라 모든 것을 private 으로 선언하고 예외적으로 public 으로 선언해라. 
+
+- 에러 처리 메시지는 표준 출력이 아니라 표준 에러로 보내라. 즉, `std::cout` 이 아니라 `std::cerr` 로 보내라.
+
+- 추상 클래스의 추상 메소드라면 `= 0;` 또는 `= delete;` 또는 `= default;` 로써 클래스를 생성 불가능하게 만들어라.
+
+- 하나의 함수는 하나의 기능만 해야 한다.
+
+- 매직 넘버를 사용하면 안된다. `0` 이나 `1` 까지는 허용한다. 물론 테스트 코드에서는 매직 넘버를 사용해도 좋다.

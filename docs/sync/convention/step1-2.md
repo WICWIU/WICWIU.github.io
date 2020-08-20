@@ -1652,37 +1652,250 @@ Enumerator 변수의 이름은 상수와 같이 네이밍해라. 즉 `k` 를 맨
 
 모든 파일에 이 주석이 반드시 있어야 한다.
 
-#### Legal Notice and Author Line
+만약 `.h` 파일이 다중 추상화를 선언한다면, 그 추상 클래스와 구현 클래스들의 전체 구조에 대한 주석을 반드시 달아라. 각각의 구현에 대한 세세한 설명은 그 구현 코드에서 주석을 달아라.
 
-#### File Contents
+이때 `.h` 와 `.cc` 파일에 주석을 중복으로 달지 마라.
 
 ### Class Comments
 
+모든 `class` 와 `struct` 에 코드를 읽는 사람이 이것이 무엇이고, 언제 사용해야 하고, 어떻게 사용하는지 충분히 이해할 수 있도록 반드시 주석을 달아라.
+
+!!! example
+
+    다음과 같이 코드를 읽는 사람에게 이것을 언제 사용해야 하고, 어떻게 사용해야 하는지 반드시 주석을 달아라.
+
+    *Do*:
+
+    ```c++ 
+    // Iterates over the contents of a GargantuanTable.
+    // Example:
+    //    GargantuanTableIterator* iter = table->NewIterator();
+    //    for (iter->Seek("foo"); !iter->done(); iter->Next()) {
+    //      process(iter->key(), iter->value());
+    //    }
+    //    delete iter;
+    class GargantuanTableIterator {
+    ...
+    };
+    ```
+
+만약 `class` 가 멀티스레드에 의하여 다뤄질 수 있다면, 주석을 더더욱 상세하게 달아라. 이로써 thread-safe, blocking, race-condition 등등에 관한 이 객체에서 주의해야하는 멀티스레딩 정보를 충분히 제공해라.
+
+`class` 선언을 `.h` 에서 했고 구현을 `.cc` 에서 했다면 `class` 에 대한 주석을 `.h` 에 달아라. 그리고 `class` 의 세부 작동과 그 구현에 관한 주석을 `.cc` 에 달아라.
+
 ### Function Comments
+
+함수와 클래스의 메소드에 다음과 같이 주석을 달아라.
 
 #### Function Declarations
 
+모든 함수의 선언부에는 함수를 어떻게 사용하는지 충분히 이해할 수 있는 주석이 있어야 한다.
+
+함수가 매우 단순고 매우 명백한 경우에만 주석을 달지 않아도 된다.
+
+함수의 주석에는 다음의 내용이 있어야만 한다.
+
+- 입력과 출력이 무엇인지.
+
+- 함수가 동적 메모리를 할당할 경우 함수를 호출한 코드에서 메모리를 해제해주어야 하는지.
+
+- 함수를 어떻게 사용해야 성능이 향상되는지. 
+
+!!! example
+
+    다음과 같이 주석을 달아라.
+
+    *Do*:
+
+    ```c++ 
+    // Returns an iterator for this table.  It is the client's
+    // responsibility to delete the iterator when it is done with it,
+    // and it must not use the iterator once the GargantuanTable object
+    // on which the iterator was created has been deleted.
+    //
+    // The iterator is initially positioned at the beginning of the table.
+    //
+    // This method is equivalent to:
+    //    Iterator* iter = table->NewIterator();
+    //    iter->Seek("");
+    //    return iter;
+    // If you are going to immediately seek to another place in the
+    // returned iterator, it will be faster to use NewIterator()
+    // and avoid the extra seek.
+    Iterator* GetIterator() const;
+    ```
+
+그러나 불필요하고 장황한 설명은 하지 마라.
+
+메소드를 오버라이딩 했다면 상위 클래스 메소드에 이미 주석이 있을 것이므로, 설명을 반복하지 말고 오버라이딩에 초점을 맞춰서 주석을 달아라. 
+
+생성자와 소멸자에 주석을 달 때는, 생성자와 소멸자가 무엇을 위한 것인지 주석을 달아라. 단지 `// destorys this object` 라고 주석을 다는 것은 무의미하다. 생성자가 그 파라미터로 무슨 일을 하는지, 소멸자가 무엇을 소멸하는지 설명해라. 만약 어떤 것이 너무 trivial 하고 명백하다면 주석을 달지 않아도 된다.
+
 #### Function Definitions
+
+함수가 tricky 한 코드를 갖고 있다면 당신이 왜 이런 식으로 코드를 구현했는지 반드시 주석으로 설명해라.
+
+`.h` 에 이미 있는 주석을 반복하지 마라. 그러나 간단하게 요약하는 주석은 허용된다.
 
 ### Variable Comments
 
+일반적으로 변수의 이름만 봐도 변수에 대한 아이디어가 충분히 이해될 수 있도록 이름을 지어야 한다. 그러나 분명 주석이 필요한 경우가 있는데, 이 경우 다음과 같이 주석을 달아라.
+
 #### Class Data Members
+
+`class` 의 멤버 변수의 목적은 반드시 명확해야 한다. 그런데도 어떤 변수가 그 타입과 이름으로 그 목적이 명확하게 전달되지 않을 것 같으면 반드시 주석을 달아라. 하지만 `int num_events_;` 처럼 타입과 이름으로 그 목적이 충분히 설명된다면 주석을 달지 마라.
+
+!!! example
+
+    다음의 변수는 타입과 이름만으로 변수의 목적이 충분히 설명되지 않기에 주석을 달아야 한다.
+
+    *Do*:
+
+    ```c++ 
+    private:
+    // Used to bounds-check table accesses. -1 means
+    // that we don't yet know how many entries the table has.
+    int num_total_entries_;
+    ```
 
 #### Global Variables
 
+모든 전역 변수에 그 목적에 대한 주석을 반드시 달아라.
+
+!!! example
+
+    *Do*:
+
+    ```c++ 
+    // The total number of tests cases that we run through in this regression test.
+    const int kNumTestCases = 6;
+    ```
+
 ### Implementation Comments
 
-#### Explanatory Comments
+실제 코드 부분에서 tricky 하고 그 의미가 명백하지 않고 중요한 부분에 반드시 주석을 달아라.
 
-#### Line-end Comments
+!!! example
 
-#### Function Argument Comments
+    다음의 코드는 매우 tricky 하다. 그러니 주석을 달아라.
 
-#### Don'ts
+    *Do*:
+
+    ```c++ 
+    // Divide result by two, taking into account that x
+    // contains the carry from the add.
+    for (int i = 0; i < result->size(); ++i) {
+        x = (x << 8) + (*result)[i];
+        (*result)[i] = x >> 1;
+        x &= 1;
+    }
+    ```
+
+어떤 코드 한 줄이 tricky 하고 그 의미가 명백하지 않다면 라인의 끝에 공백 `2` 개 이후에 주석을 달아라.
+
+!!! example
+
+    다음 코드에서 `return;` 은 그 의미가 명백하지 않다. 그렇기 때문에 공백 `2` 개를 띄우고 주석을 달아라.
+
+    *Do*:
+
+    ```c++ 
+    // If we have enough memory, mmap the data portion too.
+    mmap_budget = max<int64>(0, mmap_budget - index_->length());
+    if (mmap_budget >= data_size_ && !MmapData(mmap_chunk_bytes, mlock))
+        return;  // Error already logged.
+    ```
+
+### Function Argument Comments
+
+함수 파라미터의 의미가 명백하지 않게 되었다면 다음과 같이 하라.
+
+- 함수 파라미터가 상수 literal 이고 그것이 여러군데에서 쓰였다면 그것을 `constant` 변수로 선언하여 이름을 부여하라. 그리고 그 변수 이름으로써 그 literal 의 의미를 설명해라.
+
+- 함수 파라미터에 `bool` 타입 변수가 있다면 그것을 `enum` 으로 바꿔서 그 이름으로써 그 의미를 설명해라.
+
+- 함수의 파라미터들이 함수 기능에 대한 옵션을 설정한다면, 그 파라미터들을 한 군데로 모아서 `class` 나 `struct` 로 만드는 것을 고려해봐라. 그러고 나서 파라미터로 객체 하나만 전달해라.
+
+    *Why*:
+    
+    :	객체의 이름 자체로 그 의미가 분명해진다. 그리고 함수의 파라미터가 줄어들어서 함수를 읽거나 쓸 때 좋다.
+
+!!! example
+
+    다음의 코드는 여러 파라미터가 함수의 기능을 설정한다.
+
+    *Don't*:
+
+    ```c++ 
+    // What are these arguments?
+    const DecimalNumber product = CalculateProduct(values, 7, false, nullptr);
+    ```
+
+    그러나 다음과 같이 이 변수들을 하나로 묶은 `class` 또는 `struct` 를 정의해서 그 객체 하나만을 파라미터로 전달할 수 있도록 해라.
+
+    *Do*:
+
+    ```c++ 
+    ProductOptions options;
+    options.set_precision_decimals(7);
+    options.set_use_cache(ProductOptions::kDontUseCache);
+    const DecimalNumber product =
+        CalculateProduct(values, options, /*completion_callback=*/nullptr);
+    ```
+
+### Don'ts
+
+명백한 것에 대한 주석을 달지 마라. 코드가 무엇을 하는지 문자 그대로 설명하지 마라.
+
+`C++` 을 잘 아는 사람이 봤을 때에도 명백하지 않은 코드에 대한 higher level 인 설명을 해라. 즉, 이 코드가 왜 필요하고 이 코드가 무엇을 하는지 주석으로 설명해라.
+
+!!! example
+
+    다음의 코드처럼 코드가 무엇을 하는 일을 문자 그대로 설명하지 마라.
+
+    *Don't*:
+
+    ```c++ 
+    // Find the element in the vector.  <-- Bad: obvious!
+    auto iter = std::find(v.begin(), v.end(), element);
+    if (iter != v.end()) {
+        Process(element);
+    }
+    ```
+
+    다음 코드처럼 higher level 의 설명을 해라.
+
+    *Do*:
+
+    ```c++ 
+    // Process "element" unless it was already processed.
+    auto iter = std::find(v.begin(), v.end(), element);
+    if (iter != v.end()) {
+        Process(element);
+    }
+    ```
+
+그러나 다시 말하지만, 가장 좋은 주석은 코드 그 자체로 설명이 되는 코드이다. 위의 예시의 코드는 다음과 같이 코드 그 자체로 설명이 되는 코드로 바꿀 수 있다. 이것이 가장 좋은 코드이고 가장 좋은 주석이다.
+
+*Do*:
+
+```c++ 
+if (!IsAlreadyProcessed(element)) {
+  Process(element);
+}
+```
 
 ### Punctuation, Spelling, and Grammar
 
+문법과 스펠링을 틀리지 않도록 해라.
+
+!!! tip
+
+    [**VSCode** 의 스펠링 체크 확장](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker) 을 쓰면 됩니다.
+
 ### TODO Comments
+
+(일단 pass)
 
 ---
 

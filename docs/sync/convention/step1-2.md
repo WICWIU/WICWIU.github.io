@@ -480,17 +480,31 @@ non-copyable/movable 클래스에서는 명확하게 copy operation 을 지워�
 
 `virtual` 함수나 `virtual` 소멸자를 오버라이딩할 때 명시적으로 주석을 달아라.
 
-오버라이딩 할 때에는 `virtual` 키워드를 달지 말아라.
-
-`override` 나 `final` 키워드는 상당한 에러를 잡는데 도움이 된다.
-
-다중 상속은 허용되지만 다중 구현 상속은 매우 지양해라.
-
 ### Inheritance
 
 상속을 사용하려면 `public` 상속으로 해라.
 
 오버라이딩을 했다면 오버라이딩 했다는 주석을 달거나 `override` 키워드 또는 `final` 키워드를 꼭 붙여라.
+
+오버라이딩 할 때에는 `virtual` 키워드를 달지 말아라.
+
+!!! example
+
+    메소드를 오버라이딩 했다면 다음과 같이 `virtual` 키워드는 달지 말고, `override` 키워드를 반드시 달고, 추상 클래스의 메소드는 `= 0` 또는 `= delete` 또는 `= defualt` 로 선언하여 구현 불가능하게 만들어라.
+
+    *Do*:
+
+    ```c++ 
+    class Shape {
+    public:
+        virtual void Rotate(double radians) = 0;
+    };
+
+    class Circle : public Shape {
+    public:
+        void Rotate(double radians) override;
+    };
+    ```
 
 *Why:*
 
@@ -1378,13 +1392,19 @@ alias 는 API 를 사용하는 사용자를 편하게 한다. 하지만 그 의�
 
 가장 중요한 컨벤션이 바로 네이밍 컨벤션이다. 네이밍 스타일로써 코드를 읽는 사람은 곧바로 이것이 타입인지 변수인지 함수인지 상수인지 매크로인지 이해할 수 있기 때문이다. 따라서 개개인의 네이밍 선호에 자유를 주는 것보다 네이밍을 통일하는 것이 압도적으로 더 좋다.
 
+!!! info
+
+    **Pascal case** 는 단어가 합쳐진 부분마다 첫글자를 대문자로 나머지 부분을 소문자로 네이밍하는 것입니다. 가령 `PascalCaseNamingStyle`.
+
+    **camel case** 는 **Pascal case** 와 똑같은데 예외적으로 맨 앞 문자를 소문자로 네이밍합니다. 가령 `camelCaseNamingStyle`.
+
+    **snake case** 는 단어가 합쳐진 부분을 `_` 로 붙이고 모두 소문자로 네이밍합니다. 가령 `snake_case_naming_style`.
+
 ### General Naming Rules
 
-^^일반적인 네이밍 규칙은 그 변수의 의미를 영어로 작성한 후 공백을 지우는 것^^ 이다. 그리고 아래에서 설명해줄 네이밍의 타입에 따라서 camel case 또는 Pascal case 를 사용해라.
+^^일반적인 네이밍 규칙은 그 변수의 의미를 영어로 작성한 후 공백을 지우는 것^^ 이다. 그리고 아래에서 설명해줄 네이밍의 타입에 따라서 camel case 또는 Pascal case 또는 snake case 를 사용해라.
 
-후임 개발자가 읽었을 때 이해하기 어려운 약칭과 줄임말로 네이밍을 하지 마라.
-
-만약 Wikipedia 에 존재하는 약칭이나 줄임말이라면 써도 좋다.
+후임 개발자가 읽었을 때 이해하기 어려운 약칭과 줄임말로 네이밍을 하지 마라. 만약 Wikipedia 에 존재하는 약칭이나 줄임말이라면 써도 좋다.
 
 일반적으로 네이밍의 정확성은 그 네이밍이 사용되는 스코프에 비례하여 지어져야 한다. 
 
@@ -1901,17 +1921,162 @@ if (!IsAlreadyProcessed(element)) {
 
 # Formatting
 
+개발자에게 코드 형식의 자유를 주는 것이 아니라 프로젝트의 코드 형식을 일관되게 통일하는 것은 매우 중요하다. 이로써 코드를 읽는 사람이 코드를 쉽게 이해할 수 있기 때문이다.
+
+코드 포맷팅을 자동으로 할 수 있게 하기 위하여 [emacs setting file](https://raw.githubusercontent.com/google/styleguide/gh-pages/google-c-style.el) 을 만들어 뒀다.
+
 ### Line Length
+
+모든 코드의 라인은 `80` 문자를 넘으면 안된다.
+
+하지만 다음의 예외 상황에서는 지키지 않아도 된다.
+
+- 주석을 다음 라인으로 넘겼을 때 가독성이 떨어진다.
+
+- raw-string 이 `80` 문자를 넘겼다.
+
+- `include` 헤더 선언.
+
+- 헤더 가드.
+
+- `using` 문을 사용할 때.
 
 ### Non-ASCII Characters
 
+Non-ASCII 문자를 사용할 때 반드시 **UTF-8** 을 사용해라.
+
 ### Spaces vs. Tabs
+
+탭을 사용하지 말고 공백을 사용하여 **indentation** 을 해라. 
+
+공백 `2` 개를 사용하여 **indent** 해라.
+
+!!! example
+
+    다음과 같이 공백 `2` 개를 사용하여 **indent** 해라.
+
+    *Do*:
+
+    ```c++ 
+    ReturnType ClassName::FunctionName(Type par_name1, Type par_name2) {
+      DoSomething();
+      ...
+    }
+    ```
+
+    다음의 코드는 <kbd>Tab</kbd> 또는 공백 `4` 개를 사용하여 **indent** 했다. 이렇게 하지 마라.
+
+    *Don't*:
+
+    ```c++ 
+    ReturnType ClassName::FunctionName(Type par_name1, Type par_name2) {
+        DoSomething();
+        ...
+    }
+    ```
+
+!!! info
+
+    **VSCode** 에서 <kbd>Tab</kbd> 을 눌렀을 때 공백 `2` 개가 생기도록 설정할 수 있습니다.
 
 ### Function Declarations and Definitions
 
+함수의 선언에 반환형, 함수 이름, 파라미터를 같은 라인에 두어라.
+
+!!! example
+
+    *Do*:
+
+    ```c++ 
+    ReturnType ClassName::FunctionName(Type par_name1, Type par_name2) {
+      DoSomething();
+      ...
+    }
+    ```
+
+한 줄로 함수 선언을 다 할 수 없다면 파라미터를 다음 라인으로 내리고 첫번째 파라미터의 **indentation** 에 맞춰라.
+
+!!! example
+
+    *Do*:
+
+    ```c++ 
+    ReturnType ClassName::ReallyLongFunctionName(Type par_name1, Type par_name2,
+                                                 Type par_name3) {
+      DoSomething();
+      ...
+    }
+    ```
+
+첫번째 파라미터조차 함수 선언에 둘 수 없다면 다음과 같이 공백 `4` 개로 파라미터들을 **indent** 해라.
+
+!!! example
+
+    *Do*:
+
+    ```c++ 
+    ReturnType LongClassName::ReallyReallyReallyLongFunctionName(
+        Type par_name1,  // 4 space indent
+        Type par_name2,
+        Type par_name3) {
+      DoSomething();  // 2 space indent
+      ...
+    }
+    ```
+
 ### Lambda Expressions
 
+람다 표현식은 함수의 포맷팅과 같이 포맷팅해라. 이때 capture 를 표현하는 `[]` 에는 공백을 남기지 마라.
+
+!!! example
+
+    *Do*:
+    ```c++ 
+    int x = 0;
+    auto x_plus_n = [&x](int n) -> int { return x + n; }
+    ```
+
+함수의 파라미터로 들어간 람다 표현식은 함수 파라미터 포맷팅과 같이 포맷팅해라.
+
+!!! example
+
+    *Do*:
+
+    ```c++ 
+    std::set<int> blacklist = {7, 8, 9};
+    std::vector<int> digits = {3, 9, 1, 8, 4, 7, 1};
+    digits.erase(std::remove_if(digits.begin(), digits.end(), [&blacklist](int i) {
+                    return blacklist.find(i) != blacklist.end();
+                }),
+                digits.end());
+    ```
+
 ### Floating-point Literals
+
+부동소수점 변수는 반드시 명확한 소수점을 부여해라.
+
+!!! example
+
+    `C++` 에서는 다음과 같이 소수점을 생략해도 된다. 하지만 이렇게 하지 마라.
+
+    *Don't*:
+
+    ```c++ 
+    float f = 1.f;
+    long double ld = -.5L;
+    double d = 1248e6;
+    ```
+
+    다음과 같이 소수점을 명확하게 표시하라.
+
+    *Do*:
+
+    ```c++ 
+    float f = 1.0f;
+    float f2 = 1;   // Also OK
+    long double ld = -0.5L;
+    double d = 1248.0e6;
+    ```
 
 ### Function Calls
 

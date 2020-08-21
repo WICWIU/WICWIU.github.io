@@ -90,6 +90,130 @@
 
 이 문서는 모든 합리적 제약을 기술하도록 작성된 것이다. 하지만 비판적인 자세를 가져라. 그리고 당신에게 확신이 안선다면 프로젝트 팀장에게 이 규칙에 대하여 당신의 비판을 말하라.
 
+*References*: 
+
+:   https://google.github.io/styleguide/cppguide.html
+
 !!! info
 
-    이번 포스트에서는 [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html) 의 목표까지만 다루고 실질적인 코딩 컨벤션 규칙은 다음 포스트에서 다루겠습니다.
+    이번 포스트에서는 [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html) 의 목표까지만 다루고 실질적인 코딩 컨벤션 규칙은 다음 포스트에서 다루겠습니다. 
+    
+    그런데 다음 포스트에서 다룰 [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html) 은 독자가 [Abseil](https://abseil.io/) 을 기본적으로 사용할 수 있다고 가정하고 있기 때문에 기초적인 [Abseil](https://abseil.io/) 사용법을 알고 넘어가야 합니다.
+    
+    그런데 [Abseil](https://abseil.io/) 의 공식적인 빌드 툴은 [bazel](https://bazel.build/) 이기 때문에 [bazel](https://bazel.build/) 에 대하여 먼저 간단히 알아보겠습니다.
+
+---
+
+# Bazel
+
+[bazel](https://bazel.build/) 은 `C++`, `Java`, `Android`, `iOS`, `Go` 등의 소프트웨어의 빌드 및 테스트를 자동화시켜주는 툴이다.
+
+## Why Bazel?
+
+[bazel](https://bazel.build/) 은 **Make**, **Ant**, **Gradle** 등의 툴과 비슷하다. 하지만 [bazel](https://bazel.build/) 은 다음의 이유 때문에 특별하다.
+
+- [bazel](https://bazel.build/) 은 **Google** 의 빌드 시스템이다.
+
+- [bazel](https://bazel.build/) 의 빌드 명령어는 매우 쉽고 간단하고 고수준이다. 가령 **Make** 로 빌드하기 위하여 **Makefile** 을 만들면 모든 파일을 일일이 컴파일러에게 명시해주어야만 해서 너무 어렵다.
+
+- 똑같은 빌드 파일로 여러 플랫폼과 아키텍처로 컴파일 할 수 있다. **Google** 은 실제로 데이터센터 서버에서 실행될 거대한 프로그램부터 핸드폰에서 실행될 어플리케이션까지 모두 다 [bazel](https://bazel.build/) 을 사용하여 컴파일한다.
+
+- [bazel](https://bazel.build/) 은 빌드 파일을 분석해서 다시 컴파일해야하는 부분만 컴파일한다.
+
+    !!! note
+    
+        **Flutter** 로 개발 해보신 분들은 수정된 코드만 탐지해서 빠르게 리빌딩하는 **Hot reload** 기능이 떠오르실 겁니다. 그것을 `C++` 프로젝트에서도 할 수 있다는 것이지요.
+
+- [bazel](https://bazel.build/) 은 매우 큰 프로그램도 매우 빠르게 빌드한다. 가령 우리 **Google** 에서는 서버에서 실행될 소스파일만 `10` 만개 정도인 프로젝트가 있는데 파일이 변경되지 않으면 빌드 시간이 단지 `0.2` 초밖에 안걸린다.
+
+- [bazel](https://bazel.build/) 은 Linux, macOS, Windows 에서 실행가능하고 손쉽게 cross-compile 을 할 수 있다. 
+
+- [bazel](https://bazel.build/) 이 crash 가 거의 나지 않는다는 것을 우리 **Google** 이 보증한다. 우리도 [bazel](https://bazel.build/) 로 **Google** 의 프로젝트를 관리하고 있다.
+
+그렇다면 우리 **Google** 은 왜 다른 빌드 시스템을 사용하지 않는가?
+
+- `Make`, `Ninja`: 이 툴들은 타겟에 대한 매우 정확한 명령을 제공한다. 하지만 그것을 올바르게 사용하는 것은 전적으로 개발자의 몫이다. 반면 [bazel](https://bazel.build/) 의 유저 인터페이스는 매우 고수준이다.
+
+- `Ant`, `Maven`: 이들은 **Java** 만 지원하는 반면 [bazel](https://bazel.build/) 은 다양한 언어를 모두 다 지원한다.
+
+- `Gradle`: [bazel](https://bazel.build/) 의 빌드 파일은 `Gradle` 보다 구조화되어 있어서 더 이해하기 쉽고 재사용하기 쉽다.
+
+우리 **Google** 도 원래 **Makefile** 을 사용해왔다. 그런데 소프트웨어의 규모가 커지면 커질수록 **Makefile** 은 빌드 속도를 느리게했다. 그리고 **Makefile** 의 빌드를 신뢰할 수도 없었다. 결과적으로 **Makefile** 은 **Google** 개발자들의 생산성에 직격타를 날렸고 우리 **Google** 의 기업적인 민첩성에도 영향을 미쳤다. [bazel](https://bazel.build/) 은 이 문제를 해결했다. 
+
+[bazel](https://bazel.build/) 은 처음에는 **Google** 내부의 서버 프로그램 개발 도구였다. 하지만 그 유용성이 입증되어 계속 확장되었다. 그 결과 지금은 심지어 핸드폰 어플을 위한 `iOS` 와 `Android` 빌드에도 쓸 수 있다.
+
+[bazel](https://bazel.build/) 은 다음과 같은 프로젝트에서 빛을 발한다.
+
+- 매우 큰 프로젝트.
+
+- 여러 언어로 작성된 프로젝트.
+
+- 여러 플랫폼에 배포되어야 하는 프로젝트.
+
+- 수많은 테스트를 해야 하는 프로젝트.
+
+!!! note
+
+    모두 [**WICWIU**](https://github.com/WICWIU/WICWIU) 에 유용한 기능들 같네요.
+
+*References*: 
+
+:   https://bazel.build/ 
+
+---
+
+# Abseil
+
+[Abseil](https://abseil.io/) 은 **Google** 에서 제작한 `C++` 표준 STL 라이브러리의 확장이다. **Google** 은 [Abseil](https://abseil.io/) 을 통하여 STL 의 부족한 부분을 보완했다. [Abseil](https://abseil.io/) 은 **Google** 의 `C++` 프로젝트의 기반으로 광범위하게 사용되고 있다.
+
+## Why Abseil?
+
+**Google** 은 `C++` 프로젝트에 [Abseil](https://abseil.io/) 을 사용하는 것을 추천한다.
+
+*Why*:
+
+- [Abseil](https://abseil.io/) 은 항상 최신 `C++` 표준과 호환된다.
+
+- **Google** 의 오픈소스 프로젝트와 호환된다. 가령 **TensorFlow**, **gRPC** 등등.
+
+    !!! note
+    
+        TensorFlow 소스코드 분석을 해야 할 때도 [Abseil](https://abseil.io/) 을 알아야 하겠네요.
+
+- [Abseil](https://abseil.io/) 은 **Google** 이 `C++` 제품을 만드는 인터페이스이기 때문에 **Google** 이 어떻게 `C++` 프로젝트를 개발하는지 배울 수 있다.
+
+- **Google** 은 [Abseil](https://abseil.io/) 을 매일 발전시키고 있고 `C++` 개발자들의 요구를 끊임없이 [Abseil](https://abseil.io/) 에 구현하고 있다.
+
+## Codemap
+
+[Abseil](https://abseil.io/) 은 다음의 `C++` 라이브러리들로 이루어져 있다.
+
+- `base` : 다른 라이브러리의 초기화 코드를 담고 있다. 다른 라이브러리가 이 라이브러리에 의존한다.
+
+- `algorithm` : `C++` STL 의 `algorithm`의 확장이다.
+
+- `container` : `C++` STL 의 `container`의 확장이다.
+
+- `debugging` : 메모리 누수 검증, stacktrace 등등 을 지원하는 디버깅 라이브러리이다.
+
+- `hash` : hash 타입과 관련 기능을 제공하는 프레임워크이다.
+
+- `memory` : `std::make_unique()` 와 호환되는 메모리 관리 관련 라이브러리이다.
+
+- `meta` : 타입 체크 관련 기능을 제공한다.
+
+- `numeric` : `128` 비트 정수형 관련 기능을 제공한다.
+
+- `strings` : STL 과 호환되는 `string` 관련 기능을 제공한다.
+
+- `synchronization` : `std::mutex` 를 대체하는 `absl:Mutex` 등 병렬 실행에 관한 기능을 제공한다.
+
+- `time` : 시간과 관련된 다양한 기능을 제공한다.
+
+- `types` : non-container 타입 관련 기능을 제공한다.
+
+- `utility` : 여러 유틸리티와 도움이 될만한 코드들을 제공한다.
+
+*References*: 
+
+:   https://abseil.io

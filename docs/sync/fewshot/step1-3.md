@@ -78,7 +78,7 @@
   <figcaption><i>트루 컬러 이미지 (https://kr.mathworks.com/help/images/image-types-in-the-toolbox.html)</i></figcaption>
 </figure>
 
-*참고 및 출처*: 
+*References*: 
 
 :   https://en.wikipedia.org/wiki/Digital_image
 
@@ -130,7 +130,7 @@
 
 **PNG** 파일은 위와 같이 Signature 로 시작하여 Header, Data, Terminator 로 구성된다. 이것은 빨강, 초록, 파랑 픽셀만을 갖는 단순힌 **PNG** 파일을 분석한 것이다.
 
-*참고 및 출처*: 
+*References*: 
 
 :   https://github.com/corkami/formats/blob/master/image/png.md
 
@@ -154,7 +154,7 @@
 
 6. `CImg` 는 무료이고 오픈소스이다.
 
-*참고 및 출처*: 
+*References*: 
 
 :   http://cimg.eu
 
@@ -226,7 +226,7 @@ CImg<unsigned char>: this = 0x7ffdba95e5a0, size = (512,512,1,3) [768 Kio], data
 
 그런데 트루 컬러 **RGB** 이미지의 픽셀 정밀도는 `24` 라고 했었다. 하지만 `spectrum()` 함수가 `3` 을 반환하였다. 그렇기 때문에 채널이 `3` 개 이므로 $3 \times 8 = 24$ 로써 픽셀 정밀도가 `24` 가 된다. 
 
-*참고 및 출처*: 
+*References*: 
 
 :   http://cimg.eu/reference/group__cimg__tutorial.html 
 
@@ -332,7 +332,7 @@ $B _{00}$ 값을 가져오려면 `img(0, 0, 0, 2)` 로 참조하면 된다.
     img(10,10,0) = img(10,10,1) = img(10,10,2) = avg; 
     ```
 
-*참고 및 출처*: 
+*References*: 
 
 :   http://cimg.eu/reference/group__cimg__storage.html
 
@@ -378,7 +378,7 @@ for (int x = 0; x<img.width(); ++x)
     }
     ```
 
-*참고 및 출처*: 
+*References*: 
 
 :   http://cimg.eu/reference/group__cimg__loops.html
 

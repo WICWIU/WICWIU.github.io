@@ -261,7 +261,7 @@ $$ \therefore \dfrac{\partial L}{\partial \mathbf{Y}} = \begin{pmatrix} \dfrac{\
 
 이다. ■ 
 
-*참고 및 출처*: 
+*References*: 
 
 :   http://cs231n.stanford.edu/handouts/derivatives.pdf
 

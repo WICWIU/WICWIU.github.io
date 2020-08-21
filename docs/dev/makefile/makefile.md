@@ -402,7 +402,7 @@ rm -f blah.o blah blah.c
 
     하지만 위와 같이 `f1.o` 의 규칙을 따로 지정해줄 경우 `f1.o` 를 생성할 때 `make` 는 `%.o` 규칙이 아니라 `f1.o` 규칙을 실행한다. 
 
-*참고 및 출처*: 
+*References*: 
 
 :   https://makefiletutorial.com/ 
 

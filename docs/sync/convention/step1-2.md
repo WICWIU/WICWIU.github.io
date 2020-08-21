@@ -2080,11 +2080,205 @@ Non-ASCII 문자를 사용할 때 반드시 **UTF-8** 을 사용해라.
 
 ### Function Calls
 
+함수 호출은 하나의 라인에 하라.
+
+!!! example
+
+    *Do*:
+
+    ```c++ 
+    bool result = DoSomething(argument1, argument2, argument3);
+    ```
+
+하지만 `80` 문자를 넘어간다면 파라미터를 다음 라인으로 내리고 첫번째 파라미터의 **indentation** 에 맞춰라.
+
+!!! example
+
+    *Do*:
+
+    ```c++ 
+    bool result = DoSomething(averyveryveryverylongargument1,
+                              argument2, argument3);
+    ```
+
+첫번째 파라미터도 한 줄에 표현할 수 없다면 다음과 같이 공백 `4` 개로 파라미터들을 **indent** 해라.
+
+!!! example
+
+    *Do*:
+
+    ```c++ 
+    bool result = DoSomething(
+        argument1, argument2,  // 4 space indent
+        argument3, argument4);
+    ```
+
+어떤 변수의 의미가 명백하지 않다면 다음과 같이 새로운 변수에 저장하여 그 의미를 변수 이름으로 보여줘라.
+
+!!! example
+
+    *Do*:
+
+    ```c++ 
+    int my_heuristic = scores[x] * y + bases[x];
+    bool result = DoSomething(my_heuristic, x, y, z);
+    ```
+
+변수의 구조가 의미에 영향을 준다면 다음과 같이 구조를 표현할 수 있도록 자유롭게 포맷팅을 해라.
+
+!!! example
+
+    *Do*:
+
+    ```c++ 
+    // Transform the widget by a 3x3 matrix.
+    my_widget.Transform(x1, x2, x3,
+                        y1, y2, y3,
+                        z1, z2, z3);
+    ```
+
 ### Braced Initializer List Format
+
+(일단 pass)
 
 ### Conditionals
 
+`if-else` 문을 사용할 때 `if` 문 다음에 공백을 하나 둬라.
+
+
+`else` 문은 `{` 와 같은 라인에 써라.
+
+!!! example
+
+    *Do*:
+
+    ```c++ 
+    if (condition) {  // no spaces inside parentheses
+      ...  // 2 space indent.
+    } else if (...) {  // The else goes on the same line as the closing brace.
+      ...
+    } else {
+      ...
+    }
+    ```
+
+조건을 표현하는 `(...)` 에 공백을 두지 마라.
+
+!!! example
+
+    *Do*:
+
+    ```c++ 
+    if (condition) {  // Good - proper space after IF and before {.
+    ```
+
+    *Don't*:
+
+    ```c++ 
+    if(condition) {   // Bad - space missing after IF.
+    if ( condition ) { // Bad - space between the parentheses and the condition
+    if (condition){   // Bad - space missing before {.
+    if(condition){    // Doubly bad.
+    ```
+
+조건문이 매우 간단하고 `else` 를 쓰지 않을 때에만 조건문을 한줄에 써라. 
+
+!!! example
+
+    *Do*:
+
+    ```c++ 
+    if (x == kFoo) return new Foo();
+    if (x == kBar) return new Bar();
+    ```
+
+    다음의 조건문은 `else` 가 있으므로 한줄로 쓰면 안된다.
+
+    *Don't*:
+    
+    ```c++ 
+    // Not allowed - IF statement on one line when there is an ELSE clause
+    if (x) DoThis();
+    else DoThat();
+    ```
+
+조건문의 코드가 `1` 줄이라면 중괄호 `{ ... }` 를 쓰지 않아도 된다. 하지만 어떤 프로젝트에서 중괄호를 쓰기로 약속했다면 그것을 지켜라.
+
+!!! example
+
+    다음 두 형태 모두 가능하다.
+
+    *Do*:
+
+    ```c++ 
+    if (condition)
+      DoSomething();  // 2 space indent.
+
+    if (condition) {
+      DoSomething();  // 2 space indent.
+    }
+    ```
+
+하지만 `if-else` 중 어느 하나라도 중괄호를 쓰면 모두 중괄호를 붙혀라.
+
+!!! example
+
+    *Don't*:
+    
+    ```c++ 
+    // Not allowed - curly on IF but not ELSE
+    if (condition) {
+      foo;
+    } else
+      bar;
+
+    // Not allowed - curly on ELSE but not IF
+    if (condition)
+      foo;
+    else {
+      bar;
+    }
+    ```
+
+    *Do*:
+    
+    ```c++ 
+    // Curly braces around both IF and ELSE required because
+    // one of the clauses used braces.
+    if (condition) {
+      foo;
+    } else {
+      bar;
+    }
+    ```
+
 ### Loops and Switch Statements
+
+`switch` 문의 `case` 들은 공백 `2` 개로 **indent** 하고 모두 중괄호로 묶어라.
+
+`case` 의 코드는 마찬가지로 공백 `2` 개로 **indent** 하면 된다.
+
+`switch-case` 에는 반드시 `default` 를 둬라. 만약 `default` 가 절대로 존재해서는 안된다면 `assert(false)` 등으로 에러를 발생시켜라.
+
+!!! example
+
+    *Do*:
+
+    ```c++ 
+    switch (var) {
+      case 0: {  // 2 space indent
+        ...      // 4 space indent
+        break;
+    }
+      case 1: {
+        ...
+        break;
+    }
+      default: {
+        assert(false);
+      }
+    }
+    ```
 
 ### Pointer and Reference Expressions
 

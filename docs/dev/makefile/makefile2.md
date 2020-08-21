@@ -300,7 +300,7 @@
       cd subdir && $(MAKE)
     ```
 
-*참고 및 출처*: 
+*References*: 
 
 :   https://makefiletutorial.com/ 
 

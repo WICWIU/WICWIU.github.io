@@ -77,7 +77,7 @@
     $ sudo pip install mtcnn
     ```
 
-*참고 및 출처*: 
+*References*: 
 
 :   [FaceNet: A Unified Embedding for Face Recognition and Clustering](https://arxiv.org/abs/1503.03832)
 
@@ -161,7 +161,7 @@
 
     $\infty$ 는 특정한 값이 아니고 "한없이 커지고 있는 상태" 를 나타내기 때문에 $[-\infty, \infty]$ 나 $(a, \infty]$ 와 같이 $\infty$ 를 폐구간과 엮지 않는다. 실수 $x$ 의 값이 한없이 커질 수는 있어도 $x = \infty$ 라는 값을 가질 수는 없기 때문이다. 
 
-*참고 및 출처*: 
+*References*: 
 
 :   [저의 블로그 ㅎㅎ - 벡터](https://ccss17.github.io/Math/Calculus/vector/)
 
@@ -456,6 +456,6 @@ Figure 6 은 ^^모든^^ 실패 케이스를 보여주지. 우리는 center crop 
 
 우리는 얼굴 사진을 거리가 유사도인 유클리드 공간에 embedding 하는 방법을 소개했어. 이건 지금까지와의 방법과 다르게 중간 layers 를 학습하는 것에 집중하는 것이 아니라 embedding 자체를 직접적으로 학습시키는 거라 혁신적이지. 
 
-*참고 및 출처*: 
+*References*: 
 
 :   [FaceNet: A Unified Embedding for Face Recognition and Clustering](https://arxiv.org/abs/1503.03832)

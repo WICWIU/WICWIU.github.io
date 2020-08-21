@@ -136,7 +136,7 @@ $$ \iff t \leq \dfrac{R ^{2}}{\gamma ^{2}} $$
 
     $\gamma$ 가 늘어날수록 학습횟수가 줄어들고, $R$ 이 늘어날수록 학습횟수가 많아진다.
 
-*참고 및 출처*: 
+*References*: 
 
 :   https://nbviewer.jupyter.org/github/metamath1/ml-simple-works/blob/master/perceptron/perceptron.ipynb
 

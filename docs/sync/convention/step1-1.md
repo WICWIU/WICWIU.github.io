@@ -16,12 +16,58 @@
 
 좋은 Coding Convention 은 순전히 숙련된 개발자의 경험으로부터 나옵니다. 각 커뮤니티와 회사들이 자신들만의 경험을 기반으로 코딩 컨벤션을 통일하곤 합니다. 하지만 [**WICWIU**](https://github.com/WICWIU/WICWIU) 개발자는 보통 한동대 학부생이므로 코딩 경험이 극히 부족한 경우가 대부분입니다. 즉, 우리의 코딩 경험만으로 코딩 컨벤션을 정립하기에는 무리가 있습니다. 그러므로 우리는 기존의 정립된 코딩 컨벤션을 차용할 필요가 있습니다.
 
-여러 커뮤니티와 회사들이 자신들의 코딩 컨벤션을 정립해두었습니다. 대표적으로 [Linux kernel](https://www.kernel.org/doc/html/v4.10/process/coding-style.html), [GNU C++ Style](https://gcc.gnu.org/wiki/CppConventions), [Microsoft C++ Style Conventions](https://docs.microsoft.com/en-us/windows/win32/stg/coding-style-conventions), [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html), [LLVM coding standards](http://llvm.org/docs/CodingStandards.html), [Chromium’s style guide](http://www.chromium.org/developers/coding-style), [Mozilla’s style guide](https://developer.mozilla.org/en-US/docs/Developer_Guide/Coding_Style), [WebKit’s style guide](http://www.webkit.org/coding/coding-style.html), [Qt Coding Style](http://wiki.qt.io/Qt_Coding_Style),   [Unreal Engine Coding Standard](https://docs.unrealengine.com/latest/INT/Programming/Development/CodingStandard/), [C++ Best Practices](http://codergears.com/QACenter/index.php?qa=questions), [Blender Coding Style](http://wiki.blender.org/index.php/Dev:Doc/Code_Style), [Blink Coding Style Guidelines](http://www.chromium.org/blink/coding-style), [Inkscape Coding Style](https://inkscape.org/en/develop/coding-style/), [CppCoreGuidelines](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md) 등등이 있습니다. 
-그 중에서 일단 Google Style 이 좋지 않겠냐는 의견이 중론이어서 먼저 [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html) 을 정리해 보았습니다.
+여러 커뮤니티와 회사들이 자신들의 코딩 컨벤션을 정립해두었습니다. 대표적으로 [Linux kernel](https://www.kernel.org/doc/html/v4.10/process/coding-style.html), [GNU C++ Style](https://gcc.gnu.org/wiki/CppConventions), [Microsoft C++ Style Conventions](https://docs.microsoft.com/en-us/windows/win32/stg/coding-style-conventions), [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html), [LLVM coding standards](http://llvm.org/docs/CodingStandards.html), [Chromium’s style guide](http://www.chromium.org/developers/coding-style), [Mozilla’s style guide](https://developer.mozilla.org/en-US/docs/Developer_Guide/Coding_Style), [WebKit’s style guide](http://www.webkit.org/coding/coding-style.html), [Qt Coding Style](http://wiki.qt.io/Qt_Coding_Style),   [Unreal Engine Coding Standard](https://docs.unrealengine.com/latest/INT/Programming/Development/CodingStandard/), [C++ Best Practices](http://codergears.com/QACenter/index.php?qa=questions), [Blender Coding Style](http://wiki.blender.org/index.php/Dev:Doc/Code_Style), [Blink Coding Style Guidelines](http://www.chromium.org/blink/coding-style), [Inkscape Coding Style](https://inkscape.org/en/develop/coding-style/), [CppCoreGuidelines](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md) 등등이 있습니다. 그 중에서 일단 Google Style 이 좋지 않겠냐는 의견이 중론이어서 먼저 [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html) 을 정리해 보았습니다.
 
-그래서 정리를 해봤는데, 논란이 될 만한 부분이 꽤 많았습니다. 하지만 **Google** 의 권위를 믿고 꾹 참고 계속 번역 및 정리 작업을 계속 했었죠. 그런데 너무 미심쩍어서 `C++` 커뮤니티들에 **Google** 의 `C++` 코딩 컨벤션에 대하여 검색을 해보니까 `C++` 커뮤니티에서는 **Google** 의 Style Guide 가 **Google** 같은 코드가 1억줄이 넘는 프로젝트와 수많은 legacy 프로젝트를 다뤄야하는 곳에서나 적합하지 새로운 `C++` 프로젝트에는 매우 부적절하다는 목소리가 많았습니다. 심지어 절대로 **Google** 의 Style Guide 를 따르지 말라는 독립된 블로그 포스트도 있었고, `C++` 커뮤니티에서 Google Style Gudie 는 쓰레기다는 등의 부정적인 여론이 상당히 많았습니다. **Google** 이 하는 말이라면 무엇이든 옳다고 생각했던 게 실수였던 것 같네요. **Google** 때문에 시간낭비를 너무 많이했습니다. 앞으로는 심지어 **Google** 이라고 해도 커뮤니티 같은 곳을 통해서 사람들의 의견을 다방면으로 수집해봐야겠습니다. 제가 번역/정리 하던 **Google** Style Guide 의 legacy 문서를 확인하려면 [Google C++ Style Guide 미완성 문서](googlestyleguide.md)를 클릭하세요. 단, 몇몇 기업과 커뮤니티는 [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html) 의 단점을 고쳐서 잘 사용하고 있다고 합니다. [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html) 의 문서 구조 자체와 다루고 있는 주제들 자체는 좋기 때문인 것 같습니다.
+## Google C++ Style Guide 를 정리하다가 발견한 여러 논란
 
-`C++` 커뮤니티의 중론은 `clang-format` 으로 `C++` 의 포맷팅을 자동화하고 코딩 컨벤션은 [CppCoreGuidelines](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md) 을 따르는 것이 좋다는 의견에 합의되어 있었습니다. 그래서 지금부터 이것을 번역 및 정리해야겠네요. 그래서 [CppCoreGuidelines](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md) 를 번역하고 정리하고 있었는데, 이번에는 우리나라 `C++` 커뮤니티인 [C++ Korea](https://www.cppkorea.org) 에서 이미 [CppCoreGuidelines 한글 번역 프로젝트](https://www.cppkorea.org/CppCoreGuidelines/) 를 완료했다는 것을 알게되었습니다. 그러니까 [CppCoreGuidelines](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md) 번역 및 정리 작업을 그만 두고 우리나라 `C++` 개발자 형들이 이미 깔끔하게 번역해두신 [CppCoreGuidelines 한글 번역 프로젝트](https://www.cppkorea.org/CppCoreGuidelines/) 을 읽도록 하겠습니다.
+그래서 정리를 해봤는데, 논란이 될 만한 부분이 꽤 많았습니다. 하지만 **Google** 의 권위를 믿고 꾹 참고 계속 번역 및 정리 작업을 계속 했었죠. 그런데 너무 미심쩍어서 `C++` 커뮤니티들에 **Google** 의 `C++` 코딩 컨벤션에 대하여 검색을 해보니까 `C++` 커뮤니티에서는 **Google** 의 Style Guide 가 **Google** 같은 코드가 1억줄이 넘는 프로젝트와 수많은 legacy 프로젝트를 다뤄야하는 곳에서나 적합하지 새로운 `C++` 프로젝트에는 매우 부적절하다는 목소리가 많았습니다. 심지어 절대로 **Google** 의 Style Guide 를 따르지 말라는 독립된 블로그 포스트도 있었고, `C++` 커뮤니티에서 Google Style Gudie 는 쓰레기다는 등의 부정적인 여론이 상당히 많았습니다. 물론 그 블로그 포스트를 반박하는 의견도 상당히 많았습니다. 
+
+- [Google C++ Style Guide is No Good](https://eyakubovich.github.io/2018-11-27-google-cpp-style-guide-is-no-good/)
+
+- [Hacker News Discussion: Google C++ Style Guide is No Good](https://news.ycombinator.com/item?id=18555771)
+
+    ![image](https://user-images.githubusercontent.com/16812446/90983456-4f3f3e80-e5a9-11ea-8975-a06283e664af.png)
+
+- [Reddit Discussion: Google C++ Style Guide is No Good](https://www.reddit.com/r/cpp/comments/a1b7km/google_c_style_guide_is_no_good/)
+
+- [Why isn’t it good to follow Google's C++ style guide?](https://www.quora.com/Why-isn%E2%80%99t-it-good-to-follow-Googles-C++-style-guide)
+
+    ![image](https://user-images.githubusercontent.com/16812446/90983465-6f6efd80-e5a9-11ea-94b6-36fb590dd62f.png)
+
+- [Which C++ style guide do you follow?](https://www.reddit.com/r/cpp/comments/8oja7y/which_c_style_guide_do_you_follow/)
+
+    ![image](https://user-images.githubusercontent.com/16812446/90983506-b230d580-e5a9-11ea-86ab-59d40c257fde.png)
+
+- [Why Google Style Guide for C++ is a deal-breaker](https://www.linkedin.com/pulse/20140503193653-3046051-why-google-style-guide-for-c-is-a-deal-breaker)
+
+- [Reddit Discussion: Why Google Style Guide for C++ is a deal-breaker](https://www.reddit.com/r/programming/comments/28alvi/why_google_style_guide_for_c_is_a_dealbreaker/)
+
+- [Reddit Discussion2: Why Google Style Guide for C++ is a deal-breaker](https://www.reddit.com/r/cpp/comments/289n27/this_blog_post_matches_much_of_my_thinking_on/)
+
+- [What programming style do you use?](https://www.reddit.com/r/cpp/comments/5zth1c/what_programming_style_do_you_use/)
+
+- [favorite C++ coding standards?](https://www.reddit.com/r/cpp/comments/80m4vx/favorite_c_coding_standards/)
+
+- [Reddit Discussion: Do you adopt abseil?](https://www.reddit.com/r/cpp/comments/9hlf8o/do_you_adopt_abseil/)
+
+    ![image](https://user-images.githubusercontent.com/16812446/90983444-2fa81600-e5a9-11ea-964a-55a37848f8d0.png)
+
+- [Choose C++ style guideline #5](https://github.com/open-telemetry/opentelemetry-cpp/issues/5)
+
+    ![image](https://user-images.githubusercontent.com/16812446/90983779-70089380-e5ab-11ea-8f62-b6c31ecd9d54.png)
+
+
+솔직히 모르겠습니다. 저는 전문 `C++` 개발자가 아니고 아직 대학교 학부생입니다. 그래서 Google Style 이 옳은지 다른 Style 이 옳은지 판단할 수 없습니다. 그런데 사실 이렇게 논란이 많은 것 자체로 Google C++ Style Guide 를 저평가할 수밖에 없습니다. 왜냐하면 Google C++ Style Guide 로 더 이상 시간낭비를 하고 싶지 않기 때문입니다. 위에 올려둔 커뮤니티들 링크에서 수많은 토론이 진행되었었는데 그 와중에 [CppCoreGuidelines](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md) 은 논란 없이 좋다는 의견에 합의되어 있었죠. 그렇다면 공프기/캡스톤 하느라 시간이 없는 우리 입장에서는 Google C++ Style Guide 가 좋은지 나쁜지 판단하는 것보다 논란이 없는 CppCoreGuidelines 을 따르는 것이 더 나을 것입니다.
+
+어쨌든 **Google** 이 하는 말이라면 무엇이든 옳다고 생각했던 게 실수였던 것 같네요. **Google** 때문에 시간낭비를 너무 많이했습니다. 앞으로는 심지어 **Google** 이라고 해도 커뮤니티 같은 곳을 통해서 사람들의 의견을 다방면으로 수집해봐야겠습니다. 제가 번역/정리 하던 **Google** Style Guide 의 legacy 문서를 확인하려면 [Google C++ Style Guide 미완성 문서](googlestyleguide.md)를 클릭하세요. 단, 몇몇 기업과 커뮤니티는 [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html) 의 단점을 고쳐서 잘 사용하고 있다고 합니다. [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html) 의 철학과 문서 구조 자체와 다루고 있는 주제들 자체는 좋기 때문인 것 같습니다. 
+
+`C++` 커뮤니티의 중론은 `clang-format` 으로 `C++` 의 포맷팅을 자동화하고 코딩 컨벤션은 [CppCoreGuidelines](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md) 을 따르는 것이 좋다는 의견에 합의되어 있었습니다. 그래서 지금부터 이것을 번역 및 정리해야겠네요. Google C++ Style 이 좋은지 나쁜지 저는 더 이상 관심없습니다. 그것을 판단하고 있는 것 자체가 무의미하고, 시간낭비일 뿐입니다. CppCoreGuidelines 은 `C++` 커뮤니티에서도 논란이 없었기 때문에 의심하지 않고 쓸 수 있을 것 같네요.
+
+그래서 [CppCoreGuidelines](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md) 를 번역하고 정리하고 있었는데, 이번에는 우리나라 `C++` 커뮤니티인 [C++ Korea](https://www.cppkorea.org) 에서 이미 [CppCoreGuidelines 한글 번역 프로젝트](https://www.cppkorea.org/CppCoreGuidelines/) 를 완료했다는 것을 알게되었습니다. 그러니까 [CppCoreGuidelines](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md) 번역 및 정리 작업을 그만 두고 우리나라 `C++` 개발자 형들이 이미 깔끔하게 번역해두신 [CppCoreGuidelines 한글 번역 프로젝트](https://www.cppkorea.org/CppCoreGuidelines/) 을 읽도록 하겠습니다.
+
+!!! note
+
+    사실 이로써 CppCoreGuidelines 에 대한 안심을 한 번 더 하게되었습니다. 왜냐하면 우리나라 `C++` 커뮤니티에서도 CppCoreGuidelines 을 인정하고 그것을 번역 및 정리하는 프로젝트를 진행한 것이기 때문이죠. CppCoreGuidelines 은 저에게 더 이상 시간낭비를 하지 않게 해줄 것 같네요. 후...
 
 그런데 [CppCoreGuidelines 한글 번역 프로젝트](https://www.cppkorea.org/CppCoreGuidelines/) 는 [CppCoreGuidelines](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md) 의 원래 내용 순서를 제목 알파벳 순으로 바꾸어놓았었습니다. 그래서 [CppCoreGuidelines](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md) 의 원본 순서대로 볼 수 있도록 [CppCoreGuidelines 한글 번역 프로젝트](https://www.cppkorea.org/CppCoreGuidelines/) 의 내용을 정리했습니다.
 
@@ -62,3 +108,17 @@
 - [Appendix D: 유용한 도구들](https://www.cppkorea.org/CppCoreGuidelines/appendix/Tools/)
 - [용어 해설](https://www.cppkorea.org/CppCoreGuidelines/Glossary/)
 - [To-do: 미분류 규칙](https://www.cppkorea.org/CppCoreGuidelines/Unclassified/)
+
+---
+
+# clang-format 
+
+(작성중)
+
+## clang-format 사용법
+
+(작성중)
+
+## clang-format with VSCode 
+
+지금까지 `clang-format` 의 사용법을 알아보았는데, **VSCode** 에서는 파일을 저장하기만 하면 자동으로 파일에 `clang-format` 이 적용되도록 할 수 있는 확장이 있습니다.

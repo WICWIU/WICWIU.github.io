@@ -43,8 +43,8 @@ nav:
       - Step 3. 역전파: sync/fewshot/step3.md
       - Step 4. 최적화: sync/fewshot/step4.md
     - Coding Convention: 
-      - Step 1. Google C++ Guide: 
-        - About Coding Convention: sync/convention/step1-1.md
+      - About Coding Convention: sync/convention/step1-1.md
+      - (ABANDONED)Google C++ Style Guide: sync/convention/googlestyleguide.md
   - 이곳에 문서 작성하기:
     - Step 1. Markdown 파일: write/markdown.md
     - Step 2. 소스코드 설명하기: write/code.md

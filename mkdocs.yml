@@ -23,6 +23,9 @@ nav:
       - Collaborate with Git: dev/Git/git.md
       - Commit/PR protocol: dev/Git/message.md
       - Update forked repo: dev/Git/update.md
+    - VSCode:
+      - 딥러닝 서버 VSCode 연동: dev/VSCode/VSCode.md
+      - VSCode Git 연동: dev/VSCode/VSCode-git.md
     - GPU Acceleration:
       - cuda: dev/GPU/cuda.md
     - Makefile: 

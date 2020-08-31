@@ -12,6 +12,8 @@ nav:
   - API: api.md
   - 논문 정리: 
     - ResNet: paper/resnet.md
+    - FaceNet: paper/facenet.md
+    - Quadruplet: paper/quadruplet.md
   # - WICWIU 딥러닝 가이드: usage/usage.md
   - WICWIU 개발 가이드: 
     - WICWIU: 

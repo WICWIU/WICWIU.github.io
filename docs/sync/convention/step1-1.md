@@ -73,6 +73,50 @@
 
 ---
 
+# C++ Core Guidelines 사전지식
+
+하지만 C++ Core Guidelines 은 C++ 문법서가 아니기 때문에 여러가지 고급 문법을 설명 없이 다루고 있습니다. 따라서 그러한 기능들을 사전에 알아두고 읽어야 합니다.
+
+- span
+
+- gsl::index
+
+- owner
+
+- fopen, malloc, strdup 이 반환하는 포인터는 할당 해제를 해주어야 하므로 fopen 이 아닌 ifstream 을 사용해야 한다는 것
+
+- https://www.cppkorea.org/CppCoreGuidelines/Philosophy/#example-bad_6 에서 예제가 무엇을 낭비하는지 독자 스스로 찾아라 했는데 `strlen` 이 매 루프마다 계산되고 있다는 것이다.
+
+- std::chrono
+
+- 사전조건 gsl::Expects() : if 나 assert 로 할 수 있지만 이게 더 좋다고하네. 왜? 
+
+- 사후조건 gsl::Ensures() : if 나 assert 로 할 수 있지만 이게 더 좋다고하네. 왜? 
+
+- lock_guard, RAII
+
+- constexpr
+
+- template 에 적용되는 requires, Concept
+
+- zstring 
+
+- std::strlen 
+
+- not_null 
+
+- czstring 
+
+- string_span
+
+- extern
+
+- ㅁ든걸 const 로
+
+- C스타일로코딘 ㄴㄴㄴ
+
+- 스마트 포인터
+
 # C++ Core Guidelines
 
 - [Abstraciton](https://www.cppkorea.org/CppCoreGuidelines/home/)

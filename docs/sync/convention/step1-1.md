@@ -157,12 +157,111 @@
 
 # clang-format 
 
-(작성중)
+`clang-format` 은 `C`, `C++`, `Objective-C` 코드를 자동으로 포맷팅해주는 툴입니다. `clang-format` 은 **LLVM**, **Google**, **Chromium**, **Mozilla**, **WebKit** 의 `C++` 코딩 컨벤션에서 말하는 코드 포맷팅 기준을 자동으로 맞춰주기 때문에 일일히 코딩 컨벤션을 맞추느라 수고하지 않아도 되게 해줍니다. 또한 코드 스타일을 `.clang-format` 파일에 명시하면 코드 스타일을 커스터마이징 할 수도 있습니다. 
+
+[**WICWIU**](https://github.com/WICWIU/WICWIU) 를 만들고 **commit** 하기 전에 `clang-format` 을 한번 실행하기만 하면 코드 포맷이 자동으로 통일되는 것입니다.
+
+## clang-format 설치
+
+=== "시스템 설치"
+
+    일반 유저는 `sudo` 명령어를 사용할 수 없기 때문에 시스템을 해킹하지 않는 이상 시스템 관리자에게 문의하여 다음 명령어로 `clang-format` 을 설치해주라고 부탁하세요.
+
+    ```shell
+    $ sudo apt install clang-format
+    ```
+
+=== "유저 설치"
+
+    다음 명령어로 저의 [`standalone` 레포지토리](https://github.com/ccss17/standalone)를 **clone** 해주세요. 이 레포지토리는 필요한 패키지를 설치없이 standalone 하게 실행할 수 있도록 필요 라이브러리 의존성을 자동으로 해결해주면서 바이너리에 `alias` 를 지정해주는 스크립트를 담고 있습니다. 
+
+    ```shell
+    $ git clone --depth 1 https://github.com/ccss17/standalone 
+    ```
+
+    그리고 다음과 같이 `setup.sh` 을 실행하면 됩니다.
+
+    ```shell
+    $ cd standalone
+    $ ./setup.sh
+    ```
+
+    그러면 `clang-format` 뿐만 아니라 `zsh`, `bat`, `curl`, `gotop`, `nvtop` 등의 딥러닝 개발 시 매우 유용한 툴들이 자동으로 설치됩니다. 하지만 `clang-format` 만을 설치하고 싶다면 다음 명령어를 입력하면 됩니다.
+
+    ```shell
+    $ cd standalone/clang-format
+    $ ./setup.sh
+    ```
+
+    !!! note
+    
+        하지만 이 방식은 실행 파일들을 standalone 하게 설치하는 것이기 때문에 불필요한 추가 라이브러리가 계속 다운로드 되어 서버의 저장용량을 낭비 할 수도 있습니다. 따라서 서버 관리자가 `clang-format` 을 정식으로 설치해줄 때까지 임시적으로 사용할 수 있는 방식입니다. 서버 관리자가 서버에 `clang-format` 을 정식으로 설치해주었다면 불필요해진 이 standalone 레포지토리를 삭제하면 좋을 것입니다.
 
 ## clang-format 사용법
 
-(작성중)
+### 미리 정의된 스타일
 
-## clang-format with VSCode 
+만약 `test.cpp` 을 **Google** 스타일로 자동으로 포맷팅하고 싶다면 다음의 명령어를 실행하면 됩니다.
 
-지금까지 `clang-format` 의 사용법을 알아보았는데, **VSCode** 에서는 파일을 저장하기만 하면 자동으로 파일에 `clang-format` 이 적용되도록 할 수 있는 확장이 있습니다.
+```shell
+$ clang-format --style=google -i test.cpp
+```
+
+### 커스텀 스타일
+
+만약 커스텀 스타일로 포맷팅을 하고 싶다면 `.clang-format` 파일에 [Clang documentations](https://clang.llvm.org/docs/ClangFormatStyleOptions.html#) 의 내용을 참고하여 스타일을 만든 후 `--style` 옵션 명시 없이 `clang-format` 을 실행하면 됩니다.
+
+### 모든 파일 포맷팅
+
+모든 파일을 한꺼번에 포맷팅하고 싶다면 다음의 명령어를 실행하면 됩니다.
+
+```shell
+$ find . -regex '.*\.\(cpp\|hpp\|cu\|c\|h\)' -exec clang-format -style=file -i {} \;
+```
+
+### VSCode 연동 자동 포맷팅 (추천)
+
+하지만 이렇게 `clang-format` 을 사용하는 것보다 훨씬 편하고 힘이 덜들어가는 방법이 있습니다. 바로 **VSCode** 와 연동하여 `clang-format` 을 사용하는 것인데요. 파일을 수정하고 저장하는 것만으로 자동으로 포맷팅을 해줍니다.
+
+!!! note
+
+    아직 딥러닝 서버에 **VSCode** 를 연동하지 않았다면 [VSCode 딥러닝 서버 연동하기](../../dev/VSCode/VSCode.md) 를 확인해주세요.
+
+1. 먼저 [**VSCode** 의 `clang-format` 확장](https://marketplace.visualstudio.com/items?itemName=xaver.clang-format)을 설치하세요.
+
+2. 명령팔레트의 **Preferences: Open Settings (JSON)** 을 실행하여 `settings.json` 을 여세요.
+
+    ![2020-08-28_15-52](https://user-images.githubusercontent.com/16812446/91530985-fffd6300-e946-11ea-81a0-988bdd297cea.png)
+
+3. 파일에 다음과 같이 `"editor.formatOnSave": true` 을 추가하세요.
+
+    ```shell
+    {
+        ...
+        "editor.formatOnSave": true
+        ...
+    }
+    ```
+
+4. 만약 `clang-format` 을 [`standalone` 레포지토리](https://github.com/ccss17/standalone) 을 통하여 설치했다면 파일에 다음과 같이 `"clang-format.executable": "/home/USER/.standalone/clang-format/standalone-clang-format.sh"` 을 추가해주세요. `/home/USER` 를 꼭 자신의 홈 디렉토리 경로로 바꿔주어야 합니다!
+
+    ```shell
+    {
+        ...
+        `"clang-format.executable": "/home/USER/.standalone/clang-format/standalone-clang-format.sh"`
+        ...
+    }
+    ```
+
+## `clang-format` 포맷팅 통일
+
+우선 [**WICWIU**](https://github.com/WICWIU/WICWIU) 에서의 `clang-format` 포맷팅을 널리 알려진 `C++` 포맷팅으로 통일하도록 하겠습니다. 이후에 포맷팅을 바꾸고 싶다면 [**WICWIU**](https://github.com/WICWIU/WICWIU) 팀원들 간의 협의를 통하여 바꿀 수 있습니다.
+
+이를 위하여 다음 명령어로 [.clang-format](https://gist.github.com/ccss17/48b6c29ba8cb72b02d5166e5bf6bfddd) 을 받아서 `.clang-format` 파일에 저장해주세요.
+
+```shell
+$ git clone https://gist.github.com/ccss17/48b6c29ba8cb72b02d5166e5bf6bfddd
+$ cp 48b6c29ba8cb72b02d5166e5bf6bfddd/.clang-format ~
+```
+
+이제 [**WICWIU**](https://github.com/WICWIU/WICWIU) 를 자동으로 포맷을 통일할 수 있게 되었습니다. 

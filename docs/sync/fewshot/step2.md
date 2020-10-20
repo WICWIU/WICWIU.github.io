@@ -783,74 +783,220 @@ public:
 
         22:
 
-            `nextOp         = out->GetInputContainer();` 로 `out` 의 인풋 컨테이너에 존재하는 `Operator` 들을 `nextOp` 에 저장하고 다시 큐에 저장한다. 
+        `nextOp         = out->GetInputContainer();` 로 `out` 의 인풋 컨테이너에 존재하는 `Operator` 들을 `nextOp` 에 저장하고 다시 큐에 저장한다. 
 
-            ```cpp 
-            template<typename DTYPE> class ConvolutionLayer2D : public Module<DTYPE>{
-            int Alloc(Operator<DTYPE> *pInput, int pNumInputChannel, int pNumOutputChannel, int pNumKernelRow, int pNumKernelCol, int pStrideRow, int pStrideCol, int pPaddingRow, int pPaddingCol, int use_bias, std::string pName) {
-                this->SetInput(pInput);
-                ...
-            ```
+        ```cpp 
+        template<typename DTYPE> class ConvolutionLayer2D : public Module<DTYPE>{
+        int Alloc(Operator<DTYPE> *pInput, int pNumInputChannel, int pNumOutputChannel, int pNumKernelRow, int pNumKernelCol, int pStrideRow, int pStrideCol, int pPaddingRow, int pPaddingCol, int use_bias, std::string pName) {
+            this->SetInput(pInput);
+            ...
+        ```
 
-            위 코드의 `SetInput` 에서 `pInput` 이 저장된 것이 나오게 된다. `pInput` 은 `out = new ReShape<float>(x, 28, 28, "Flat2Image");` 에서 온 것이었다. 이 `pInput` 이 다시 
+        위 코드의 `SetInput` 에서 `pInput` 이 저장된 것이 나오게 된다. `pInput` 은 `out = new ReShape<float>(x, 28, 28, "Flat2Image");` 에서 온 것이었다. 이 `pInput` 이 다시 
 
-            ```cpp 
-            out = new Convolution2D<DTYPE>(out, pWeight, pStrideRow, pStrideCol, pPaddingRow, pPaddingCol, "Convolution2D_Convolution2D_" + pName);
-            ```
+        ```cpp 
+        out = new Convolution2D<DTYPE>(out, pWeight, pStrideRow, pStrideCol, pPaddingRow, pPaddingCol, "Convolution2D_Convolution2D_" + pName);
+        ```
 
-            로 들어갔다가 `AnalyzeGraph` 로 들어간 것이었다. 
+        로 들어갔다가 `AnalyzeGraph` 로 들어간 것이었다. 
 
-            다시.. `Convolution2D` 에서는 
+        다시.. `Convolution2D` 에서는 
 
-            ```cpp 
-            Convolution2D(Operator<DTYPE> *pInput, Operator<DTYPE> *pWeight, int stride1, int stride2, std::string pName = "NO NAME", int pLoadflag = TRUE) : Operator<DTYPE>(pInput, pWeight, pName, pLoadflag) {
-                Alloc(pInput, pWeight, stride1, stride2, 0, 0);
-            }
-            ```
+        ```cpp 
+        Convolution2D(Operator<DTYPE> *pInput, Operator<DTYPE> *pWeight, int stride1, int stride2, std::string pName = "NO NAME", int pLoadflag = TRUE) : Operator<DTYPE>(pInput, pWeight, pName, pLoadflag) {
+            Alloc(pInput, pWeight, stride1, stride2, 0, 0);
+        }
+        ```
 
-            이게 호출 되고, 이에 따라 `Operator` 에서 
+        이게 호출 되고, 이에 따라 `Operator` 에서 
 
-            ```cpp 
-            template<typename DTYPE> Operator<DTYPE>::Operator(Operator<DTYPE> *pInput0, Operator<DTYPE> *pInput1, std::string pName, int pLoadflag) {
-                ...
-                Alloc();
-                AddEdgebetweenOperators(2, pInput0, pInput1, pLoadflag);
-            }
-            ```
+        ```cpp 
+        template<typename DTYPE> Operator<DTYPE>::Operator(Operator<DTYPE> *pInput0, Operator<DTYPE> *pInput1, std::string pName, int pLoadflag) {
+            ...
+            Alloc();
+            AddEdgebetweenOperators(2, pInput0, pInput1, pLoadflag);
+        }
+        ```
 
-            이게 호출 되고, 
+        이게 호출 되고, 
 
-            ```cpp 
-            template<typename DTYPE> int Operator<DTYPE>::AddEdgebetweenOperators(Operator<DTYPE> *pInput) {
-                this->AddInputEdge(pInput);
-                pInput->AddOutputEdge(this);
-                return TRUE;
-            }
-            ```
+        ```cpp 
+        template<typename DTYPE> int Operator<DTYPE>::AddEdgebetweenOperators(Operator<DTYPE> *pInput) {
+            this->AddInputEdge(pInput);
+            pInput->AddOutputEdge(this);
+            return TRUE;
+        }
+        ```
 
-            이게 호출되고
+        이게 호출되고
 
-            ```cpp 
-            template<typename DTYPE> int Operator<DTYPE>::AddInputEdge(Operator<DTYPE> *pInput) {
-                ...
-                    m_apInput->Push(pInput);
-                ...
-            }
-            ```
+        ```cpp 
+        template<typename DTYPE> int Operator<DTYPE>::AddInputEdge(Operator<DTYPE> *pInput) {
+            ...
+                m_apInput->Push(pInput);
+            ...
+        }
+        ```
 
-            이게 호출된다. 
-            
-            일단 `SetInput` 도 마찬가지로 `Set` 기능이 아니라 `Add` 기능을 하는 메소드였었다.
+        이게 호출된다. 
+        
+        일단 `SetInput` 도 마찬가지로 `Set` 기능이 아니라 `Add` 기능을 하는 메소드였었다.
 
-            그러니까 정리하자면 맨 처음에 `ConvolutionLayer2D` 의 `SetInput` 을 통해 `ConvolutionLayer2D` 객체의 `m_apInput` 에 전달된 `ReShape` 객체인 `pInput` 이 `Push` 되었고, `Convolution2D` 의 상위클래스 `Operator` 의 생성자 속의 `AddEdgebetweenOperators` 속의 `AddInputEdge` 에 `pInput` 에 저장되어 있던 `ReShape` 객체인 `out` 전달되는데, 이것이 `Convolution2D` 객체의 `m_apInput` 에 `Push` 되고, `ReShape` 객체의 `m_apOutput` 에 `Convolution2D` 가 `Push` 된다.
+        그러니까 정리하자면 맨 처음에 `ConvolutionLayer2D` 의 `SetInput` 을 통해 `ConvolutionLayer2D` 객체의 `m_apInput` 에 전달된 `ReShape` 객체인 `pInput` 이 `Push` 되었고, `Convolution2D` 의 상위클래스 `Operator` 의 생성자 속의 `AddEdgebetweenOperators` 속의 `AddInputEdge` 에 `pInput` 에 저장되어 있던 `ReShape` 객체인 `out` 전달되는데, 이것이 `Convolution2D` 객체의 `m_apInput` 에 `Push` 되고, `ReShape` 객체의 `m_apOutput` 에 `Convolution2D` 가 `Push` 된다.
 
-            !!! danger
-            
-                데이터 구조를 좀 심플하게 만들 필요가 있어보이는데, 중복으로 `Push` 하는 부분도 많아 보이고, 그래서 `isValid` 를 호출해야만 하는 것 같고,
+        !!! danger
+        
+            데이터 구조를 좀 심플하게 만들 필요가 있어보이는데, 중복으로 `Push` 하는 부분도 많아 보이고, 그래서 `isValid` 를 호출해야만 하는 것 같고,
 
-                상속 구조도 코드 분석을 난해하게 만드는 불필요한 상속관계가 많은 것 같다.k
+            상속 구조도 코드 분석을 난해하게 만드는 불필요한 상속관계가 많은 것 같다.k
 
-                전체적인 구조가 단순할 수 있는데, 불필요하게 너무 복잡해진 것 같고, 중복 로직이 너무 많고, 불필요한 로직도 너무 많아 보인다. 이러면 코드 관리가 계속 계속 힘들어지게 된다. 
+            전체적인 구조가 단순할 수 있는데, 불필요하게 너무 복잡해진 것 같고, 중복 로직이 너무 많고, 불필요한 로직도 너무 많아 보인다. 이러면 코드 관리가 계속 계속 힘들어지게 된다. 
 
-            어쨌든 결국 `Convolution2D` 의 `GetInputContainer` 를 통해 `ReShape` 객체가 나오게 된다. 
-            
+        어쨌든 결국 `Convolution2D` 의 `GetInputContainer` 를 통해 `ReShape` 객체가 나오게 된다. 
+        
+- 10-22:
+
+    `Relu`, `Maxpooling2D` 은 단순히 다음의 생성자를 갖는다.
+
+    ```c++ 
+    Relu(Operator<DTYPE> *pInput, std::string pName, int pLoadflag = TRUE) : Operator<DTYPE>(pInput, pName, pLoadflag) {
+        this->Alloc(pInput);
+    }
+    int Alloc(Operator<DTYPE> *pInput) {
+        int timesize    = pInput->GetResult()->GetTimeSize();
+        int batchsize   = pInput->GetResult()->GetBatchSize();
+        int channelsize = pInput->GetResult()->GetChannelSize();
+        int rowsize     = pInput->GetResult()->GetRowSize();
+        int colsize     = pInput->GetResult()->GetColSize();
+        this->SetResult(new Tensor<DTYPE>(timesize, batchsize, channelsize, rowsize, colsize));
+        this->SetDelta(new Tensor<DTYPE>(timesize, batchsize, channelsize, rowsize, colsize));
+        return TRUE;
+    }
+    ```
+
+    이때 `Operator` 의 생성자가 호출되므로 인풋과 아웃풋을 설정해주는 과정이 또 진행된다. 
+
+    ```c++ 
+    Maxpooling2D(Operator<DTYPE> *pInput, int maskRow, int maskCol, int strideRow, int strideCol, int padding, std::string pName, int pLoadflag = TRUE) : Operator<DTYPE>(pInput, pName, pLoadflag) {
+        this->Alloc(pInput, strideRow, strideCol, maskRow, maskCol, padding, padding);
+    }
+    int Alloc(Operator<DTYPE> *pInput, int strideRow, int strideCol, int maskRow, int maskCol, int padding1 = 0, int padding2 = 0) {
+        Shape *shapeOfInput = pInput->GetResult()->GetShape();
+        m_stride[0] = strideRow;
+        m_stride[1] = strideCol;
+
+        m_mask[0] = maskRow;
+        m_mask[1] = maskCol;
+
+        m_padding[0] = padding1;
+        m_padding[1] = padding2;
+
+        int rowsize = 0;
+        int colsize = 0;
+
+        rowsize = ((*shapeOfInput)[3] - maskRow + (2 * m_padding[0])) / strideRow + 1;
+        colsize = ((*shapeOfInput)[4] - maskCol + (2 * m_padding[1])) / strideCol + 1;
+
+        this->SetResult(new Tensor<DTYPE>((*shapeOfInput)[0], (*shapeOfInput)[1], (*shapeOfInput)[2], rowsize, colsize));
+        this->SetDelta(new Tensor<DTYPE>((*shapeOfInput)[0], (*shapeOfInput)[1], (*shapeOfInput)[2], rowsize, colsize));
+        indexOfMaxInput = new Tensor<int>((*shapeOfInput)[0], (*shapeOfInput)[1], (*shapeOfInput)[2], rowsize, colsize);
+        return TRUE;
+    }
+    ```
+
+    `Maxpooling2D` 도 마찬가지로 `Operator` 의 생성자가 호출되어 인풋과 아웃풋이 설정된다. 
+
+    `Linear` 객체에서는 
+
+    ```c++ 
+    Linear(Operator<DTYPE> *pInput, int pNumInputCol, int pNumOutputCol, int use_bias = FALSE, std::string pName = "No Name") : Module<DTYPE>(pName) {
+        Alloc(pInput, pNumInputCol, pNumOutputCol, use_bias, pName);
+    }
+    int Alloc(Operator<DTYPE> *pInput, int pNumInputCol, int pNumOutputCol, int use_bias, std::string pName) {
+        this->SetInput(pInput);
+        Operator<DTYPE> *out = pInput;
+        // for He initialization
+        float stddev = sqrt((float)4/(pNumInputCol + pNumOutputCol));
+        Tensorholder<DTYPE> *pWeight = new Tensorholder<DTYPE>(Tensor<DTYPE>::Random_normal(1, 1, 1, pNumOutputCol, pNumInputCol, 0.0, stddev), "Layer_Weight_" + pName);
+        out = new MatMul<DTYPE>(pWeight, out, "Layer_MatMul_" + pName);
+        if (use_bias) {
+            Tensorholder<DTYPE> *pBias = new Tensorholder<DTYPE>(Tensor<DTYPE>::Constants(1, 1, 1, 1, pNumOutputCol, 0.f), "Add_Bias_" + pName);
+            out = new AddColWise<DTYPE>(out, pBias, "Layer_Add_" + pName);
+        }
+
+        this->AnalyzeGraph(out);
+        return TRUE;
+    }
+    ```
+
+    `Module` 의 
+
+    ```c++ 
+    template<typename DTYPE> Module<DTYPE>::Module(std::string pName) : Operator<DTYPE>(pName) {
+        m_aaExcutableOperator    = NULL;
+        m_numOfExcutableOperator = 0;
+        m_pLastOperator          = NULL;
+        m_idOfDevice             = -1;
+        Alloc();
+    }
+    ```
+
+    이 생성자가 호출되고 다시 `Operator` 의 
+
+    ```c++ 
+    template<typename DTYPE> Operator<DTYPE>::Operator(std::string pName, int pLoadflag) {
+        m_apOutput    = NULL;
+        m_apInput     = NULL;
+        m_aaResult    = NULL;
+        m_aaGradient  = NULL;
+        m_name        = pName;
+        m_Device      = CPU;
+        m_Mode        = TRAIN;
+        m_isParameter = FALSE;
+        m_isTrainable = FALSE;
+        m_idOfDevice  = -1;
+        m_Loadflag    = TRUE;
+        Alloc();
+    }
+    ```
+
+    이 생성자가 호출된다. ㅋㅋㅋ 
+
+    !!! danger
+    
+        `AnalyzeGraph` 를 끝없이 하고 있는데, 학습 가능 그래프를 여러번 만드는 게 가치가 있나? 이런 연산은 마지막에 한번만 해도 되지 않나? 
+
+        그리고 애초에 데이터구조를 잘 선택했다면, 이러한 학습 가능 그래프를 만드는 연산 자체가 필요 없다. Ordered Dictionary 나 Sequence 같은 것들. Queue 를 데이터구조로 채택한 것때문에 스노우볼이 너무 굴러가서 구조가 너무 복잡해진 것 같은데.
+
+- 23:
+
+    마지막에 `AnalyzeGraph` 를 한번 더 호출해준다.
+
+- 25-27:
+
+    손실 함수와 최적화 함수를 초기화해주는데 볼 필요도 없이 
+
+    ```c++ 
+    template<typename DTYPE> class NeuralNetwork : public Module<DTYPE>{
+    private:
+        LossFunction<DTYPE> *m_aLossFunction;
+        ///< 신경망의 손실함수에 해당하는 LossFunction의 포인터 멤버 변수
+        Optimizer<DTYPE> *m_aOptimizer;
+    ```
+
+    얘네 들을 초기화해주는 애들일 것 같다.
+
+    ```c++ 
+    template<typename DTYPE> LossFunction<DTYPE> *NeuralNetwork<DTYPE>::SetLossFunction(LossFunction<DTYPE> *pLossFunction) {
+        m_aLossFunction = pLossFunction;
+        return pLossFunction;
+    }
+    template<typename DTYPE> Optimizer<DTYPE> *NeuralNetwork<DTYPE>::SetOptimizer(Optimizer<DTYPE> *pOptimizer) {
+        m_aOptimizer = pOptimizer;
+        return pOptimizer;
+    }
+    ```
+
+---
+
+`ForwardPropagateOnGPU` 가 왜 `NeuralNetwork` 에 있는 게 아니라 `Module` 에 있지? 아 상속 관계를 지키려고, 이를 통해 클래스 구조를 지키려고.

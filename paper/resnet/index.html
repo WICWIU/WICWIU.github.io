@@ -1,0 +1,1790 @@
+
+<!doctype html>
+<html lang="kr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <meta name="author" content="HGU DL Lab">
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.ico">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.1.0">
+    
+    
+      
+        <title>ResNet - WICWIU</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.bc7e593a.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab28b872.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#4051b5">
+        
+      
+    
+    
+    
+      
+        
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css">
+    
+      <link rel="stylesheet" href="../../stylesheets/gradient-dark.css">
+    
+      <link rel="stylesheet" href="../../stylesheets/config.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="">
+      
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#resnet" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="../.." title="WICWIU" class="md-header-nav__button md-logo" aria-label="WICWIU">
+      
+  <img src="../../assets/images/favicon.png" alt="logo">
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            WICWIU
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              ResNet
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="검색" placeholder="검색" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/WICWIU/WICWIU/" title="저장소로 이동" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    WICWIU
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="WICWIU" class="md-nav__button md-logo" aria-label="WICWIU">
+      
+  <img src="../../assets/images/favicon.png" alt="logo">
+
+    </a>
+    WICWIU
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/WICWIU/WICWIU/" title="저장소로 이동" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    WICWIU
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../about/" class="md-nav__link">
+      About
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../api/" class="md-nav__link">
+      API
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4" checked>
+    
+    <label class="md-nav__link" for="nav-4">
+      논문 정리
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="논문 정리" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        <span class="md-nav__icon md-icon"></span>
+        논문 정리
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        ResNet
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" class="md-nav__link md-nav__link--active">
+      ResNet
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#resnet" class="md-nav__link">
+    ResNet 논문 정리
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#0abstract" class="md-nav__link">
+    0.Abstract
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1introduction" class="md-nav__link">
+    1.Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2deep-residual-learning" class="md-nav__link">
+    2.Deep Residual Learning
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3network-architecture" class="md-nav__link">
+    3.Network Architecture
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4experiment" class="md-nav__link">
+    4.Experiment
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5pytorch" class="md-nav__link">
+    5.Pytorch를 이용한 코드 구현
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../facenet/" class="md-nav__link">
+      FaceNet
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../quadruplet/" class="md-nav__link">
+      Quadruplet
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      WICWIU 개발 가이드
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="WICWIU 개발 가이드" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        <span class="md-nav__icon md-icon"></span>
+        WICWIU 개발 가이드
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-1" type="checkbox" id="nav-5-1">
+    
+    <label class="md-nav__link" for="nav-5-1">
+      WICWIU
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="WICWIU" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-1">
+        <span class="md-nav__icon md-icon"></span>
+        WICWIU
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../dev/wicwiu/about/" class="md-nav__link">
+      1. About WICWIU
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../dev/wicwiu/nn/" class="md-nav__link">
+      2. WICWIU 신경망 구성
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../dev/wicwiu/learn/" class="md-nav__link">
+      3. WICWIU 로 학습하기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../dev/wicwiu/code/" class="md-nav__link">
+      4. WICWIU 코드 같이보기
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-2" type="checkbox" id="nav-5-2">
+    
+    <label class="md-nav__link" for="nav-5-2">
+      Git
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Git" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-2">
+        <span class="md-nav__icon md-icon"></span>
+        Git
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../dev/Git/git/" class="md-nav__link">
+      Collaborate with Git
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../dev/Git/message/" class="md-nav__link">
+      Commit/PR protocol
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../dev/Git/update/" class="md-nav__link">
+      Update forked repo
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-3" type="checkbox" id="nav-5-3">
+    
+    <label class="md-nav__link" for="nav-5-3">
+      VSCode
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="VSCode" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-3">
+        <span class="md-nav__icon md-icon"></span>
+        VSCode
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../dev/VSCode/remote/" class="md-nav__link">
+      딥러닝 서버 VSCode 연동
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../dev/VSCode/git/" class="md-nav__link">
+      VSCode Git 연동
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-4" type="checkbox" id="nav-5-4">
+    
+    <label class="md-nav__link" for="nav-5-4">
+      GPU Acceleration
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="GPU Acceleration" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-4">
+        <span class="md-nav__icon md-icon"></span>
+        GPU Acceleration
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../dev/GPU/cuda/" class="md-nav__link">
+      cuda
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-5" type="checkbox" id="nav-5-5">
+    
+    <label class="md-nav__link" for="nav-5-5">
+      Makefile
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Makefile" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-5">
+        <span class="md-nav__icon md-icon"></span>
+        Makefile
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../dev/makefile/makefile/" class="md-nav__link">
+      Makefile 기본
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../dev/makefile/makefile2/" class="md-nav__link">
+      Makefile 고급
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-6" type="checkbox" id="nav-5-6">
+    
+    <label class="md-nav__link" for="nav-5-6">
+      CLI
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="CLI" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-6">
+        <span class="md-nav__icon md-icon"></span>
+        CLI
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../dev/cli/cli/" class="md-nav__link">
+      CLI
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../dev/cli/zsh/" class="md-nav__link">
+      zsh
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../dev/cli/tmux/" class="md-nav__link">
+      tmux
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      WICWIU 지식동기화
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="WICWIU 지식동기화" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        <span class="md-nav__icon md-icon"></span>
+        WICWIU 지식동기화
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6-1" type="checkbox" id="nav-6-1">
+    
+    <label class="md-nav__link" for="nav-6-1">
+      fewshot diary
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="fewshot diary" data-md-level="2">
+      <label class="md-nav__title" for="nav-6-1">
+        <span class="md-nav__icon md-icon"></span>
+        fewshot diary
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6-1-1" type="checkbox" id="nav-6-1-1">
+    
+    <label class="md-nav__link" for="nav-6-1-1">
+      Step 1. Data &rarr; Tensor
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Step 1. Data &rarr; Tensor" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-1-1">
+        <span class="md-nav__icon md-icon"></span>
+        Step 1. Data &rarr; Tensor
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sync/fewshot/step1-1/" class="md-nav__link">
+      Analysis&#58; LFW 1
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sync/fewshot/step1-2/" class="md-nav__link">
+      Analysis&#58; LFW 2
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sync/fewshot/step1-3/" class="md-nav__link">
+      Coding&#58; PNG, CImg
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sync/fewshot/step2/" class="md-nav__link">
+      Step 2. 순전파
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sync/fewshot/step3/" class="md-nav__link">
+      Step 3. 역전파
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sync/fewshot/step4/" class="md-nav__link">
+      Step 4. 최적화
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6-2" type="checkbox" id="nav-6-2">
+    
+    <label class="md-nav__link" for="nav-6-2">
+      Coding Convention
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Coding Convention" data-md-level="2">
+      <label class="md-nav__title" for="nav-6-2">
+        <span class="md-nav__icon md-icon"></span>
+        Coding Convention
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sync/convention/step1-1/" class="md-nav__link">
+      About Coding Convention
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sync/convention/googlestyleguide/" class="md-nav__link">
+      (ABANDONED)Google C++ Style Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
+    
+    <label class="md-nav__link" for="nav-7">
+      이곳에 문서 작성하기
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="이곳에 문서 작성하기" data-md-level="1">
+      <label class="md-nav__title" for="nav-7">
+        <span class="md-nav__icon md-icon"></span>
+        이곳에 문서 작성하기
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../write/markdown/" class="md-nav__link">
+      Step 1. Markdown 파일
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../write/code/" class="md-nav__link">
+      Step 2. 소스코드 설명하기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../write/format/" class="md-nav__link">
+      Step 3. 고오급 포매팅
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../write/admonitions/" class="md-nav__link">
+      Step 4. Admonitions
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../write/tab/" class="md-nav__link">
+      Step 5. 컨텐츠 탭
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../write/button/" class="md-nav__link">
+      Step 6. 버튼 넣기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../write/math/" class="md-nav__link">
+      Step 7. 수식 보여주기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../write/api/" class="md-nav__link">
+      Step 8. API 작성
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#resnet" class="md-nav__link">
+    ResNet 논문 정리
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#0abstract" class="md-nav__link">
+    0.Abstract
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1introduction" class="md-nav__link">
+    1.Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2deep-residual-learning" class="md-nav__link">
+    2.Deep Residual Learning
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3network-architecture" class="md-nav__link">
+    3.Network Architecture
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4experiment" class="md-nav__link">
+    4.Experiment
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5pytorch" class="md-nav__link">
+    5.Pytorch를 이용한 코드 구현
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/WICWIU/WICWIU/edit/master/docs/paper/resnet.md" title="이 페이지를 편집" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  <h1>ResNet</h1>
+                
+                <h2 id="resnet">ResNet 논문 정리<a class="headerlink" href="#resnet" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>이 글은 Deep residual learning for image recognition 논문을 분석하고 이해를 돕기위함 입니다. </p>
+</div>
+<div class="admonition tldr">
+<p class="admonition-title">레즈넷 핵심 이해</p>
+<ul class="task-list">
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>레즈넷의 우수성</code> : </p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>Degradation</code>: </p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>Reformation</code>: </p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>Identity mapping</code>: </p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>네트워크 구조</code>: </p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>실험 결과 이해</code>: </p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>pytorch를 이용한 코드 구현</code>:</p>
+</li>
+</ul>
+</div>
+<h2 id="0abstract">0.Abstract<a class="headerlink" href="#0abstract" title="Permanent link">&para;</a></h2>
+<p>이 논문에 ResNet은 152개의 layer로 구성되었고, ILSVRC 2015 ImageNet Dataset classification 부분에서 top-5 error 3.57%로 1위를 기록하였다.</p>
+<p>또한 ImageNet Dataset뿐만이 아니라, CIFAR-10등 다양한 데이터셋에서도 좋은 성능을 내고 있다. </p>
+<p>이는 전년도 우승 네트워크 구조인 GoogleNet의 22개의 layer보다 무려 8배나 더 깊은 네트워크를 만들어 성공시켰다는 점에서 딥러닝 역사에 한 획을 그은 논문으로 평가 받고 있다.</p>
+<div class="admonition tldr">
+<p class="admonition-title">레즈넷 핵심 이해</p>
+<ul class="task-list">
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <code>레즈넷의 우수성</code> : <code>더 깊은 네트워크 구축</code></p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>Degradation</code>: </p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>Reformation</code>: </p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>Identity mapping</code>: </p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>네트워크 구조</code>: </p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>실험 결과 이해</code>: </p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>pytorch를 이용한 코드 구현</code>:</p>
+</li>
+</ul>
+</div>
+<h2 id="1introduction"><strong>1.Introduction</strong><a class="headerlink" href="#1introduction" title="Permanent link">&para;</a></h2>
+<p>네트워크를 깊게 쌓으면 발생하는 문제로 가장 확연히 들어나는 두가지가 바로 overfitting 문제와 degradation 문제이다. 하지만, 이 논문에서 제시하는 문제는 이중 degradation 문제이다.</p>
+<dl>
+<dt><img alt="degradation" src="https://sike6054.github.io/blog/images/ResNet,%20Fig.1(removed).png" /></dt>
+<dd>
+<p><em>name (<a href="">from</a>)</em></p>
+</dd>
+</dl>
+<div class="admonition success">
+<p class="admonition-title">Success</p>
+<p>왜냐하면 56 레이어 모델과 20 레이어 모델을 비교한 결과 테스트와 트레이닝 둘다의 에러율이 더 깊은 56 레이어 모델이 더 높았기 때문이다. 만약 이게 오버피팅의 문제였다면, 트레이닝에서는 더 깊은 56레이어의 에러율이 더 작고, 테스트에서만 56레이어의 에러가 더 높았어야 한다. 그런점으로 봤을때, 모델을 더 깊이 쌓았을때 해결되어야 하는 근본적인 문제중 하나는 degradation 문제이다. </p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>degradation은 vanishing gradient 와 exploding gradient 문제를 합쳐서 이야기 한다. </p>
+</div>
+<div class="admonition tldr">
+<p class="admonition-title">레즈넷 핵심 이해</p>
+<ul class="task-list">
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <code>레즈넷의 우수성</code> : <code>더 깊은 네트워크 구축</code></p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <code>Degradation</code>: <code>오버피팅과의 차이 파악</code></p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>Reformation</code>: </p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>Identity mapping</code>: </p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>네트워크 구조</code>: </p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>실험 결과 이해</code>: </p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>pytorch를 이용한 코드 구현</code>:</p>
+</li>
+</ul>
+</div>
+<h2 id="2deep-residual-learning">2.Deep Residual Learning<a class="headerlink" href="#2deep-residual-learning" title="Permanent link">&para;</a></h2>
+<p>그렇다면 이 논문에서는 어떻게 degradation 문제를 해결하고 있을까? 이 논문에서는 “Residual Learning Framework”를 도입하여 성능 저하 문제를 해결하고 있다. Residual learning을 통해서 optimize가 더 쉬워지고, accuracy가 더 높아진다는 두가지 장점이 있다. </p>
+<p><img alt="residual" src="https://miro.medium.com/max/1140/1*D0F3UitQ2l5Q0Ak-tjEdJg.png" /></p>
+<p>Reformation을 통해 레즈넷은 few stacked layer를 underlying mapping을 직접 학습하지 않고, residual mapping에 맞추어 학습하도록 한다. Reformation이란 H(x) = F(x) + x 에서 x를 이항하여 F(x)는 H(x)-x 라는 값으로 만드는 것을 의미 한다. </p>
+<div class="admonition success">
+<p class="admonition-title">Success</p>
+<p>underlying mapping 즉, 원래의 original mapping을 H(x)로 나타낸다면, residual mapping이 아닌 것은 H(x)를 처음부터 그 자체를 학습할 것이고, variance가 따러서 매우 클 것이겠지만,</p>
+<p>residual learning 에서는 H(x) = F(x) + x 를 이용해서, stacked nonlinear layer의 mapping인 F(x)는 H(x)-x 를 학습하는 것이다. 이것을 통해서 F(x)는 0이 목표라는 특징을 가지기 때문에 variance는 매우 작아지고, optimize가 더 쉬워진다는 장점이 생긴다. original mapping은 F(x)+x 로 재구성 된다.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>deep learning에서 에러율에는 variance가 영향을 끼치는 요소이다. variance가 크면,overfitting의 확률이 높아지고 모델 학습에 어려움이 생긴다. 반면 variance가 작으면,일반화에 도움이 된다. 하지만 무조건 이게 항상 맞는것이 아니다. 여기에 대해서 더 완전히 자세히 알고 싶다면, 
+bias-variance trade-off에 대해 공부해야하고, 아래 블로그의 그림들을 참조하라 :
+<a href="https://towardsdatascience.com/examples-of-bias-variance-tradeoff-in-deep-learning-6420476a20bd">bias-variance trade-off</a></p>
+</div>
+<p>Residual learning에서 알아야할 정말 중요한 단어중 하나가 바로 shortcut connection이라고도 불리는 identity mapping 이다.</p>
+<div class="admonition success">
+<p class="admonition-title">Success</p>
+<p>identity mapping을 통해서, 최소한 한쪽의 gradient는 계속 흐를 수 있게 mapping 해줌으로써 우리는 더 얕은 네트워크보다 최소한 더 나쁘지는 않은 결과를 보장 받을 수 있다.또, 이를 통해 vanishing gradient 와 exploding gradient 즉 degradation 문제를 해결할 수 있고, 모델을 더 깊게 쌓을 수 있게 되어서 결국 더 좋은 accuracy가 종종 나타난다.  </p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>만약 위의 사진과 설명을 보았는데도 레즈넷이 아직도 완전히 이해가 가지 않는다면, 수식적으로 증명해 보는것을 추천한다. 그러면 완전히 머리 속으로 이 과정이 이해가 될것이다. </p>
+<p>이 레즈넷 논문은 경험적으로 기술되었다. 이후에 이 레즈넷이 왜 효과가 있는지 설명한 후속 논문들이 많이 나와 있다. 원본을 읽고 싶다면, Identity Mappings in Deep Residual Networks 라는 논문을 읽으면 된다. </p>
+<p>나는 빠르게 잘 이 논문을 정리해둔 블로그를 하나 추천해 주려고 한다. 첫번째 수식 증명을 잘 확인해보기를 바란다. <a href="http://openresearch.ai/t/identity-mappings-in-deep-residual-networks/47">수식 관련 추천 논문</a>  </p>
+</div>
+<div class="admonition tldr">
+<p class="admonition-title">레즈넷 핵심 이해</p>
+<ul class="task-list">
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <code>레즈넷의 우수성</code> : <code>더 깊은 네트워크 구축</code></p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <code>Degradation</code>: <code>오버피팅과의 차이 파악</code></p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <code>Reformation</code>: <code>easy to optimize</code></p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <code>Identity mapping</code>: <code>increase accuracy</code> </p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>네트워크 구조</code>: </p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>실험 결과 이해</code>: </p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>pytorch를 이용한 코드 구현</code>:</p>
+</li>
+</ul>
+</div>
+<h2 id="3network-architecture">3.Network Architecture<a class="headerlink" href="#3network-architecture" title="Permanent link">&para;</a></h2>
+<p><img alt="architecture" src="https://sike6054.github.io/blog/images/ResNet,%20Fig.3(removed).png" /></p>
+<p>맨 왼쪽 부터 VGGnet, plain, residual 의 네트워크 구조 입니다. </p>
+<p>Plain Network의 경우, 대부분 3*3 convolutional 필터로 이루어져있다. 
+여기는 룰이 두가지 있는데, </p>
+<ol>
+<li>
+<p>하나는 피쳐뱁과 같은 사이즈의 아웃풋일경우 레이어는 같은 개수의 필터를 가지게 하는것이다.</p>
+</li>
+<li>
+<p>두번째로는 만약 피쳐맥 사이즈의 반이라면, 필터는 각 레이어 별 타임 컴플렉 시티를 맞추기 위해 필터의 개수를 두배로 늘린다. </p>
+<p>Downsampling 은 stride 2로 이루어지고, 마지막은 글로벌 에버리지 풀링을 적용하고, 1000-way fully connected layer에 softmax를 적용한다. </p>
+</li>
+</ol>
+<p>Residual Network의 경우, plain 모델에 shortcut connection을 추가한다. 같은 dimension일 경우 그냥 연결을 한다. 만약 Dimension이 증가할 경우, 두가지 방법을 사용 할 수 있다. Extral zero entries padded 를 주어 dimension을 증가 시키거나, 1*1convolutions을 이용해서 projection shortcut을 해주는 방법이 있다. 둘다 strided 2를 이용한다. 여기서 점선으로 된 부분은 dimension이 증가하는 부분이다. </p>
+<p><em>ResNet 구현 세팅:</em></p>
+<ul>
+<li>
+<p>image resized 224 * 224 (RC,HF)</p>
+</li>
+<li>
+<p>Batch normalization BN 사용</p>
+</li>
+<li>
+<p>Initialize Weights</p>
+</li>
+<li>
+<p>SGD, mini batch 256</p>
+</li>
+<li>
+<p>Learning rate 0.1  Iteration 60 * 10^4</p>
+</li>
+<li>
+<p>weight decay 0.0001, momentum 0.9</p>
+</li>
+<li>
+<p>No dropout</p>
+</li>
+</ul>
+<div class="admonition success">
+<p class="admonition-title">Success</p>
+<p>Residual Network의 경우, plain 모델에 shortcut connection을 추가한다. </p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>이 두 네트워크의 TOTAL FLOP은 3.6billion 입니다. 이건 VGG 는 19.6 billion FLOP이 있는데, 비교하면 18퍼센트 밖에 안되는 복잡성을 가지고 있다. </p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>실험적으로 이게 가장 좋아서 이렇게 네트워크 구조가 짜여졌다. 나처럼 이 네트워크 구조의 세팅이 왜 이렇게 이루어 졌고, 이게 가장 좋다는 것을 이해하기 어렵다면, 후속 논문들의 실험 내용과 증명을 보기를 추천한다. <a href="http://openresearch.ai/t/identity-mappings-in-deep-residual-networks/47">identity mapping증명</a>  </p>
+</div>
+<div class="admonition tldr">
+<p class="admonition-title">레즈넷 핵심 이해</p>
+<ul class="task-list">
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <code>레즈넷의 우수성</code> : <code>더 깊은 네트워크 구축</code></p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <code>Degradation</code>: <code>오버피팅과의 차이 파악</code></p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <code>Reformation</code>: <code>easy to optimize</code></p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <code>Identity mapping</code>: <code>increase accuracy</code> </p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <code>네트워크 구조</code>: <code>plain network with identity mapping</code></p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>실험 결과 이해</code>: </p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>pytorch를 이용한 코드 구현</code>:</p>
+</li>
+</ul>
+</div>
+<h2 id="4experiment">4.Experiment<a class="headerlink" href="#4experiment" title="Permanent link">&para;</a></h2>
+<dl>
+<dt><img alt="result1" src="https://sike6054.github.io/blog/images/ResNet,%20Table.2(removed).png" /></dt>
+<dd>
+<p><em>Table.2 학습 된 18-layer 및 34-layer plain/residual network의 validation data에 대한 10-crop testing 결과 중 top-1 error를 나타낸 표다.</em></p>
+</dd>
+</dl>
+<p><em>분석결과:</em></p>
+<ol>
+<li>
+<p>34-layer ResNet이 18-layer ResNet보다 우수한 성능을 보인다. 즉, 깊은 네트워크에서 성능 저하 문제가 잘 해결되었다. </p>
+</li>
+<li>
+<p>plain network와 비교할때,residual learning의 유효성을 입증할 수 있다. (increase acurracy)</p>
+</li>
+<li>
+<p>18-layer plain/residual network 간에는 유사한 성능을 보였지만, 논문의 Fig.4에 따르면 18-layer ResNet이 더욱 빠르게 수렴한다. 이는 network가 “not overly deep”한 경우(18-layers의 경우), 현재의 SGD solver는 여전히 plain net에서도 좋은 solution을 찾을 수 있다는 것으로 볼 수 있다. </p>
+<p>하지만, 이러한 경우에도 ResNet에서는 빠른 수렴속도를 기대할 수 있다. (easy to optimize)</p>
+</li>
+</ol>
+<dl>
+<dt><img alt="result2" src="https://sike6054.github.io/blog/images/ResNet,%20Table.3(removed).png" /></dt>
+<dd>
+<p><em>Table.3 각 수치는 ImageNet validation data에 대한 10-crop testing error를 나타낸다.</em></p>
+</dd>
+</dl>
+<p><em>분석결과:</em></p>
+<ol>
+<li>
+<p>projection shortcut는 dimension을 늘릴 때만 사용되며, 다른 shortcut은 모두 identity로 세팅한다. </p>
+</li>
+<li>
+<p>ResNet152 즉, 가장 깊은 네트워크가 낮은 에러율을 보인다. </p>
+</li>
+<li>
+<p>다른 네트워크에 비해 덜 복잡한 ResNet이 낮은 에러를 가진다. 즉, 레즈넷은 매우 훌륭한 네트워크이다. </p>
+</li>
+</ol>
+<p>위의 테이블의 결과에 따르면, A의 세팅은 zero-padding shortcut는 dimension matching에 사용되며, 모든 shortcut는 parameter-free이고, B의 세팅은 projection shortcut는 dimension을 늘릴 때만 사용되며, 다른 shortcut은 모두 identity이며, C의 세팅은 모든 shortcut은 projection이다. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>결과적으로는 C가 가장 좋지만, 그 차이가 아주 작다. 즉, 성능저하에 큰 영향을 주지 않는다. 하지만, C의 복잡성에 비해 B가 훨씬 덜 복잡하므로 논문에서는 B를 채택했다. </p>
+</div>
+<p><img alt="result3" src="https://sike6054.github.io/blog/images/ResNet,%20Fig.5(removed).png" /></p>
+<blockquote>
+<p>Fig.5 ImageNet data에 대한 학습을 위한 deeper residual function F의 building block이다. 왼쪽은 Fig.3의 ResNet에서 feature map의 크기가 56x56인 경우의 building block이며, 오른쪽은 ResNet-50/101/152에서 같은 경우에 사용하는 ‘bottleneck’ building block이다.</p>
+</blockquote>
+<p>다음으로 ImageNet dataset을 위한 deeper network를 설명한다. 감당할 수 없는 training time에 대한 우려로 인해, building block을 bottleneck design으로 수정한다. 각 residual function F, 2-layer stack대신 3-layer stack을 사용한다(Fig.5 참조). 3개의 layer는 각각 순서대로 1x1, 3x3, 1x1 conv layer이며, 1x1 conv layer는 dimension을 줄이거나 늘리는 용도로 사용하며, 3x3 layer의 input/output의 dimension을 줄인 bottleneck으로 둔다. Fig.5에서는 2-layer stack과 3-layer stack의 디자인을 보여준다. 둘은 유사한 time complexity를 갖는다.</p>
+<blockquote>
+<p>여기서 parameter-free인 ideneity shortcut은 이 architecture에서 특히 중요하다. 만약 Fig.5의 오른쪽 다이어그램에서 identity shortcut이 projection으로 대체된다면, shortcut이 두 개의 high-dimensional 출력과 연결되므로 time complexity와 model size가 두 배로 늘어난다. 따라서 identity shortcut은 이 bottleneck design을 보다 효율적인 모델로 만들어준다.</p>
+</blockquote>
+<p><em>CIFAR10 and Analysis:</em></p>
+<p><ins>결론만 말하자면, ImageNet Dataset이 아닌 다른 데이터 셋에서도 레즈넷은 잘 동작한다.</ins> 또 overfitting이 조금 이루어지기는 했지만, 그래도 꽤 좋은 결과로 1000 레이어 까지 쌓아본 실험결과가 담겨져 있다. 작은 데이터셋에는 1000레이어가 오버피팅이 일어나지만, 큰 데이터셋을 대상으로는 좋은 결과를 받을것으로 예측되며, 레즈넷 덕분에 네트워크를 아주 깊게 구축 할 수 있게 되었다. </p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>좀더 자세히 분석하고 싶다면, <a href="https://sike6054.github.io/blog/paper/first-post/">더 많은 실험결과</a></p>
+</div>
+<div class="admonition tldr">
+<p class="admonition-title">레즈넷 핵심 이해</p>
+<ul class="task-list">
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <code>레즈넷의 우수성</code> : <code>더 깊은 네트워크 구축</code></p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <code>Degradation</code>: <code>오버피팅과의 차이 파악</code></p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <code>Reformation</code>: <code>easy to optimize</code></p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <code>Identity mapping</code>: <code>increase accuracy</code> </p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <code>네트워크 구조</code>: <code>plain network with identity mapping</code></p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <code>실험 결과 이해</code>: <code>많은 데이터 셋에 관해 더 깊은 네트워크 구축으로 높은 accuracy 성공</code> </p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>pytorch를 이용한 코드 구현</code>:</p>
+</li>
+</ul>
+</div>
+<h2 id="5pytorch">5.Pytorch를 이용한 코드 구현<a class="headerlink" href="#5pytorch" title="Permanent link">&para;</a></h2>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38</pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">BasicBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="n">expansion</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inplanes</span><span class="p">,</span> <span class="n">planes</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">downsample</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">base_width</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">dilation</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">norm_layer</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BasicBlock</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">norm_layer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">norm_layer</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span>
+        <span class="k">if</span> <span class="n">groups</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">base_width</span> <span class="o">!=</span> <span class="mi">64</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;BasicBlock only supports groups=1 and base_width=64&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dilation</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Dilation &gt; 1 not supported in BasicBlock&quot;</span><span class="p">)</span>
+        <span class="c1"># Both self.conv1 and self.downsample layers downsample the input when stride != 1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">conv3x3</span><span class="p">(</span><span class="n">inplanes</span><span class="p">,</span> <span class="n">planes</span><span class="p">,</span> <span class="n">stride</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bn1</span> <span class="o">=</span> <span class="n">norm_layer</span><span class="p">(</span><span class="n">planes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relu</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">conv3x3</span><span class="p">(</span><span class="n">planes</span><span class="p">,</span> <span class="n">planes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bn2</span> <span class="o">=</span> <span class="n">norm_layer</span><span class="p">(</span><span class="n">planes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">downsample</span> <span class="o">=</span> <span class="n">downsample</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stride</span> <span class="o">=</span> <span class="n">stride</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">identity</span> <span class="o">=</span> <span class="n">x</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bn1</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bn2</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">downsample</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">identity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">downsample</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="n">out</span> <span class="o">+=</span> <span class="n">identity</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span>
+</code></pre></div>
+</td></tr></table>
+<ul>
+<li>
+<p><strong>4</strong>:</p>
+<p>init 함수 안에서 3*3 컨볼루션 2개를 통과하는것을 확인하면, 이게 basic 구조라는것을 좀더 명확하게 볼 수 있다. </p>
+</li>
+<li>
+<p><strong>22</strong>:</p>
+<p>또 forward 함수에서 identity mapping을 실제로 out += identity에서 더해주고 해주고 있음을 확인하자. </p>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Bottleneck</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="c1"># Bottleneck in torchvision places the stride for downsampling at 3x3 convolution(self.conv2)</span>
+    <span class="c1"># while original implementation places the stride at the first 1x1 convolution(self.conv1)</span>
+    <span class="c1"># according to &quot;Deep residual learning for image recognition&quot;https://arxiv.org/abs/1512.03385.</span>
+    <span class="c1"># This variant is also known as ResNet V1.5 and improves accuracy according to</span>
+    <span class="c1"># https://ngc.nvidia.com/catalog/model-scripts/nvidia:resnet_50_v1_5_for_pytorch.</span>
+
+    <span class="n">expansion</span> <span class="o">=</span> <span class="mi">4</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inplanes</span><span class="p">,</span> <span class="n">planes</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">downsample</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">base_width</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">dilation</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">norm_layer</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Bottleneck</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">norm_layer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">norm_layer</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">planes</span> <span class="o">*</span> <span class="p">(</span><span class="n">base_width</span> <span class="o">/</span> <span class="mf">64.</span><span class="p">))</span> <span class="o">*</span> <span class="n">groups</span>
+        <span class="c1"># Both self.conv2 and self.downsample layers downsample the input when stride != 1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">conv1x1</span><span class="p">(</span><span class="n">inplanes</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bn1</span> <span class="o">=</span> <span class="n">norm_layer</span><span class="p">(</span><span class="n">width</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">conv3x3</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">stride</span><span class="p">,</span> <span class="n">groups</span><span class="p">,</span> <span class="n">dilation</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bn2</span> <span class="o">=</span> <span class="n">norm_layer</span><span class="p">(</span><span class="n">width</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv3</span> <span class="o">=</span> <span class="n">conv1x1</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">planes</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">expansion</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bn3</span> <span class="o">=</span> <span class="n">norm_layer</span><span class="p">(</span><span class="n">planes</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">expansion</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relu</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">downsample</span> <span class="o">=</span> <span class="n">downsample</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stride</span> <span class="o">=</span> <span class="n">stride</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">identity</span> <span class="o">=</span> <span class="n">x</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bn1</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bn2</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv3</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bn3</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">downsample</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">identity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">downsample</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="n">out</span> <span class="o">+=</span> <span class="n">identity</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>init 함수에서 1*1 convolutional network 통과후 3*3 convolutional network 통과후 1*1 convolutional network를 통과하게 구조가 짜져있음을 확인하다. </p>
+<p>역시 처럼 identity mapping이 있고, 그것을 더해줌을 확인하자. </p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">_forward_impl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="c1"># See note [TorchScript super()]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bn1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxpool</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer3</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer4</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">avgpool</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">x</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>이 forward함수는 ResNet 클래스에서 가져온 것이다. forward 의 실제 구조가 아까 network architecture를 설명할때 보여줬던 사진의 구조와 같은지 한번 확인해보자. 마지막은 역시 논문에서 나온것처럼 global average pooling 과 linear projection, 그리고 softmax 함수를 적용한다. </p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">resnet18</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;ResNet-18 model from</span>
+<span class="sd">    `&quot;Deep Residual Learning for Image Recognition&quot; &lt;https://arxiv.org/pdf/1512.03385.pdf&gt;`_</span>
+<span class="sd">    Args:</span>
+<span class="sd">        pretrained (bool): If True, returns a model pre-trained on ImageNet</span>
+<span class="sd">        progress (bool): If True, displays a progress bar of the download to stderr</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_resnet</span><span class="p">(</span><span class="s1">&#39;resnet18&#39;</span><span class="p">,</span> <span class="n">BasicBlock</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">pretrained</span><span class="p">,</span> <span class="n">progress</span><span class="p">,</span>
+                   <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>실제로 논문에서 나온것 처럼, 레즈넷 18과 34는 basic block을 사용한다. </p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">resnet50</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;ResNet-50 model from</span>
+<span class="sd">    `&quot;Deep Residual Learning for Image Recognition&quot; &lt;https://arxiv.org/pdf/1512.03385.pdf&gt;`_</span>
+<span class="sd">    Args:</span>
+<span class="sd">        pretrained (bool): If True, returns a model pre-trained on ImageNet</span>
+<span class="sd">        progress (bool): If True, displays a progress bar of the download to stderr</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_resnet</span><span class="p">(</span><span class="s1">&#39;resnet50&#39;</span><span class="p">,</span> <span class="n">Bottleneck</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">pretrained</span><span class="p">,</span> <span class="n">progress</span><span class="p">,</span>
+                   <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</code></pre></div>
+<p>!! tip</p>
+<pre><code>반면, 레즈넷 50이상은 실제로 논문에서 나온것 처럼, bottleneck구조를 이용해서 구현한것을 확인할 수 있다.
+</code></pre>
+<div class="admonition success">
+<p class="admonition-title">Success</p>
+<p>만약 파이토치 내부 레즈넷 구현이 좀 더 궁금해서 코드 전문을 보고싶다면 아래를 클릭해라. </p>
+<blockquote>
+<p><a href="https://github.com/pytorch/vision/blob/master/torchvision/models/resnet.py">파이토치 ResNet구현 코드</a></p>
+</blockquote>
+</div>
+<div class="admonition tldr">
+<p class="admonition-title">레즈넷 핵심 이해</p>
+<ul class="task-list">
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <code>레즈넷의 우수성</code> : <code>더 깊은 네트워크 구축</code></p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <code>Degradation</code>: <code>오버피팅과의 차이 파악</code></p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <code>Reformation</code>: <code>easy to optimize</code></p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <code>Identity mapping</code>: <code>increase accuracy</code> </p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <code>네트워크 구조</code>: <code>plain network with identity mapping</code></p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <code>실험 결과 이해</code>: <code>많은 데이터 셋에 관해 더 깊은 네트워크 구축으로 높은 accuracy 성공</code> </p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <code>pytorch를 이용한 코드 구현</code>: <code>코드 구조 이해</code></p>
+</li>
+</ul>
+</div>
+<div class="admonition sucess">
+<p class="admonition-title">레즈넷 이해 완료</p>
+<p>수고하셨습니다 :)</p>
+</div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../../api/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  이전
+                </span>
+                API
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../facenet/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  다음
+                </span>
+                FaceNet
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2018-2020 HGU DL Lab
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+        
+        
+      
+      <a href="https://github.com/WICWIU" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/vendor.6a3d08fc.min.js"></script>
+      <script src="../../assets/javascripts/bundle.71201edf.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "search.config.lang": "en", "search.config.pipeline": " ", "search.config.separator": "[\\s\\-]+", "search.placeholder": "\uac80\uc0c9", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../..",
+          features: [],
+          search: Object.assign({
+            worker: "../../assets/javascripts/worker/search.4ac00218.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.js"></script>
+      
+        <script src="../../javascripts/config.js"></script>
+      
+        <script src="../../javascripts/all.js"></script>
+      
+    
+  </body>
+</html>

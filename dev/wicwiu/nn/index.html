@@ -1,0 +1,1481 @@
+
+<!doctype html>
+<html lang="kr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <meta name="author" content="HGU DL Lab">
+      
+      <link rel="shortcut icon" href="../../../assets/images/favicon.ico">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.1.0">
+    
+    
+      
+        <title>2. WICWIU 신경망 구성 - WICWIU</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.bc7e593a.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab28b872.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#4051b5">
+        
+      
+    
+    
+    
+      
+        
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css">
+    
+      <link rel="stylesheet" href="../../../stylesheets/gradient-dark.css">
+    
+      <link rel="stylesheet" href="../../../stylesheets/config.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="">
+      
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="../../.." title="WICWIU" class="md-header-nav__button md-logo" aria-label="WICWIU">
+      
+  <img src="../../../assets/images/favicon.png" alt="logo">
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            WICWIU
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              2. WICWIU 신경망 구성
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="검색" placeholder="검색" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/WICWIU/WICWIU/" title="저장소로 이동" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    WICWIU
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="WICWIU" class="md-nav__button md-logo" aria-label="WICWIU">
+      
+  <img src="../../../assets/images/favicon.png" alt="logo">
+
+    </a>
+    WICWIU
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/WICWIU/WICWIU/" title="저장소로 이동" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    WICWIU
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../.." class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../about/" class="md-nav__link">
+      About
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../api/" class="md-nav__link">
+      API
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      논문 정리
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="논문 정리" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        <span class="md-nav__icon md-icon"></span>
+        논문 정리
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../paper/resnet/" class="md-nav__link">
+      ResNet
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../paper/facenet/" class="md-nav__link">
+      FaceNet
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../paper/quadruplet/" class="md-nav__link">
+      Quadruplet
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5" checked>
+    
+    <label class="md-nav__link" for="nav-5">
+      WICWIU 개발 가이드
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="WICWIU 개발 가이드" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        <span class="md-nav__icon md-icon"></span>
+        WICWIU 개발 가이드
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-1" type="checkbox" id="nav-5-1" checked>
+    
+    <label class="md-nav__link" for="nav-5-1">
+      WICWIU
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="WICWIU" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-1">
+        <span class="md-nav__icon md-icon"></span>
+        WICWIU
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../about/" class="md-nav__link">
+      1. About WICWIU
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        2. WICWIU 신경망 구성
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" class="md-nav__link md-nav__link--active">
+      2. WICWIU 신경망 구성
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    데이터 구조
+  </a>
+  
+    <nav class="md-nav" aria-label="데이터 구조">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-tensor" class="md-nav__link">
+    Class Tensor
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#class-shape" class="md-nav__link">
+    Class Shape
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#class-longarray" class="md-nav__link">
+    Class LongArray
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    인공신경망 구성 클래스
+  </a>
+  
+    <nav class="md-nav" aria-label="인공신경망 구성 클래스">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-operator" class="md-nav__link">
+    Class Operator
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#class-module" class="md-nav__link">
+    Class Module
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    신경망 학습 클래스
+  </a>
+  
+    <nav class="md-nav" aria-label="신경망 학습 클래스">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-lossfunction" class="md-nav__link">
+    Class LossFunction
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#class-optimizer" class="md-nav__link">
+    Class Optimizer
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    신경망 구성
+  </a>
+  
+    <nav class="md-nav" aria-label="신경망 구성">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-neuralnetwork" class="md-nav__link">
+    Class NeuralNetwork
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../learn/" class="md-nav__link">
+      3. WICWIU 로 학습하기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../code/" class="md-nav__link">
+      4. WICWIU 코드 같이보기
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-2" type="checkbox" id="nav-5-2">
+    
+    <label class="md-nav__link" for="nav-5-2">
+      Git
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Git" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-2">
+        <span class="md-nav__icon md-icon"></span>
+        Git
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Git/git/" class="md-nav__link">
+      Collaborate with Git
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Git/message/" class="md-nav__link">
+      Commit/PR protocol
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Git/update/" class="md-nav__link">
+      Update forked repo
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-3" type="checkbox" id="nav-5-3">
+    
+    <label class="md-nav__link" for="nav-5-3">
+      VSCode
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="VSCode" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-3">
+        <span class="md-nav__icon md-icon"></span>
+        VSCode
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../VSCode/remote/" class="md-nav__link">
+      딥러닝 서버 VSCode 연동
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../VSCode/git/" class="md-nav__link">
+      VSCode Git 연동
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-4" type="checkbox" id="nav-5-4">
+    
+    <label class="md-nav__link" for="nav-5-4">
+      GPU Acceleration
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="GPU Acceleration" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-4">
+        <span class="md-nav__icon md-icon"></span>
+        GPU Acceleration
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../GPU/cuda/" class="md-nav__link">
+      cuda
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-5" type="checkbox" id="nav-5-5">
+    
+    <label class="md-nav__link" for="nav-5-5">
+      Makefile
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Makefile" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-5">
+        <span class="md-nav__icon md-icon"></span>
+        Makefile
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../makefile/makefile/" class="md-nav__link">
+      Makefile 기본
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../makefile/makefile2/" class="md-nav__link">
+      Makefile 고급
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-6" type="checkbox" id="nav-5-6">
+    
+    <label class="md-nav__link" for="nav-5-6">
+      CLI
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="CLI" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-6">
+        <span class="md-nav__icon md-icon"></span>
+        CLI
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../cli/cli/" class="md-nav__link">
+      CLI
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../cli/zsh/" class="md-nav__link">
+      zsh
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../cli/tmux/" class="md-nav__link">
+      tmux
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      WICWIU 지식동기화
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="WICWIU 지식동기화" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        <span class="md-nav__icon md-icon"></span>
+        WICWIU 지식동기화
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6-1" type="checkbox" id="nav-6-1">
+    
+    <label class="md-nav__link" for="nav-6-1">
+      fewshot diary
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="fewshot diary" data-md-level="2">
+      <label class="md-nav__title" for="nav-6-1">
+        <span class="md-nav__icon md-icon"></span>
+        fewshot diary
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6-1-1" type="checkbox" id="nav-6-1-1">
+    
+    <label class="md-nav__link" for="nav-6-1-1">
+      Step 1. Data &rarr; Tensor
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Step 1. Data &rarr; Tensor" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-1-1">
+        <span class="md-nav__icon md-icon"></span>
+        Step 1. Data &rarr; Tensor
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/fewshot/step1-1/" class="md-nav__link">
+      Analysis&#58; LFW 1
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/fewshot/step1-2/" class="md-nav__link">
+      Analysis&#58; LFW 2
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/fewshot/step1-3/" class="md-nav__link">
+      Coding&#58; PNG, CImg
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/fewshot/step2/" class="md-nav__link">
+      Step 2. 순전파
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/fewshot/step3/" class="md-nav__link">
+      Step 3. 역전파
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/fewshot/step4/" class="md-nav__link">
+      Step 4. 최적화
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6-2" type="checkbox" id="nav-6-2">
+    
+    <label class="md-nav__link" for="nav-6-2">
+      Coding Convention
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Coding Convention" data-md-level="2">
+      <label class="md-nav__title" for="nav-6-2">
+        <span class="md-nav__icon md-icon"></span>
+        Coding Convention
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/convention/step1-1/" class="md-nav__link">
+      About Coding Convention
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/convention/googlestyleguide/" class="md-nav__link">
+      (ABANDONED)Google C++ Style Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
+    
+    <label class="md-nav__link" for="nav-7">
+      이곳에 문서 작성하기
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="이곳에 문서 작성하기" data-md-level="1">
+      <label class="md-nav__title" for="nav-7">
+        <span class="md-nav__icon md-icon"></span>
+        이곳에 문서 작성하기
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/markdown/" class="md-nav__link">
+      Step 1. Markdown 파일
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/code/" class="md-nav__link">
+      Step 2. 소스코드 설명하기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/format/" class="md-nav__link">
+      Step 3. 고오급 포매팅
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/admonitions/" class="md-nav__link">
+      Step 4. Admonitions
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/tab/" class="md-nav__link">
+      Step 5. 컨텐츠 탭
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/button/" class="md-nav__link">
+      Step 6. 버튼 넣기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/math/" class="md-nav__link">
+      Step 7. 수식 보여주기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/api/" class="md-nav__link">
+      Step 8. API 작성
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    데이터 구조
+  </a>
+  
+    <nav class="md-nav" aria-label="데이터 구조">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-tensor" class="md-nav__link">
+    Class Tensor
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#class-shape" class="md-nav__link">
+    Class Shape
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#class-longarray" class="md-nav__link">
+    Class LongArray
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    인공신경망 구성 클래스
+  </a>
+  
+    <nav class="md-nav" aria-label="인공신경망 구성 클래스">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-operator" class="md-nav__link">
+    Class Operator
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#class-module" class="md-nav__link">
+    Class Module
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    신경망 학습 클래스
+  </a>
+  
+    <nav class="md-nav" aria-label="신경망 학습 클래스">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-lossfunction" class="md-nav__link">
+    Class LossFunction
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#class-optimizer" class="md-nav__link">
+    Class Optimizer
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    신경망 구성
+  </a>
+  
+    <nav class="md-nav" aria-label="신경망 구성">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-neuralnetwork" class="md-nav__link">
+    Class NeuralNetwork
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/WICWIU/WICWIU/edit/master/docs/dev/wicwiu/nn.md" title="이 페이지를 편집" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  <h1>2. WICWIU 신경망 구성</h1>
+                
+                <p>이곳에서는 <a href="https://github.com/WICWIU/WICWIU"><strong>WICWIU</strong></a> 가 어떻게 인공신경망을 구성하는지 설명합니다.</p>
+<h2 id="_1">데이터 구조<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<figure>
+  <img src="https://user-images.githubusercontent.com/16812446/89108189-6474f180-d471-11ea-94cb-17d40a924109.png" width="90%" />
+  <figcaption><i>Tensor, Shape, LongArray 데이터 형식 요약</i></figcaption>
+</figure>
+
+<h3 id="class-tensor">Class <code>Tensor</code><a class="headerlink" href="#class-tensor" title="Permanent link">&para;</a></h3>
+<dl>
+<dd>Class <code>Tensor</code> : <a href="https://github.com/WICWIU/WICWIU"><strong>WICWIU</strong></a> 에서 인공 신경망 모델의 학습에 이용되는 <ins>데이터의 기본 형식</ins> 입니다.</dd>
+</dl>
+<p><code>Tensor</code> 클래스는 최대 5의 계수(Rank)를 갖는 텐서를 지원합니다. 텐서의 각 축은 인공 신경망 학습에서 <ins>Time, Batch, Row, Column 축에 해당</ins> 합니다.</p>
+<p><code>Tensor</code> 클래스는 <ins>텐서의 차원에 관한 정보를 담고 있는 <code>Shape</code> 클래스와 각 차원의 개별 데이터를 담고 있는 <code>LongArray</code> 클래스</ins> 를 멤버 변수로 갖습니다. <code>Tensor</code> 클래스는 <code>Shape</code> 클래스의 차원 정보 데이터를 활용해 각 차원의 개별 데이터를 담고 있는 메모리에 접근합니다. </p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p><a href="https://ko.wikipedia.org/wiki/%ED%85%90%EC%84%9C">Tensor</a> 는 물리학의 개념을 차용, 다차원의 정보를 갖는 데이터를 의미합니다. </p>
+</div>
+<h3 id="class-shape">Class <code>Shape</code><a class="headerlink" href="#class-shape" title="Permanent link">&para;</a></h3>
+<dl>
+<dd>Class <code>Shape</code> : <code>Tensor</code> 데이터의 차원에 관한 정보를 담고 있는 클래스입니다. </dd>
+</dl>
+<p><code>Shape</code> 클래스는 <ins>텐서의 계수(Rank)를 담고 있는 변수와 계수 각 축의 차원 정보를 담고 있는 변수</ins> 를 멤버 변수로 갖고 있습니다.</p>
+<p>계수 변수의 최댓값은 <code>5</code> 이고, 각 축은 인공 신경망 학습에서 Time, Batch, Channel, Row, Column 축으로 활용됩니다. 각 <ins>축의 차원 정보에 해당하는 변수는 포인터로 선언</ins> 되어 있으며, 축의 개수만큼 배열로서 동적으로 할당되어 축의 차원 정보를 나타냅니다. </p>
+<h3 id="class-longarray">Class <code>LongArray</code><a class="headerlink" href="#class-longarray" title="Permanent link">&para;</a></h3>
+<dl>
+<dt><figure>
+  <img src="https://user-images.githubusercontent.com/16812446/89108533-3513b400-d474-11ea-881b-3ceb8dd2772e.png" width="80%" />
+  <figcaption><i>LongArray 클래스의 위계적 데이터 구조</i></figcaption>
+</figure>
+</dt>
+<dd>
+<p>Class <code>LongArray</code> : High-dimensional Array 의 약어로, 실제 각 차원의 개별 데이터를 담고 있는 클래스입니다.</p>
+</dd>
+</dl>
+<p><code>LongArray</code> 클래스의 데이터들은 <ins>동적으로 한 번에 할당했을 때 메모리가 부족해 할당이 불가하는 경우를 막기 위해 위계적 구조를 가지고 이중 포인터를 이용하여 선언</ins> 되어 있습니다.</p>
+<p>논리적으로는 하나의 연속적인 배열이나 물리적으로는 블록으로 나누어져 메모리에 할당됩니다. 각 블록은 Time 축을 기준으로 그 외 나머지 4개의 차원(Batch, Channel, Row, Column)을 갖는 데이터로 분리됩니다.</p>
+<h2 id="_2">인공신경망 구성 클래스<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h3 id="class-operator">Class <code>Operator</code><a class="headerlink" href="#class-operator" title="Permanent link">&para;</a></h3>
+<figure>
+  <img src="https://user-images.githubusercontent.com/16812446/89108602-d8fd5f80-d474-11ea-83c7-a2d05cead642.png" width="80%" />
+  <figcaption><i> Operator 클래스의 기본 구조
+  </i></figcaption>
+</figure>
+
+<dl>
+<dt><figure>
+  <img src="https://user-images.githubusercontent.com/16812446/89108636-ee728980-d474-11ea-90e0-b547c5eb8d40.png" width="90%" />
+  <figcaption><i> Operator 클래스 간 네트워크 연결 </i></figcaption>
+</figure>
+</dt>
+<dd>
+<p>Class <code>Operator</code> : 인공신경망 안에서 저수준의 기본 연산을 수행하기 위한 클래스입니다. </p>
+</dd>
+</dl>
+<p><code>Operator</code> 클래스는 <ins>인공신경망의 노드를 구성하는 가장 작은 단위</ins> 입니다. </p>
+<p><code>Operator</code> 클래스는 네트워크 구성을 위해 각각 <ins>연산의 입력 방향과 출력 방향에 대해서 <code>Operator</code> 클래스에 대한 포인터를 저장하는 Container 를 멤버 변수</ins> 로 갖습니다.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Container 는 <a href="https://github.com/WICWIU/WICWIU"><strong>WICWIU</strong></a> 에서 정의한 큐와 비슷한 자료 구조입니다. </p>
+</div>
+<p>또한 인공 신경망의 순전파와 역전파를 수행하기 위해 연산의 결과 값과 기울기 벡터를 저장하기 위한 <code>Tensor</code> 클래스에 대한 포인터를 저장하는 Container 를 멤버 변수로 갖습니다. 순전파와 역전파에서 사용되는 Weight 파라미터들은 후에 기술할 <code>NeuralNetwork</code> 클래스가 포인터들의 Container 로 가지고 있으며, <code>Operator</code> 클래스에게 전달합니다. 파생 클래스들은 해당 클래스를 상속하여 각 연산의 기능을 수행합니다.</p>
+<h3 id="class-module">Class <code>Module</code><a class="headerlink" href="#class-module" title="Permanent link">&para;</a></h3>
+<dl>
+<dt><figure>
+  <img src="https://user-images.githubusercontent.com/16812446/89108752-fed73400-d475-11ea-9b1d-905d7f1a4e05.png" width="130%" />
+  <figcaption><i>Module 클래스의 기본 구조 예시</i></figcaption>
+</figure>
+</dt>
+<dd>
+<p>Class <code>Module</code> : 단일 <code>Operator</code> 클래스로는 수행할 수 없는 고수준의 복합 연산을 수행하기 위한 클래스입니다. </p>
+</dd>
+</dl>
+<p><code>Module</code> 클래스는 <ins><code>Operator</code> 클래스를 상속</ins> 받으며, 복수의 <code>Operator</code> 들을 조합하여 서브 그래프를 구성하고 연산을 수행합니다. </p>
+<p><code>Module</code> 클래스는 <strong>너비 우선 탐색(Breadth-First Search)</strong> 방식을 이용해 서브 그래프를 구성하고 연산합니다. <code>Module</code> 클래스는 다른 <code>Module</code> 클래스를 포함하는 재귀적 구조를 형성할 수 있다. <code>Module</code> 클래스는 <ins>하나의 단일 <code>Operator</code> 클래스와 같이 기능 및 동작</ins> 한다. 파생 클래스들은 해당 클래스를 상속하여 각 연산의 기능을 수행한다.</p>
+<h2 id="_3">신경망 학습 클래스<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h3 id="class-lossfunction">Class <code>LossFunction</code><a class="headerlink" href="#class-lossfunction" title="Permanent link">&para;</a></h3>
+<dl>
+<dt><figure>
+  <img src="https://user-images.githubusercontent.com/16812446/89108807-7f963000-d476-11ea-8c14-7db61d009a1f.png" width="100%" />
+  <figcaption><i> LossFunction 클래스의 기본 구조 </i></figcaption>
+</figure>
+</dt>
+<dd>
+<p>Class <code>LossFunction</code> : <code>NeuralNetwork</code> 의 순전파를 통해 얻어진 최종 출력 <code>Tensor</code> 와 <code>NeuralNetwork</code> 로부터 전달 받은 입력 데이터에 대한 레이블 값을 비교하여 손실 함수 값을 계산하는 클래스입니다. </p>
+</dd>
+</dl>
+<p><code>Operator</code> 클래스와는 구분된 독립적인 클래스이며, <ins>기울기 벡터를 계산하여 <code>NeuralNetwork</code> 의 역전파의 시작 부분을 담당</ins> 합니다. 파생 클래스들은 해당 클래스를 상속하여 각 손실 함수의 기능을 수행한다.</p>
+<h3 id="class-optimizer">Class <code>Optimizer</code><a class="headerlink" href="#class-optimizer" title="Permanent link">&para;</a></h3>
+<dl>
+<dt><figure>
+  <img src="https://user-images.githubusercontent.com/16812446/89108835-c7b55280-d476-11ea-9b4a-e053e52935a1.png" width="100%" />
+  <figcaption><i> NeuralNetwork 클래스 내 학습 파라미터의 기본 구조 </i></figcaption>
+</figure>
+</dt>
+<dd>
+<p><code>Optimizer</code> 클래스 : <ins>최적화 알고리즘을 활용해 Weight 파라미터를 업데이트</ins> 하는 클래스입니다.</p>
+</dd>
+</dl>
+<p>인공신경망 모델의 역전파 시, 손실 함수에서 계산된 값에 대해서 각 학습 파라미터의 기울기 벡터가 <code>Tensor</code> 형태로 계산된다. <code>Optimizer</code> 클래스는 이 기울기 벡터에 대한 <code>Tensor</code> 들의 포인터를 Container 로 가지고 있습니다. 파생 클래스들은 해당 클래스를 상속하여 각 Optimizer의 기능을 수행한다. </p>
+<h2 id="_4">신경망 구성<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h3 id="class-neuralnetwork">Class <code>NeuralNetwork</code><a class="headerlink" href="#class-neuralnetwork" title="Permanent link">&para;</a></h3>
+<dl>
+<dt><figure>
+  <img src="https://user-images.githubusercontent.com/16812446/89109037-963d8680-d478-11ea-8d89-248ce99b8a01.png" width="80%" />
+  <figcaption><i>NeuralNetwork 클래스 그래프 예시</i></figcaption>
+</figure>
+</dt>
+<dd>
+<p><code>NeuralNetwork</code> 클래스 : 앞에서 설명했던 요소들을 조합하여, 학습 가능한 신경망 모델을 구성하는 클래스입니다. </p>
+</dd>
+</dl>
+<p><code>NeuralNetwork</code> 클래스는 하나의 그래프를 구성하는 <code>Operator(Module)</code> 클래스 포인터에 대한 Container 를 가지고 있습니다. <code>Operator(Module)</code> 클래스들이 구성하는 그래프는 인공신경망 모델에 대응됩니다.</p>
+<p><code>NeuralNetwork</code> 클래스는 너비 우선 탐색(Breadth-first Search) 방식으로 각 <code>Operator</code> 클래스들에 접근합니다. <code>NeuralNetwork</code> 클래스는 <code>LossFunction</code> 클래스를 이용해 손실 함수의 값을 계산하고, <code>Optimizer</code> 클래스의 최적화 알고리즘을 이용해 인공 신경망을 최적화한다. <code>NeuralNetwork</code> 클래스는 Weight 파라미터에 대한 포인터의 Container 를 가지고 있으며, 역전파 및 최적화 시 활용한다. <code>NeuralNetwork</code> 클래스를 이용한 학습 진행 방식의 자세한 내용은 후술하였다. </p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../about/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  이전
+                </span>
+                1. About WICWIU
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../learn/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  다음
+                </span>
+                3. WICWIU 로 학습하기
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2018-2020 HGU DL Lab
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+        
+        
+      
+      <a href="https://github.com/WICWIU" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/vendor.6a3d08fc.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.71201edf.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "search.config.lang": "en", "search.config.pipeline": " ", "search.config.separator": "[\\s\\-]+", "search.placeholder": "\uac80\uc0c9", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../../..",
+          features: [],
+          search: Object.assign({
+            worker: "../../../assets/javascripts/worker/search.4ac00218.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.js"></script>
+      
+        <script src="../../../javascripts/config.js"></script>
+      
+        <script src="../../../javascripts/all.js"></script>
+      
+    
+  </body>
+</html>

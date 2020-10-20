@@ -1,0 +1,1585 @@
+
+<!doctype html>
+<html lang="kr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <meta name="author" content="HGU DL Lab">
+      
+      <link rel="shortcut icon" href="../../../assets/images/favicon.ico">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.1.0">
+    
+    
+      
+        <title>Makefile 고급 - WICWIU</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.bc7e593a.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab28b872.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#4051b5">
+        
+      
+    
+    
+    
+      
+        
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css">
+    
+      <link rel="stylesheet" href="../../../stylesheets/gradient-dark.css">
+    
+      <link rel="stylesheet" href="../../../stylesheets/config.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="">
+      
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#vpath" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="../../.." title="WICWIU" class="md-header-nav__button md-logo" aria-label="WICWIU">
+      
+  <img src="../../../assets/images/favicon.png" alt="logo">
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            WICWIU
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Makefile 고급
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="검색" placeholder="검색" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/WICWIU/WICWIU/" title="저장소로 이동" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    WICWIU
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="WICWIU" class="md-nav__button md-logo" aria-label="WICWIU">
+      
+  <img src="../../../assets/images/favicon.png" alt="logo">
+
+    </a>
+    WICWIU
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/WICWIU/WICWIU/" title="저장소로 이동" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    WICWIU
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../.." class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../about/" class="md-nav__link">
+      About
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../api/" class="md-nav__link">
+      API
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      논문 정리
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="논문 정리" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        <span class="md-nav__icon md-icon"></span>
+        논문 정리
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../paper/resnet/" class="md-nav__link">
+      ResNet
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../paper/facenet/" class="md-nav__link">
+      FaceNet
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../paper/quadruplet/" class="md-nav__link">
+      Quadruplet
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5" checked>
+    
+    <label class="md-nav__link" for="nav-5">
+      WICWIU 개발 가이드
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="WICWIU 개발 가이드" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        <span class="md-nav__icon md-icon"></span>
+        WICWIU 개발 가이드
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-1" type="checkbox" id="nav-5-1">
+    
+    <label class="md-nav__link" for="nav-5-1">
+      WICWIU
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="WICWIU" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-1">
+        <span class="md-nav__icon md-icon"></span>
+        WICWIU
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../wicwiu/about/" class="md-nav__link">
+      1. About WICWIU
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../wicwiu/nn/" class="md-nav__link">
+      2. WICWIU 신경망 구성
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../wicwiu/learn/" class="md-nav__link">
+      3. WICWIU 로 학습하기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../wicwiu/code/" class="md-nav__link">
+      4. WICWIU 코드 같이보기
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-2" type="checkbox" id="nav-5-2">
+    
+    <label class="md-nav__link" for="nav-5-2">
+      Git
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Git" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-2">
+        <span class="md-nav__icon md-icon"></span>
+        Git
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Git/git/" class="md-nav__link">
+      Collaborate with Git
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Git/message/" class="md-nav__link">
+      Commit/PR protocol
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Git/update/" class="md-nav__link">
+      Update forked repo
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-3" type="checkbox" id="nav-5-3">
+    
+    <label class="md-nav__link" for="nav-5-3">
+      VSCode
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="VSCode" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-3">
+        <span class="md-nav__icon md-icon"></span>
+        VSCode
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../VSCode/remote/" class="md-nav__link">
+      딥러닝 서버 VSCode 연동
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../VSCode/git/" class="md-nav__link">
+      VSCode Git 연동
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-4" type="checkbox" id="nav-5-4">
+    
+    <label class="md-nav__link" for="nav-5-4">
+      GPU Acceleration
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="GPU Acceleration" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-4">
+        <span class="md-nav__icon md-icon"></span>
+        GPU Acceleration
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../GPU/cuda/" class="md-nav__link">
+      cuda
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-5" type="checkbox" id="nav-5-5" checked>
+    
+    <label class="md-nav__link" for="nav-5-5">
+      Makefile
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Makefile" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-5">
+        <span class="md-nav__icon md-icon"></span>
+        Makefile
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../makefile/" class="md-nav__link">
+      Makefile 기본
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Makefile 고급
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" class="md-nav__link md-nav__link--active">
+      Makefile 고급
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#vpath" class="md-nav__link">
+    vpath
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#static-pattern-rules" class="md-nav__link">
+    Static Pattern Rules
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#static-pattern-rules-and-filter" class="md-nav__link">
+    Static Pattern Rules and Filter
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#double-colon" class="md-nav__link">
+    Double-Colon
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    명령 실행 관련 규칙
+  </a>
+  
+    <nav class="md-nav" aria-label="명령 실행 관련 규칙">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#command-echoingsilencing" class="md-nav__link">
+    Command Echoing/Silencing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#command-execution" class="md-nav__link">
+    Command Execution
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#default-shell" class="md-nav__link">
+    Default Shell
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete_on_error" class="md-nav__link">
+    DELETE_ON_ERROR
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    에러 처리
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recursive-make" class="md-nav__link">
+    Recursive make
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-6" type="checkbox" id="nav-5-6">
+    
+    <label class="md-nav__link" for="nav-5-6">
+      CLI
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="CLI" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-6">
+        <span class="md-nav__icon md-icon"></span>
+        CLI
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../cli/cli/" class="md-nav__link">
+      CLI
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../cli/zsh/" class="md-nav__link">
+      zsh
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../cli/tmux/" class="md-nav__link">
+      tmux
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      WICWIU 지식동기화
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="WICWIU 지식동기화" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        <span class="md-nav__icon md-icon"></span>
+        WICWIU 지식동기화
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6-1" type="checkbox" id="nav-6-1">
+    
+    <label class="md-nav__link" for="nav-6-1">
+      fewshot diary
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="fewshot diary" data-md-level="2">
+      <label class="md-nav__title" for="nav-6-1">
+        <span class="md-nav__icon md-icon"></span>
+        fewshot diary
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6-1-1" type="checkbox" id="nav-6-1-1">
+    
+    <label class="md-nav__link" for="nav-6-1-1">
+      Step 1. Data &rarr; Tensor
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Step 1. Data &rarr; Tensor" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-1-1">
+        <span class="md-nav__icon md-icon"></span>
+        Step 1. Data &rarr; Tensor
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/fewshot/step1-1/" class="md-nav__link">
+      Analysis&#58; LFW 1
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/fewshot/step1-2/" class="md-nav__link">
+      Analysis&#58; LFW 2
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/fewshot/step1-3/" class="md-nav__link">
+      Coding&#58; PNG, CImg
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/fewshot/step2/" class="md-nav__link">
+      Step 2. 순전파
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/fewshot/step3/" class="md-nav__link">
+      Step 3. 역전파
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/fewshot/step4/" class="md-nav__link">
+      Step 4. 최적화
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6-2" type="checkbox" id="nav-6-2">
+    
+    <label class="md-nav__link" for="nav-6-2">
+      Coding Convention
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Coding Convention" data-md-level="2">
+      <label class="md-nav__title" for="nav-6-2">
+        <span class="md-nav__icon md-icon"></span>
+        Coding Convention
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/convention/step1-1/" class="md-nav__link">
+      About Coding Convention
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/convention/googlestyleguide/" class="md-nav__link">
+      (ABANDONED)Google C++ Style Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
+    
+    <label class="md-nav__link" for="nav-7">
+      이곳에 문서 작성하기
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="이곳에 문서 작성하기" data-md-level="1">
+      <label class="md-nav__title" for="nav-7">
+        <span class="md-nav__icon md-icon"></span>
+        이곳에 문서 작성하기
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/markdown/" class="md-nav__link">
+      Step 1. Markdown 파일
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/code/" class="md-nav__link">
+      Step 2. 소스코드 설명하기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/format/" class="md-nav__link">
+      Step 3. 고오급 포매팅
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/admonitions/" class="md-nav__link">
+      Step 4. Admonitions
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/tab/" class="md-nav__link">
+      Step 5. 컨텐츠 탭
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/button/" class="md-nav__link">
+      Step 6. 버튼 넣기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/math/" class="md-nav__link">
+      Step 7. 수식 보여주기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/api/" class="md-nav__link">
+      Step 8. API 작성
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#vpath" class="md-nav__link">
+    vpath
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#static-pattern-rules" class="md-nav__link">
+    Static Pattern Rules
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#static-pattern-rules-and-filter" class="md-nav__link">
+    Static Pattern Rules and Filter
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#double-colon" class="md-nav__link">
+    Double-Colon
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    명령 실행 관련 규칙
+  </a>
+  
+    <nav class="md-nav" aria-label="명령 실행 관련 규칙">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#command-echoingsilencing" class="md-nav__link">
+    Command Echoing/Silencing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#command-execution" class="md-nav__link">
+    Command Execution
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#default-shell" class="md-nav__link">
+    Default Shell
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete_on_error" class="md-nav__link">
+    DELETE_ON_ERROR
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    에러 처리
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recursive-make" class="md-nav__link">
+    Recursive make
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/WICWIU/WICWIU/edit/master/docs/dev/makefile/makefile2.md" title="이 페이지를 편집" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  <h1>Makefile 고급</h1>
+                
+                <div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>아래의 내용은 <a href="https://ccss17.github.io/makefile.html">저의 블로그 내용</a> 을 다시 정리한 것입니다.</p>
+</div>
+<h3 id="vpath">vpath<a class="headerlink" href="#vpath" title="Permanent link">&para;</a></h3>
+<dl>
+<dd><code>vpath</code> : <code>prerequisites</code> 를 찾는 경로를 현재 디렉토리와 더불어서 추가한다. </dd>
+<dt>기본적으로 <code>make</code> 는 <code>prerequisites</code> 를 현재 디렉토리에서 찾는다. 그런데 <code>vpath</code> 로 특정 <code>prerequisites</code> 의 탐색경로를 현재 디렉토리에 더불어서 추가할 수 있다. </dt>
+<dd>
+<p>형식 : <code>vpath &lt;pattern&gt; &lt;directories, space/colon seperated&gt;</code></p>
+</dd>
+</dl>
+<p><code>&lt;pattern&gt;</code> 에서 특수문자 <code>%</code> 를 사용할 수 있다. <code>VPATH</code> 환경변수에도 경로를 추가하여 사용할 수 있다.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="cp">vpath %.h ../headers ../other-directory</span>
+
+<span class="nf">some_binary</span><span class="o">:</span> ../<span class="n">headers</span> <span class="n">blah</span>.<span class="n">h</span>
+  touch some_binary
+
+<span class="nf">../headers</span><span class="o">:</span>
+  mkdir ../headers
+
+<span class="nf">blah.h</span><span class="o">:</span>
+  touch ../headers/blah.h
+</code></pre></div>
+<p>위 예시의 <code>vpath</code> 때문에 <code>.h</code> 확장자를 가진 파일을 현재 디렉토리 뿐만 아니라 <code>../headers</code> 디렉토리와 <code>../other-directory</code> 에서도 찾는다. 이에 따라 만약 <code>vpath</code> 가 포함된 라인을 지우고 <code>make</code> 를 실행해보면 파일 <code>blah.h</code> 를 찾지 못하여 규칙 <code>blah.h:</code> 를 항상 실행하게 된다.</p>
+</div>
+<h3 id="static-pattern-rules">Static Pattern Rules<a class="headerlink" href="#static-pattern-rules" title="Permanent link">&para;</a></h3>
+<dl>
+<dd>static pattern : 패턴에 맞는 <code>targets</code> 을 자동으로 <code>prerequisites</code> 으로 변환해주는 규칙이다.</dd>
+</dl>
+<p><code>targets ...: target-pattern: prereq-patterns ...</code> 의 형식으로 사용된다. <code>target-pattern</code> 에 매칭된 <code>target</code> 을 <code>prereq-pattern</code> 으로 변환해준다.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nv">objects</span> <span class="o">=</span> foo.o bar.o
+<span class="nf">$(objects)</span><span class="o">:</span> %.<span class="n">o</span>: %.<span class="n">c</span>
+  <span class="nb">echo</span> <span class="s2">&quot;Call gcc to generate </span><span class="nv">$@</span><span class="s2"> from </span>$<span class="s2">&lt;&quot;</span>
+</code></pre></div>
+<p>위 규칙은 다음의 규칙과 동일하다.</p>
+<div class="highlight"><pre><span></span><code><span class="nf">foo.o</span><span class="o">:</span> <span class="n">foo</span>.<span class="n">c</span>
+  <span class="nb">echo</span> <span class="s2">&quot;Call gcc to generate </span><span class="nv">$@</span><span class="s2"> from </span>$<span class="s2">&lt;&quot;</span>
+
+<span class="nf">bar.o</span><span class="o">:</span> <span class="n">bar</span>.<span class="n">c</span>
+  <span class="nb">echo</span> <span class="s2">&quot;Call gcc to generate bar.o from bar.c&quot;</span>
+</code></pre></div>
+</div>
+<h3 id="static-pattern-rules-and-filter">Static Pattern Rules and Filter<a class="headerlink" href="#static-pattern-rules-and-filter" title="Permanent link">&para;</a></h3>
+<dl>
+<dd>static pattern with Filter : static pattern 의 <code>targets</code> 을 패턴으로 필터링해서 매칭되지 않는 <code>target</code> 은 규칙에 적용시키지 않는 규칙이다. </dd>
+</dl>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nv">objects</span> <span class="o">=</span> foo.o bar.o f1.c
+<span class="nf">$(objects)</span><span class="o">:</span> %.<span class="n">o</span>: %.<span class="n">c</span>
+  <span class="nb">echo</span> <span class="s2">&quot;Call gcc to generate </span><span class="nv">$@</span><span class="s2"> from </span>$<span class="s2">&lt;&quot;</span>
+</code></pre></div>
+<p>위 규칙에서 <code>f1.c</code> 는 분명 static pattern 에 해당되지 않는 예외이다. 이 규칙은 다음의 규칙과 동일한 기능을 하게 된다. </p>
+<div class="highlight"><pre><span></span><code><span class="nf">foo.o</span><span class="o">:</span> <span class="n">foo</span>.<span class="n">c</span>
+  <span class="nb">echo</span> <span class="s2">&quot;Call gcc to generate </span><span class="nv">$@</span><span class="s2"> from </span>$<span class="s2">&lt;&quot;</span>
+
+<span class="nf">bar.o</span><span class="o">:</span> <span class="n">bar</span>.<span class="n">c</span>
+  <span class="nb">echo</span> <span class="s2">&quot;Call gcc to generate bar.o from bar.c&quot;</span>
+
+<span class="nf">f1.c</span><span class="o">:</span>
+  <span class="nb">echo</span> <span class="s2">&quot;Call gcc to generate f1.c from&quot;</span>
+</code></pre></div>
+<p>따라서 이러한 예외는 규칙에 적용시키지 않기 위하여 다음과 같이 필터링을 걸 수 있다. </p>
+<div class="highlight"><pre><span></span><code><span class="nv">objects</span> <span class="o">=</span> foo.o bar.o f1.c
+<span class="nf">$(filter %.o $(objects))</span><span class="o">:</span> %.<span class="n">o</span>: %.<span class="n">c</span>
+  <span class="nb">echo</span> <span class="s2">&quot;Call gcc to generate </span><span class="nv">$@</span><span class="s2"> from </span>$<span class="s2">&lt;&quot;</span>
+</code></pre></div>
+<p>위 규칙은 <code>objects</code> 에서 <code>.o</code> 로 끝나는 파일만 규칙에 적용시킨다. </p>
+</div>
+<h3 id="double-colon">Double-Colon<a class="headerlink" href="#double-colon" title="Permanent link">&para;</a></h3>
+<dl>
+<dd>Double-Colon : Double-Colon 으로 시작되는 규칙이 여러번 정의되어도 그것들을 모두 실행하게 해준다. </dd>
+</dl>
+<p>이 규칙은 흔히 쓰이지는 않습니다. 그래도 다음 예시를 한 번 보겠습니다.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nf">all</span><span class="o">:</span> <span class="n">blah</span>
+<span class="nf">blah</span><span class="o">::</span>
+  <span class="nb">echo</span> <span class="s2">&quot;hello&quot;</span>
+<span class="nf">blah</span><span class="o">::</span>
+  <span class="nb">echo</span> <span class="s2">&quot;hello again&quot;</span>
+</code></pre></div>
+<p>위 규칙에서 <code>blah</code> 가 Double-Colon 으로 시작되는데 Single-Colon 으로 바꾸면 에러가 발생하면서 마지막 규칙만 실행된다. </p>
+</div>
+<h2 id="_1">명령 실행 관련 규칙<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h3 id="command-echoingsilencing">Command Echoing/Silencing<a class="headerlink" href="#command-echoingsilencing" title="Permanent link">&para;</a></h3>
+<dl>
+<dd>Command Echoing/Silencing : 명령어 앞에 <code>@</code> 를 붙히면 명령어가 출력되지 않는다. </dd>
+</dl>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nf">all</span><span class="o">:</span> 
+  @echo <span class="s2">&quot;hello&quot;</span>
+  <span class="nb">echo</span> <span class="s2">&quot;hello again&quot;</span>
+</code></pre></div>
+<p>위 예시의 출력은 다음과 같다. </p>
+<div class="highlight"><pre><span></span><code>$ make
+hello
+<span class="nb">echo</span> <span class="s2">&quot;hello again&quot;</span>
+hello again
+</code></pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><code>make -s</code> 로 실행하면 모든 명령어에 <code>@</code> 를 붙혀서 실행한 효과를 얻을 수 있다. </p>
+</div>
+<h3 id="command-execution">Command Execution<a class="headerlink" href="#command-execution" title="Permanent link">&para;</a></h3>
+<dl>
+<dd>Command Execution : 각각의 명령어는 항상 새로운 쉘에서 실행되는 것과 같다. </dd>
+</dl>
+<p>따라서 <code>make</code> 에서 명령어들을 실행하기 위하여 보통 <code>; \</code> 로 명령어를 이어준다. </p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nf">all</span><span class="o">:</span> 
+  <span class="nb">cd</span> ..
+  <span class="nb">echo</span> <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>
+  <span class="nb">cd</span> ..<span class="p">;</span><span class="nb">echo</span> <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>
+  <span class="nb">cd</span> ..<span class="p">;</span> <span class="se">\</span>
+  <span class="nb">echo</span> <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>
+</code></pre></div>
+<p>위 예시의 출력은 다음과 같다. </p>
+<div class="highlight"><pre><span></span><code>$ make
+<span class="nb">cd</span> ..
+<span class="nb">echo</span> <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>
+/home/ccsss/repo/csrepo/ccss17.github.io/maketest
+<span class="nb">cd</span> ..<span class="p">;</span><span class="nb">echo</span> <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>
+/home/ccsss/repo/csrepo/ccss17.github.io
+<span class="nb">cd</span> ..<span class="p">;</span> <span class="se">\</span>
+<span class="nb">echo</span> <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>
+/home/ccsss/repo/csrepo/ccss17.github.io
+</code></pre></div>
+</div>
+<h3 id="default-shell">Default Shell<a class="headerlink" href="#default-shell" title="Permanent link">&para;</a></h3>
+<dl>
+<dd>Default Shell : <code>make</code> 가 명령어를 실행하는 기본 쉘은 <code>/bin/sh</code> 인데 <code>SHELL</code> 변수를 바꿈으로써 기본 쉘을 변경할 수 있다. </dd>
+</dl>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nf">all</span><span class="o">:</span>
+  <span class="nb">echo</span> <span class="s2">&quot;current shell: </span><span class="nv">$$</span><span class="s2">0&quot;</span>
+</code></pre></div>
+<p>위 예시가 <code>/bin/sh</code> 을 출력하는데 비해 다음 예시는 <code>/bin/bash</code> 를 출력한다. </p>
+<div class="highlight"><pre><span></span><code><span class="nv">SHELL</span><span class="o">=</span>/bin/bash
+<span class="nf">all</span><span class="o">:</span>
+  <span class="nb">echo</span> <span class="s2">&quot;current shell: </span><span class="nv">$$</span><span class="s2">0&quot;</span>
+</code></pre></div>
+</div>
+<h3 id="delete_on_error">DELETE_ON_ERROR<a class="headerlink" href="#delete_on_error" title="Permanent link">&para;</a></h3>
+<dl>
+<dd><code>DELETE_ON_ERROR</code> : <code>make</code> 는 규칙이 <code>nonzero</code> 종료 코드를 반환하면 전체 실행을 중단하는데, <code>.DELETE_ON_ERROR</code> 가 설정되면 이때 <code>nonzero</code> 반환값을 반환한 규칙의 <code>target</code> 파일을 삭제한다. </dd>
+</dl>
+<p>대부분의 경우에 <code>.DELETE_ON_ERROR</code> 를 설정하는 것이 좋다. </p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nf">all</span><span class="o">:</span> <span class="n">one</span>
+
+<span class="nf">one</span><span class="o">:</span>
+  touch one
+  <span class="nb">false</span>
+</code></pre></div>
+<p>위 예시는 <code>false</code> 가 <code>nonzero</code> 종료코드를 반환하기에 전체실행이 중단되지만 파일 <code>one</code> 이 사라지지 않는다. 하지만 다음 예시는 파일 <code>one</code> 이 자동으로 삭제된다. </p>
+<div class="highlight"><pre><span></span><code><span class="err">.DELETE_ON_ERROR</span>
+<span class="nf">all</span><span class="o">:</span> <span class="n">one</span>
+
+<span class="nf">one</span><span class="o">:</span>
+  touch one
+  <span class="nb">false</span>
+</code></pre></div>
+</div>
+<h3 id="_2">에러 처리<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<dl>
+<dd><code>-k</code> 옵션 : <code>make</code> 를 이 옵션으로 실행하면 에러가 발생해도 실행을 중단하지 않고 끝까지 실행한다.</dd>
+</dl>
+<ul>
+<li>모든 에러를 한번에 확인하고 싶을 때 유용하다.</li>
+</ul>
+<dl>
+<dd><code>-i</code> 옵션 : <code>make</code> 를 이 옵션으로 실행하면 모든 에러를 무시한다. </dd>
+</dl>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nf">.DELETE_ON_ERROR</span><span class="o">:</span>
+<span class="nf">all</span><span class="o">:</span> <span class="n">one</span> 
+
+<span class="nf">one</span><span class="o">:</span>
+    touch one
+    <span class="nb">false</span>
+    touch one-post
+</code></pre></div>
+<p>위 예시를 <code>make -k</code> 로 실행하면 파일 <code>one</code> 생성되었다가 <code>false</code> 에서 전체 실행이 중단되고 <code>one</code> 이 삭제된다.</p>
+<p>반면 <code>make -i</code> 로 실행하면 <code>false</code> 가 반환하는 <code>nonzero</code> 리턴값을 무시하고 파일 <code>one</code> 과 파일 <code>one-post</code> 가 생성된다.</p>
+</div>
+<dl>
+<dd><code>-</code> : 명령어 앞에 <code>-</code> 를 붙히면 <code>nonzero</code> 종료코드가 반환되어도 전체 실행이 중단되지 않고 무시된다.</dd>
+</dl>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nf">one</span><span class="o">:</span>
+    -false
+    touch one
+</code></pre></div>
+<p>위 예시에서 에러가 무시되고 파일 <code>one</code> 이 잘 실행된다. </p>
+</div>
+<h2 id="recursive-make">Recursive make<a class="headerlink" href="#recursive-make" title="Permanent link">&para;</a></h2>
+<dl>
+<dd><code>make -C &lt;directory&gt;</code> : <code>&lt;directory&gt;</code> 를 <code>make</code> 한다. </dd>
+</dl>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nv">new_contents</span> <span class="o">=</span> <span class="s2">&quot;hello:;touch inside_file&quot;</span>                                            
+<span class="nf">all</span><span class="o">:</span>
+    mkdir -p subdir
+    <span class="nb">echo</span> <span class="k">$(</span>new_contents<span class="k">)</span> &gt; subdir/makefile
+    make -C subdir
+</code></pre></div>
+<p>위 예시는 <code>subdir</code> 디렉토리를 만들고 <code>subdir/makefile</code> 을 <code>make</code> 한다. </p>
+</div>
+<dl>
+<dd><code>export &lt;variable&gt;</code> : 재귀적으로 호출된 하위 <code>make</code> 에서 상위 <code>make</code> 의 변수를 사용할 수 있게 한다. </dd>
+</dl>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nv">new_contents</span> <span class="o">=</span> <span class="s2">&quot;hello:;echo \$</span><span class="k">$(</span>cooly<span class="k">)</span><span class="s2">&quot;</span>
+
+<span class="nf">all</span><span class="o">:</span>
+    mkdir -p subdir
+    <span class="nb">echo</span> <span class="k">$(</span>new_contents<span class="k">)</span> <span class="p">|</span> sed -e <span class="s1">&#39;s/^ //&#39;</span> &gt; subdir/makefile
+    make -C subdir
+<span class="nv">cooly</span> <span class="o">=</span> <span class="s2">&quot;The subdirectory can see me!&quot;</span>
+<span class="k">export</span> <span class="nv">cooly</span>
+</code></pre></div>
+<p>위 예시의 <code>export cooly</code> 로 생성된 <code>subdir/makefile</code> 에서 <code>cooly</code> 변수를 사용할 수 있게 된다.</p>
+</div>
+<dl>
+<dd><code>EXPORT_ALL_VARIABLES</code> : <code>.EXPORT_ALL_VARIABLES:</code> 를 선언하면 모든 변수가 <code>export</code> 된다. </dd>
+</dl>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nf">.EXPORT_ALL_VARIABLES</span><span class="o">:</span>
+<span class="nv">new_contents</span> <span class="o">=</span> <span class="s2">&quot;hello:\n\techo \$</span><span class="k">$(</span>cooly<span class="k">)</span><span class="s2">&quot;</span>
+
+<span class="nv">cooly</span> <span class="o">=</span> <span class="s2">&quot;The subdirectory can see me!&quot;</span>
+<span class="c"># This would nullify the line above: unexport cooly</span>
+
+<span class="nf">all</span><span class="o">:</span>
+  mkdir -p subdir
+  <span class="nb">echo</span> <span class="k">$(</span>new_contents<span class="k">)</span> <span class="p">|</span> sed -e <span class="s1">&#39;s/^ //&#39;</span> &gt; subdir/makefile
+  @echo <span class="s2">&quot;---MAKEFILE CONTENTS---&quot;</span>
+  @cd subdir <span class="o">&amp;&amp;</span> cat makefile
+  @echo <span class="s2">&quot;---END MAKEFILE CONTENTS---&quot;</span>
+  <span class="nb">cd</span> subdir <span class="o">&amp;&amp;</span> <span class="k">$(</span>MAKE<span class="k">)</span>
+</code></pre></div>
+</div>
+<dl>
+<dt><em>References</em>: </dt>
+<dd>
+<p><a href="https://makefiletutorial.com/">https://makefiletutorial.com/</a> </p>
+</dd>
+<dd>
+<p><a href="http://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/">http://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/</a></p>
+</dd>
+</dl>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../makefile/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  이전
+                </span>
+                Makefile 기본
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../../cli/cli/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  다음
+                </span>
+                CLI
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2018-2020 HGU DL Lab
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+        
+        
+      
+      <a href="https://github.com/WICWIU" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/vendor.6a3d08fc.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.71201edf.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "search.config.lang": "en", "search.config.pipeline": " ", "search.config.separator": "[\\s\\-]+", "search.placeholder": "\uac80\uc0c9", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../../..",
+          features: [],
+          search: Object.assign({
+            worker: "../../../assets/javascripts/worker/search.4ac00218.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.js"></script>
+      
+        <script src="../../../javascripts/config.js"></script>
+      
+        <script src="../../../javascripts/all.js"></script>
+      
+    
+  </body>
+</html>

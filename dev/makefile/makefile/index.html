@@ -1,0 +1,1640 @@
+
+<!doctype html>
+<html lang="kr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <meta name="author" content="HGU DL Lab">
+      
+      <link rel="shortcut icon" href="../../../assets/images/favicon.ico">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.1.0">
+    
+    
+      
+        <title>Makefile 기본 - WICWIU</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.bc7e593a.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab28b872.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#4051b5">
+        
+      
+    
+    
+    
+      
+        
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css">
+    
+      <link rel="stylesheet" href="../../../stylesheets/gradient-dark.css">
+    
+      <link rel="stylesheet" href="../../../stylesheets/config.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="">
+      
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="../../.." title="WICWIU" class="md-header-nav__button md-logo" aria-label="WICWIU">
+      
+  <img src="../../../assets/images/favicon.png" alt="logo">
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            WICWIU
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Makefile 기본
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="검색" placeholder="검색" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/WICWIU/WICWIU/" title="저장소로 이동" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    WICWIU
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="WICWIU" class="md-nav__button md-logo" aria-label="WICWIU">
+      
+  <img src="../../../assets/images/favicon.png" alt="logo">
+
+    </a>
+    WICWIU
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/WICWIU/WICWIU/" title="저장소로 이동" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    WICWIU
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../.." class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../about/" class="md-nav__link">
+      About
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../api/" class="md-nav__link">
+      API
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      논문 정리
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="논문 정리" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        <span class="md-nav__icon md-icon"></span>
+        논문 정리
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../paper/resnet/" class="md-nav__link">
+      ResNet
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../paper/facenet/" class="md-nav__link">
+      FaceNet
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../paper/quadruplet/" class="md-nav__link">
+      Quadruplet
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5" checked>
+    
+    <label class="md-nav__link" for="nav-5">
+      WICWIU 개발 가이드
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="WICWIU 개발 가이드" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        <span class="md-nav__icon md-icon"></span>
+        WICWIU 개발 가이드
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-1" type="checkbox" id="nav-5-1">
+    
+    <label class="md-nav__link" for="nav-5-1">
+      WICWIU
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="WICWIU" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-1">
+        <span class="md-nav__icon md-icon"></span>
+        WICWIU
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../wicwiu/about/" class="md-nav__link">
+      1. About WICWIU
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../wicwiu/nn/" class="md-nav__link">
+      2. WICWIU 신경망 구성
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../wicwiu/learn/" class="md-nav__link">
+      3. WICWIU 로 학습하기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../wicwiu/code/" class="md-nav__link">
+      4. WICWIU 코드 같이보기
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-2" type="checkbox" id="nav-5-2">
+    
+    <label class="md-nav__link" for="nav-5-2">
+      Git
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Git" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-2">
+        <span class="md-nav__icon md-icon"></span>
+        Git
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Git/git/" class="md-nav__link">
+      Collaborate with Git
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Git/message/" class="md-nav__link">
+      Commit/PR protocol
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Git/update/" class="md-nav__link">
+      Update forked repo
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-3" type="checkbox" id="nav-5-3">
+    
+    <label class="md-nav__link" for="nav-5-3">
+      VSCode
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="VSCode" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-3">
+        <span class="md-nav__icon md-icon"></span>
+        VSCode
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../VSCode/remote/" class="md-nav__link">
+      딥러닝 서버 VSCode 연동
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../VSCode/git/" class="md-nav__link">
+      VSCode Git 연동
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-4" type="checkbox" id="nav-5-4">
+    
+    <label class="md-nav__link" for="nav-5-4">
+      GPU Acceleration
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="GPU Acceleration" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-4">
+        <span class="md-nav__icon md-icon"></span>
+        GPU Acceleration
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../GPU/cuda/" class="md-nav__link">
+      cuda
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-5" type="checkbox" id="nav-5-5" checked>
+    
+    <label class="md-nav__link" for="nav-5-5">
+      Makefile
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Makefile" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-5">
+        <span class="md-nav__icon md-icon"></span>
+        Makefile
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Makefile 기본
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" class="md-nav__link md-nav__link--active">
+      Makefile 기본
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    기본 규칙
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    규칙 실행 순서
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    관례
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#targets" class="md-nav__link">
+    규칙의 targets 파일이 이미 존재할 경우
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    축약규칙
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phony" class="md-nav__link">
+    PHONY
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    변수
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    함축 규칙
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    특수 문자
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    다중 타겟
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../makefile2/" class="md-nav__link">
+      Makefile 고급
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-6" type="checkbox" id="nav-5-6">
+    
+    <label class="md-nav__link" for="nav-5-6">
+      CLI
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="CLI" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-6">
+        <span class="md-nav__icon md-icon"></span>
+        CLI
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../cli/cli/" class="md-nav__link">
+      CLI
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../cli/zsh/" class="md-nav__link">
+      zsh
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../cli/tmux/" class="md-nav__link">
+      tmux
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      WICWIU 지식동기화
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="WICWIU 지식동기화" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        <span class="md-nav__icon md-icon"></span>
+        WICWIU 지식동기화
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6-1" type="checkbox" id="nav-6-1">
+    
+    <label class="md-nav__link" for="nav-6-1">
+      fewshot diary
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="fewshot diary" data-md-level="2">
+      <label class="md-nav__title" for="nav-6-1">
+        <span class="md-nav__icon md-icon"></span>
+        fewshot diary
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6-1-1" type="checkbox" id="nav-6-1-1">
+    
+    <label class="md-nav__link" for="nav-6-1-1">
+      Step 1. Data &rarr; Tensor
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Step 1. Data &rarr; Tensor" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-1-1">
+        <span class="md-nav__icon md-icon"></span>
+        Step 1. Data &rarr; Tensor
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/fewshot/step1-1/" class="md-nav__link">
+      Analysis&#58; LFW 1
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/fewshot/step1-2/" class="md-nav__link">
+      Analysis&#58; LFW 2
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/fewshot/step1-3/" class="md-nav__link">
+      Coding&#58; PNG, CImg
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/fewshot/step2/" class="md-nav__link">
+      Step 2. 순전파
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/fewshot/step3/" class="md-nav__link">
+      Step 3. 역전파
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/fewshot/step4/" class="md-nav__link">
+      Step 4. 최적화
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6-2" type="checkbox" id="nav-6-2">
+    
+    <label class="md-nav__link" for="nav-6-2">
+      Coding Convention
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Coding Convention" data-md-level="2">
+      <label class="md-nav__title" for="nav-6-2">
+        <span class="md-nav__icon md-icon"></span>
+        Coding Convention
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/convention/step1-1/" class="md-nav__link">
+      About Coding Convention
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/convention/googlestyleguide/" class="md-nav__link">
+      (ABANDONED)Google C++ Style Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
+    
+    <label class="md-nav__link" for="nav-7">
+      이곳에 문서 작성하기
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="이곳에 문서 작성하기" data-md-level="1">
+      <label class="md-nav__title" for="nav-7">
+        <span class="md-nav__icon md-icon"></span>
+        이곳에 문서 작성하기
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/markdown/" class="md-nav__link">
+      Step 1. Markdown 파일
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/code/" class="md-nav__link">
+      Step 2. 소스코드 설명하기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/format/" class="md-nav__link">
+      Step 3. 고오급 포매팅
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/admonitions/" class="md-nav__link">
+      Step 4. Admonitions
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/tab/" class="md-nav__link">
+      Step 5. 컨텐츠 탭
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/button/" class="md-nav__link">
+      Step 6. 버튼 넣기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/math/" class="md-nav__link">
+      Step 7. 수식 보여주기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/api/" class="md-nav__link">
+      Step 8. API 작성
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    기본 규칙
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    규칙 실행 순서
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    관례
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#targets" class="md-nav__link">
+    규칙의 targets 파일이 이미 존재할 경우
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    축약규칙
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phony" class="md-nav__link">
+    PHONY
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    변수
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    함축 규칙
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    특수 문자
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    다중 타겟
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/WICWIU/WICWIU/edit/master/docs/dev/makefile/makefile.md" title="이 페이지를 편집" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  <h1>Makefile 기본</h1>
+                
+                <p><a href="https://en.wikipedia.org/wiki/Makefile">makefile</a> 은 프로젝트를 자동으로 빌드하기 위한 규칙들을 명시해주어 <code>make</code> 명령어로 긴 컴파일 명령어들을 자동으로 실행할 수 있도록 해주는 파일입니다.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>아래의 내용은 <a href="https://ccss17.github.io/makefile.html">저의 블로그 내용</a> 을 다시 정리한 것입니다.</p>
+</div>
+<p>지금부터 학습하면서 소개해드리는 예제 코드들을 <code>makefile</code> 에 저장하고 <code>make</code> 명령어를 실행해보세요!</p>
+<h3 id="_1">기본 규칙<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<p><code>Makefile</code> 은 프로젝트를 자동으로 빌드하기 위한 여러개의 규칙으로 구성되는데 규칙의 일반적 문법은 다음과 같습니다.</p>
+<div class="highlight"><pre><span></span><code><span class="nf">targets </span><span class="o">:</span> <span class="n">prerequisites</span> 
+<span class="err">command</span>
+<span class="err">command</span>
+<span class="err">command</span>
+<span class="err">...</span>
+</code></pre></div>
+<ul>
+<li>
+<p><code>targets</code> : 규칙 이름으로써 공백으로 구분되는 파일 이름들이다. 만들어질 파일 이름을 뜻한다. 보통 규칙 당 하나의 파일만 있다. </p>
+</li>
+<li>
+<p><code>commands</code> : <code>targets</code> 을 만드는 일련의 명령어들이다. 이 부분은 공백이 아닌 탭으로 시작되어야만 한다. </p>
+</li>
+<li>
+<p><code>prerequisites</code> : 공백으로 구분되는 파일 이름들로써 <code>commands</code> 가 실행되기 위하여 필요한 의존성 파일 리스트를 뜻한다. </p>
+</li>
+</ul>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p><strong>만약 <code>prerequisites</code> 에서 명시된 파일들 중 하나가 존재하지 않는다면 먼저 그 파일 이름의 규칙을 찾아서 그 규칙을 실행하여 파일을 만듭니다.</strong></p>
+</div>
+<h3 id="_2">규칙 실행 순서<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<p><code>make</code> 명령을 인자 없이 실행하면 <code>Makefile</code> 의 첫번째 규칙이 실행된다. 일반적으로 첫번째 규칙을 <code>all</code> 로 정하는 국룰이 있다. </p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nf">blah</span><span class="o">:</span> <span class="n">blah</span>.<span class="n">o</span>
+<span class="err">cc</span> <span class="err">blah.o</span> <span class="err">-o</span> <span class="err">blah</span>
+
+<span class="nf">blah.o</span><span class="o">:</span> <span class="n">blah</span>.<span class="n">c</span>
+<span class="err">cc</span> <span class="err">-c</span> <span class="err">blah.c</span> <span class="err">-o</span> <span class="err">blah.o</span>
+
+<span class="nf">blah.c</span><span class="o">:</span>
+<span class="err">echo</span> <span class="s2">&quot;int main() { return 0; }&quot;</span> <span class="err">&gt;</span> <span class="err">blah.c</span>
+
+<span class="nf">clean</span><span class="o">:</span>
+<span class="err">rm</span> <span class="err">-f</span> <span class="err">blah.o</span> <span class="err">blah.c</span> <span class="err">blah</span>
+</code></pre></div>
+<p>이러한 <code>Makefile</code> 의 경우 <code>blah</code> 가 첫번째 규칙이므로 디폴트 규칙이 된다. </p>
+</div>
+<h3 id="_3">관례<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<p>통상적으로 <code>CC</code> 에 컴파일러를, <code>CFLAGS</code> 에 컴파일 옵션을 저장하여 규칙에 삽입한다. </p>
+<h3 id="targets">규칙의 <code>targets</code> 파일이 이미 존재할 경우<a class="headerlink" href="#targets" title="Permanent link">&para;</a></h3>
+<p><code>make</code> 는 규칙의 파일이 이미 존재할 경우 <code>"up to date"</code> 메시지를 출력하고 규칙을 실행하지 않는다. </p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nf">some_file</span><span class="o">:</span>
+  touch some_file
+</code></pre></div>
+<p>처음 실행할 때는 규칙이 실행 되지만 한번 더 실행하면 규칙이 실행되지 않는다. </p>
+</div>
+<h3 id="_4">축약규칙<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<p>위 예제의 <code>Makefile</code> 은 다음과 같이 축약할 수 있다. </p>
+<div class="highlight"><pre><span></span><code><span class="nf">some_file</span><span class="o">:</span>; <span class="n">touch</span> <span class="n">some_file</span>
+</code></pre></div>
+<h3 id="phony">PHONY<a class="headerlink" href="#phony" title="Permanent link">&para;</a></h3>
+<dl>
+<dd><code>.PHONY</code> : <code>targets</code> 이 실제 파일 이름이 아니라는 것을 명시한다.</dd>
+</dl>
+<p><code>make</code> 는 효율성을 위하여 <code>targets</code> 파일이 이미 존재하면 규칙을 실행하지 않는다. 그런데 <code>clean</code> 이나 <code>all</code> 같은 규칙은 실제 파일 이름을 지칭하지 않는다. 만약 실수로 <code>all</code> 파일이나 <code>clean</code> 파일을 생성하였을 경우 <code>all</code> 이나 <code>clean</code> 규칙이 실행되지 않을 수도 있다. 이것을 방지하기 위하여 <code>.PHONY</code> 에 <code>targets</code> 을 명시하면 <code>make</code> 는 파일이 존재하는지 검사하지 않고 규칙을 무조건 실행한다. </p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>또한 파일 존재 검사를 하지 않기 때문에 <code>.PHONY</code> 를 사용하면 <code>make</code> 의 성능이 향상된다. </p>
+</div>
+<p>다음의 예시를 살펴보면서 <code>.PHONY</code> 를 이해해봅시다.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nf">one</span><span class="o">:</span>; <span class="n">touch</span> <span class="n">one</span>
+<span class="nf">clean</span><span class="o">:</span>; <span class="n">rm</span> -<span class="n">f</span> <span class="n">one</span>
+</code></pre></div>
+<p>위 예제의 <code>clean</code> 규칙은 파일 <code>one</code> 을 삭제하기로 되어있다. 그런데 만약 <code>clean</code> 이라는 이름을 가진 파일이 존재하면 <code>make clean</code> 으로 규칙을 실행한다 해도 <code>make: 'clean' is up to date.</code> 라는 메세지가 출력되고 규칙이 실행되지 않는다. </p>
+<div class="highlight"><pre><span></span><code><span class="nf">one</span><span class="o">:</span>; <span class="n">touch</span> <span class="n">one</span>
+<span class="nf">clean</span><span class="o">:</span>; <span class="n">rm</span> -<span class="n">f</span> <span class="n">one</span>
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">clean</span>
+</code></pre></div>
+<p>따라서 <code>.PHONY</code> 에 <code>clean</code> 을 명시하여 실제 파일 이름이 아니라는 것을 명시해준다. 그러면 <code>clean</code> 파일이 있어도 규칙이 항상 실행된다. </p>
+</div>
+<h3 id="_5">변수<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<p>문자열을 변수에 저장하고 <code>${}</code> 나 <code>$()</code> 로 사용할 수 있다.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nv">files</span> <span class="o">=</span> file1 file2
+<span class="nf">some_file</span><span class="o">:</span> <span class="k">$(</span><span class="nv">files</span><span class="k">)</span>
+  <span class="nb">echo</span> <span class="s2">&quot;Look at this variable: &quot;</span> <span class="k">$(</span>files<span class="k">)</span>
+  touch some_file
+
+<span class="nf">file1</span><span class="o">:</span>
+  touch file1
+<span class="nf">file2</span><span class="o">:</span>
+  touch file2
+
+<span class="nf">clean</span><span class="o">:</span>
+  rm -f file1 file2 some_file
+</code></pre></div>
+</div>
+<h4>변수 할당</h4>
+<dl>
+<dd><code>var = value</code> : 지연된 할당으로써 변수가 사용될 때 그 값들이 재귀적으로 할당된다. </dd>
+</dl>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nv">foo</span> <span class="o">=</span> <span class="k">$(</span>bar<span class="k">)</span>
+<span class="nv">bar</span> <span class="o">=</span> <span class="k">$(</span>ugh<span class="k">)</span>
+<span class="nv">ugh</span> <span class="o">=</span> Huh?
+
+<span class="nf">all</span><span class="o">:</span>;<span class="n">echo</span> <span class="k">$(</span><span class="nv">foo</span><span class="k">)</span>
+</code></pre></div>
+<p>이때 <code>foo</code> 에 할당되는 <code>bar</code> 는 <code>foo</code> 가 선언되는 시점에서 정의되지 않았기 때문에 컴파일 에러가 날 것 같다. 하지만 <code>=</code> 는 지연된 할당으로서 <code>foo</code> 가 실질적으로 사용될 때 참조된 모든 변수들을 재귀적으로 찾아가며 할당한다. </p>
+</div>
+<dl>
+<dd><code>var := value</code> : 즉시 할당으로써 변수가 선언될 때 그 값들이 재귀적으로 할당된다. </dd>
+</dl>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nv">foo</span> <span class="o">:=</span> <span class="k">$(</span>bar<span class="k">)</span>
+<span class="nv">bar</span> <span class="o">:=</span> <span class="k">$(</span>ugh<span class="k">)</span>
+<span class="nv">ugh</span> <span class="o">:=</span> Huh?
+
+<span class="nf">all</span><span class="o">:</span>;<span class="n">echo</span> <span class="k">$(</span><span class="nv">foo</span><span class="k">)</span>
+</code></pre></div>
+<p>이전 예제와는 달리 이 코드는 아무것도 출력하지 않는다. <code>foo</code> 가 선언되는 시점에서 <code>bar</code> 는 정의되지 않았기 때문이다. </p>
+<div class="highlight"><pre><span></span><code><span class="nv">ugh</span> <span class="o">:=</span> Huh?
+<span class="nv">bar</span> <span class="o">:=</span> <span class="k">$(</span>ugh<span class="k">)</span>
+<span class="nv">foo</span> <span class="o">:=</span> <span class="k">$(</span>bar<span class="k">)</span>
+
+<span class="nf">all</span><span class="o">:</span>;<span class="n">echo</span> <span class="k">$(</span><span class="nv">foo</span><span class="k">)</span>
+</code></pre></div>
+<p>즉시 할당된 변수를 제대로 출력되게 하기 위해서는 위와 같이 선언 순서를 바꾸어 주어야 한다. 즉시 할당과 지연 할당을 섞어서 쓰면 다음과 같이 순서를 배치하는 것 또한 가능하다. </p>
+<div class="highlight"><pre><span></span><code><span class="nv">bar</span> <span class="o">=</span> <span class="k">$(</span>ugh<span class="k">)</span>
+<span class="nv">ugh</span> <span class="o">:=</span> Huh?
+<span class="nv">foo</span> <span class="o">:=</span> <span class="k">$(</span>bar<span class="k">)</span>
+
+<span class="nf">all</span><span class="o">:</span>;<span class="n">echo</span> <span class="k">$(</span><span class="nv">foo</span><span class="k">)</span>
+</code></pre></div>
+<p>이렇게 해도 된다. </p>
+<div class="highlight"><pre><span></span><code><span class="nv">foo</span> <span class="o">=</span> <span class="k">$(</span>bar<span class="k">)</span>
+<span class="nv">ugh</span> <span class="o">:=</span> Huh?
+<span class="nv">bar</span> <span class="o">:=</span> <span class="k">$(</span>ugh<span class="k">)</span>
+
+<span class="nf">all</span><span class="o">:</span>;<span class="n">echo</span> <span class="k">$(</span><span class="nv">foo</span><span class="k">)</span>
+</code></pre></div>
+</div>
+<p>다음 예시로 지연 할당과 즉시 할당을 비교해보세요.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nv">one</span> <span class="o">=</span> one <span class="si">${</span><span class="nv">later_variable</span><span class="si">}</span>
+<span class="nv">two</span> <span class="o">:=</span> two <span class="si">${</span><span class="nv">later_variable</span><span class="si">}</span>
+
+<span class="nv">later_variable</span> <span class="o">=</span> later
+
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">all</span>
+<span class="nf">all</span><span class="o">:</span> 
+  <span class="nb">echo</span> <span class="k">$(</span>one<span class="k">)</span>
+  <span class="nb">echo</span> <span class="k">$(</span>two<span class="k">)</span>
+</code></pre></div>
+<p>위 예시에서 <code>one</code> 에는 <code>later_variable</code> 이 할당되지만 <code>two</code> 는 <code>:=</code> 으로 즉시할당을 사용했기 때문에 <code>later_variable</code> 이 할당되지 않는다. </p>
+</div>
+<dl>
+<dd><code>var ?= value</code> : 만약 <code>var</code> 이 할당되어 있지 않으면 <code>value</code> 로 할당한다. </dd>
+</dl>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nv">one</span> <span class="o">=</span> hello
+<span class="nv">one</span> <span class="o">?=</span> will not be <span class="nb">set</span>
+<span class="nv">two</span> <span class="o">?=</span> will be <span class="nb">set</span>
+
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">all</span>
+<span class="nf">all</span><span class="o">:</span> 
+  <span class="nb">echo</span> <span class="k">$(</span>one<span class="k">)</span>
+  <span class="nb">echo</span> <span class="k">$(</span>two<span class="k">)</span>
+</code></pre></div>
+<p>위 예시에서 <code>?=</code> 로 <code>one</code> 과 <code>two</code> 를 할당하는데 <code>two</code> 만 할당된다. </p>
+</div>
+<dl>
+<dd>변수 확장 : 단순히 변수를 이어붙히는 것으로 변수 확장을 할 수 있다. </dd>
+</dl>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nv">one</span> <span class="o">=</span> hello
+<span class="nv">one</span> <span class="o">:=</span> <span class="si">${</span><span class="nv">one</span><span class="si">}</span> there
+<span class="nf">all</span><span class="o">:</span> 
+  <span class="nb">echo</span> <span class="k">$(</span>one<span class="k">)</span>
+</code></pre></div>
+<p>위 예시에서 즉시할당 <code>:=</code> 를 지연할당 <code>=</code> 으로 바꾼다면 무한루프 에러가 발생한다. </p>
+</div>
+<dl>
+<dd><code>+=</code> 변수 확장 : <code>+=</code> 연산자로도 변수 확장을 할 수 있다. </dd>
+</dl>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nv">one</span> <span class="o">=</span> hello
+<span class="nv">one</span> <span class="o">+=</span> there
+<span class="nf">all</span><span class="o">:</span> 
+  <span class="nb">echo</span> <span class="k">$(</span>one<span class="k">)</span>
+</code></pre></div>
+<p>위 예시는 <code>hello there</code> 를 출력한다. </p>
+</div>
+<dl>
+<dd>할당되지 않은 변수 : 할당되지 않은 변수를 다른 변수에 할당하면 스페이스 하나가 할당된다. </dd>
+</dl>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nv">with_spaces</span> <span class="o">=</span> hello   <span class="c1"># with_spaces has many spaces after &quot;hello&quot;                    </span>
+<span class="nv">after</span> <span class="o">=</span> <span class="k">$(</span>with_spaces<span class="k">)</span>there
+
+<span class="nv">nullstring</span> <span class="o">=</span>                              
+<span class="nv">space</span> <span class="o">=</span> <span class="k">$(</span>nullstring<span class="k">)</span> <span class="c1"># Make a variable with a single space.</span>
+
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">all</span> 
+<span class="nf">all</span><span class="o">:</span> 
+    @echo <span class="s2">&quot;</span><span class="k">$(</span>after<span class="k">)</span><span class="s2">&quot;</span>
+    @echo start<span class="s2">&quot;</span><span class="k">$(</span>nullstring<span class="k">)</span><span class="s2">&quot;</span>end
+    @echo start<span class="s2">&quot;</span><span class="k">$(</span>space<span class="k">)</span><span class="s2">&quot;</span>end
+</code></pre></div>
+<p>위 예시의 출력은 다음과 같다. </p>
+<div class="highlight"><pre><span></span><code>$ make
+hello   there
+startend
+start end
+</code></pre></div>
+</div>
+<dl>
+<dd>변수 치환 : <code>$(var:a=b)</code> 로 변수 <code>var</code> 의 <code>a</code> 가 <code>b</code> 로 치환된다.</dd>
+</dl>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nv">foo</span> <span class="o">:=</span> a.o b.o c.o
+<span class="nv">bar</span> <span class="o">:=</span> <span class="k">$(</span>foo:.o<span class="o">=</span>.c<span class="k">)</span>
+<span class="nf">all</span><span class="o">:</span> ; <span class="n">echo</span> <span class="k">$(</span><span class="nv">bar</span><span class="k">)</span>
+</code></pre></div>
+<p>위 예시는 <code>a.c b.c c.c</code> 를 출력한다. </p>
+</div>
+<dl>
+<dd>패턴 변수 치환 : <code>%</code> 를 사용한 패턴을 포함하여 변수 치환을 할 수도 있다. </dd>
+</dl>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nv">foo</span> <span class="o">:=</span> a.o b.o c.c
+<span class="nv">bar</span> <span class="o">:=</span> <span class="k">$(</span>foo:%.o<span class="o">=</span>%<span class="k">)</span>
+<span class="nf">all</span><span class="o">:</span> ; <span class="n">echo</span> <span class="k">$(</span><span class="nv">bar</span><span class="k">)</span>
+</code></pre></div>
+<p>위 예시는 <code>a b c.c</code> 를 출력한다. </p>
+</div>
+<h3 id="_6">함축 규칙<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<p><code>Makefile</code> 은 다음과 같이 함축 규칙을 지원한다. </p>
+<div class="highlight"><pre><span></span><code><span class="c"># blah.o 규칙 안에 주석을 달면 함축 규칙이 실행되지 않는다. </span>
+<span class="c"># Implicit command of: &quot;cc blah.o -o blah&quot;</span>
+<span class="nf">blah</span><span class="o">:</span>
+
+<span class="c"># Implicit command of: &quot;cc -c blah.c -o blah.o&quot;</span>
+<span class="nf">blah.o</span><span class="o">:</span>
+
+<span class="nf">blah.c</span><span class="o">:</span>
+<span class="err">echo</span> <span class="s2">&quot;int main() { return 0; }&quot;</span> <span class="err">&gt;</span> <span class="err">blah.c</span>
+
+<span class="nf">clean</span><span class="o">:</span>
+<span class="err">rm</span> <span class="err">-f</span> <span class="err">blah.o</span> <span class="err">blah</span> <span class="err">blah.c</span>
+</code></pre></div>
+<h3 id="_7">특수 문자<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<dl>
+<dd>와일드카드 <code>*</code> : 와일드카드 <code>*</code> 는 <code>targets</code>, <code>prerequisites</code>, <code>commands</code> 에서 사용 가능하다.</dd>
+</dl>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nf">some_file</span><span class="o">:</span> *.<span class="n">c</span>
+<span class="c">    # create the binary</span>
+
+<span class="nf">*.c</span><span class="o">:</span>
+    touch f1.c
+    touch f2.c
+
+<span class="nf">clean</span><span class="o">:</span>
+    rm -f *.c
+</code></pre></div>
+<p>이 <code>Makefile</code> 은 <code>.c</code> 파일이 단 하나라도 있으면 <code>*.c</code> 규칙이 실행되지 않는다. 와일드카드 <code>*</code> 는 어떤 문자열이라도 해당되기에 <code>make</code> 가 <code>*.c</code> 라는 의존성이 해결 된 것으로 판단하기 때문이다. </p>
+</div>
+<dl>
+<dd>와일드카드 <code>*</code> 함수 : 와일드카드 <code>*</code> 를 <code>targets</code>, <code>prerequisites</code>, <code>commands</code> 에서밖에 사용하지 못하기 때문에 변수할당이나 함수인자 전달 시에는 와일드카드 함수를 사용해야 한다. </dd>
+</dl>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nv">wrong</span> <span class="o">=</span> *.o <span class="c1"># Wrong</span>
+<span class="nv">objects</span> <span class="o">:=</span> <span class="k">$(</span>wildcard *.c<span class="k">)</span> <span class="c1"># Right</span>
+
+<span class="nf">some_binary</span><span class="o">:</span> 
+    touch f1.c
+    touch f2.c
+    <span class="nb">echo</span> <span class="k">$(</span>wrong<span class="k">)</span>
+    <span class="nb">echo</span> <span class="k">$(</span>objects<span class="k">)</span>
+
+<span class="nf">clean</span><span class="o">:</span>
+    rm -f *.c
+</code></pre></div>
+</div>
+<dl>
+<dd><code>%</code> 는 모든 파일 이름을 뜻한다.</dd>
+</dl>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><code>%.c</code> 라고 하면 모든 <code>.c</code> 파일을 뜻한다. </p>
+</div>
+<dl>
+<dd><code>$@</code> 는 규칙의 <code>:</code> 왼쪽 부분이다. </dd>
+<dd><code>$&lt;</code> 는 규칙의 <code>:</code> 오른쪽 부분의 첫번째 아이템이다. </dd>
+<dd><code>$^</code> 는 규칙의 <code>:</code> 오른쪽 부분이다. </dd>
+</dl>
+<h3 id="_8">다중 타겟<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<p><code>targets</code> 에 여러 파일이 선언되어 사용할 수도 있다. </p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nf">all</span><span class="o">:</span> <span class="n">f</span>1.<span class="n">o</span> <span class="n">f</span>2.<span class="n">o</span>
+<span class="nf">f1.o f2.o</span><span class="o">:</span>
+  <span class="nb">echo</span> <span class="nv">$@</span>
+</code></pre></div>
+<p>위 예시에서 규칙 <code>all</code> 에서 <code>f1.o</code> 와 <code>f2.o</code> 를 지정하였는데 각각 <code>f1.o f2.o</code> 규칙을 실행하게 된다. 이때 실행 명령 <code>echo $@</code> 의 <code>$@</code> 에는 각각 맥락에 따라 <code>f1.o</code> 와 <code>f2.o</code> 가 대입된다. </p>
+</div>
+<p><code>targets</code> 에 와일드카드 <code>%</code> 로 일반적인 파일을 선언하여 사용할 수 있다. </p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="nf">all</span><span class="o">:</span> <span class="n">f</span>1.<span class="n">o</span> <span class="n">f</span>2.<span class="n">o</span>
+<span class="nf">%.o</span><span class="o">:</span>
+  <span class="nb">echo</span> <span class="nv">$@</span>
+</code></pre></div>
+<p>이 경우 <code>%.o</code> 규칙으로 인해 <code>.o</code> 확장자를 가진 모든 파일이 이 규칙으로 생성된다. </p>
+<div class="highlight"><pre><span></span><code><span class="nf">all</span><span class="o">:</span> <span class="n">f</span>1.<span class="n">o</span> <span class="n">f</span>2.<span class="n">o</span>
+<span class="nf">%.o</span><span class="o">:</span>
+  <span class="nb">echo</span> <span class="nv">$@</span>
+<span class="nf">f1.o</span><span class="o">:</span>
+  <span class="nb">echo</span> TEST
+</code></pre></div>
+<p>하지만 위와 같이 <code>f1.o</code> 의 규칙을 따로 지정해줄 경우 <code>f1.o</code> 를 생성할 때 <code>make</code> 는 <code>%.o</code> 규칙이 아니라 <code>f1.o</code> 규칙을 실행한다. </p>
+</div>
+<dl>
+<dt><em>References</em>: </dt>
+<dd>
+<p><a href="https://makefiletutorial.com/">https://makefiletutorial.com/</a> </p>
+</dd>
+<dd>
+<p><a href="http://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/">http://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/</a></p>
+</dd>
+</dl>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../../GPU/cuda/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  이전
+                </span>
+                cuda
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../makefile2/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  다음
+                </span>
+                Makefile 고급
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2018-2020 HGU DL Lab
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+        
+        
+      
+      <a href="https://github.com/WICWIU" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/vendor.6a3d08fc.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.71201edf.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "search.config.lang": "en", "search.config.pipeline": " ", "search.config.separator": "[\\s\\-]+", "search.placeholder": "\uac80\uc0c9", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../../..",
+          features: [],
+          search: Object.assign({
+            worker: "../../../assets/javascripts/worker/search.4ac00218.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.js"></script>
+      
+        <script src="../../../javascripts/config.js"></script>
+      
+        <script src="../../../javascripts/all.js"></script>
+      
+    
+  </body>
+</html>

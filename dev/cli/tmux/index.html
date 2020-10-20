@@ -1,0 +1,1536 @@
+
+<!doctype html>
+<html lang="kr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <meta name="author" content="HGU DL Lab">
+      
+      <link rel="shortcut icon" href="../../../assets/images/favicon.ico">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.1.0">
+    
+    
+      
+        <title>tmux - WICWIU</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.bc7e593a.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab28b872.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#4051b5">
+        
+      
+    
+    
+    
+      
+        
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css">
+    
+      <link rel="stylesheet" href="../../../stylesheets/gradient-dark.css">
+    
+      <link rel="stylesheet" href="../../../stylesheets/config.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="">
+      
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#tmux" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="../../.." title="WICWIU" class="md-header-nav__button md-logo" aria-label="WICWIU">
+      
+  <img src="../../../assets/images/favicon.png" alt="logo">
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            WICWIU
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              tmux
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="검색" placeholder="검색" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/WICWIU/WICWIU/" title="저장소로 이동" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    WICWIU
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="WICWIU" class="md-nav__button md-logo" aria-label="WICWIU">
+      
+  <img src="../../../assets/images/favicon.png" alt="logo">
+
+    </a>
+    WICWIU
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/WICWIU/WICWIU/" title="저장소로 이동" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    WICWIU
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../.." class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../about/" class="md-nav__link">
+      About
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../api/" class="md-nav__link">
+      API
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      논문 정리
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="논문 정리" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        <span class="md-nav__icon md-icon"></span>
+        논문 정리
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../paper/resnet/" class="md-nav__link">
+      ResNet
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../paper/facenet/" class="md-nav__link">
+      FaceNet
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../paper/quadruplet/" class="md-nav__link">
+      Quadruplet
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5" checked>
+    
+    <label class="md-nav__link" for="nav-5">
+      WICWIU 개발 가이드
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="WICWIU 개발 가이드" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        <span class="md-nav__icon md-icon"></span>
+        WICWIU 개발 가이드
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-1" type="checkbox" id="nav-5-1">
+    
+    <label class="md-nav__link" for="nav-5-1">
+      WICWIU
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="WICWIU" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-1">
+        <span class="md-nav__icon md-icon"></span>
+        WICWIU
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../wicwiu/about/" class="md-nav__link">
+      1. About WICWIU
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../wicwiu/nn/" class="md-nav__link">
+      2. WICWIU 신경망 구성
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../wicwiu/learn/" class="md-nav__link">
+      3. WICWIU 로 학습하기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../wicwiu/code/" class="md-nav__link">
+      4. WICWIU 코드 같이보기
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-2" type="checkbox" id="nav-5-2">
+    
+    <label class="md-nav__link" for="nav-5-2">
+      Git
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Git" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-2">
+        <span class="md-nav__icon md-icon"></span>
+        Git
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Git/git/" class="md-nav__link">
+      Collaborate with Git
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Git/message/" class="md-nav__link">
+      Commit/PR protocol
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Git/update/" class="md-nav__link">
+      Update forked repo
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-3" type="checkbox" id="nav-5-3">
+    
+    <label class="md-nav__link" for="nav-5-3">
+      VSCode
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="VSCode" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-3">
+        <span class="md-nav__icon md-icon"></span>
+        VSCode
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../VSCode/remote/" class="md-nav__link">
+      딥러닝 서버 VSCode 연동
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../VSCode/git/" class="md-nav__link">
+      VSCode Git 연동
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-4" type="checkbox" id="nav-5-4">
+    
+    <label class="md-nav__link" for="nav-5-4">
+      GPU Acceleration
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="GPU Acceleration" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-4">
+        <span class="md-nav__icon md-icon"></span>
+        GPU Acceleration
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../GPU/cuda/" class="md-nav__link">
+      cuda
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-5" type="checkbox" id="nav-5-5">
+    
+    <label class="md-nav__link" for="nav-5-5">
+      Makefile
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Makefile" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-5">
+        <span class="md-nav__icon md-icon"></span>
+        Makefile
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../makefile/makefile/" class="md-nav__link">
+      Makefile 기본
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../makefile/makefile2/" class="md-nav__link">
+      Makefile 고급
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-6" type="checkbox" id="nav-5-6" checked>
+    
+    <label class="md-nav__link" for="nav-5-6">
+      CLI
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="CLI" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-6">
+        <span class="md-nav__icon md-icon"></span>
+        CLI
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../cli/" class="md-nav__link">
+      CLI
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../zsh/" class="md-nav__link">
+      zsh
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        tmux
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" class="md-nav__link md-nav__link--active">
+      tmux
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#tmux" class="md-nav__link">
+    tmux 로 터미널 편하게 사용하기
+  </a>
+  
+    <nav class="md-nav" aria-label="tmux 로 터미널 편하게 사용하기">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tmux_1" class="md-nav__link">
+    더 빨라진 tmux!
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alias" class="md-nav__link">
+    더 빨라진 alias
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    더 이뻐진 테마
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    더 빨라진 메타 키
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    더 빨라진 터미널 분할
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    더 빨라진 화면 생성
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    더 빨라진 터미널 이동
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    더 빨라진 터미널 크기 조절
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tmux_2" class="md-nav__link">
+    tmux 사용 예시
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      WICWIU 지식동기화
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="WICWIU 지식동기화" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        <span class="md-nav__icon md-icon"></span>
+        WICWIU 지식동기화
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6-1" type="checkbox" id="nav-6-1">
+    
+    <label class="md-nav__link" for="nav-6-1">
+      fewshot diary
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="fewshot diary" data-md-level="2">
+      <label class="md-nav__title" for="nav-6-1">
+        <span class="md-nav__icon md-icon"></span>
+        fewshot diary
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6-1-1" type="checkbox" id="nav-6-1-1">
+    
+    <label class="md-nav__link" for="nav-6-1-1">
+      Step 1. Data &rarr; Tensor
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Step 1. Data &rarr; Tensor" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-1-1">
+        <span class="md-nav__icon md-icon"></span>
+        Step 1. Data &rarr; Tensor
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/fewshot/step1-1/" class="md-nav__link">
+      Analysis&#58; LFW 1
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/fewshot/step1-2/" class="md-nav__link">
+      Analysis&#58; LFW 2
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/fewshot/step1-3/" class="md-nav__link">
+      Coding&#58; PNG, CImg
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/fewshot/step2/" class="md-nav__link">
+      Step 2. 순전파
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/fewshot/step3/" class="md-nav__link">
+      Step 3. 역전파
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/fewshot/step4/" class="md-nav__link">
+      Step 4. 최적화
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6-2" type="checkbox" id="nav-6-2">
+    
+    <label class="md-nav__link" for="nav-6-2">
+      Coding Convention
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Coding Convention" data-md-level="2">
+      <label class="md-nav__title" for="nav-6-2">
+        <span class="md-nav__icon md-icon"></span>
+        Coding Convention
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/convention/step1-1/" class="md-nav__link">
+      About Coding Convention
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../sync/convention/googlestyleguide/" class="md-nav__link">
+      (ABANDONED)Google C++ Style Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
+    
+    <label class="md-nav__link" for="nav-7">
+      이곳에 문서 작성하기
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="이곳에 문서 작성하기" data-md-level="1">
+      <label class="md-nav__title" for="nav-7">
+        <span class="md-nav__icon md-icon"></span>
+        이곳에 문서 작성하기
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/markdown/" class="md-nav__link">
+      Step 1. Markdown 파일
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/code/" class="md-nav__link">
+      Step 2. 소스코드 설명하기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/format/" class="md-nav__link">
+      Step 3. 고오급 포매팅
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/admonitions/" class="md-nav__link">
+      Step 4. Admonitions
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/tab/" class="md-nav__link">
+      Step 5. 컨텐츠 탭
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/button/" class="md-nav__link">
+      Step 6. 버튼 넣기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/math/" class="md-nav__link">
+      Step 7. 수식 보여주기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/api/" class="md-nav__link">
+      Step 8. API 작성
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#tmux" class="md-nav__link">
+    tmux 로 터미널 편하게 사용하기
+  </a>
+  
+    <nav class="md-nav" aria-label="tmux 로 터미널 편하게 사용하기">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tmux_1" class="md-nav__link">
+    더 빨라진 tmux!
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alias" class="md-nav__link">
+    더 빨라진 alias
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    더 이뻐진 테마
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    더 빨라진 메타 키
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    더 빨라진 터미널 분할
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    더 빨라진 화면 생성
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    더 빨라진 터미널 이동
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    더 빨라진 터미널 크기 조절
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tmux_2" class="md-nav__link">
+    tmux 사용 예시
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/WICWIU/WICWIU/edit/master/docs/dev/cli/tmux.md" title="이 페이지를 편집" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  <h1>tmux</h1>
+                
+                <h2 id="tmux"><code>tmux</code> 로 터미널 편하게 사용하기<a class="headerlink" href="#tmux" title="Permanent link">&para;</a></h2>
+<p>지금까지 함께 살펴보았던 CLI 프로그램들로 <strong>Linux</strong> 시스템에서도 편하고 빠르게 개발을 할 수 있습니다. 하지만 거의 모든 개발 상황에서 터미널 창 하나는 부족합니다. 이때 <code>tmux</code> 가 필요합니다.</p>
+<p><code>tmux</code> 사용법도 <a href="https://github.com/ccss17/ProgrammerBase/blob/master/tmux.md">튜토리얼</a> 에 자세히 써놓았기 때문에 여기에서는 <code>tmux</code> 를 사용하면, 또 커스터마이징하면 얼마나 생산성이 향상되는지만 살펴보겠습니다.</p>
+<h3 id="tmux_1">더 빨라진 <code>tmux</code>!<a class="headerlink" href="#tmux_1" title="Permanent link">&para;</a></h3>
+<p><code>tmux</code> 업그레이드는 사실 실제적인 업그레이드가 아니라 <code>tmux</code> 의 설정을 커스터마이징할 수 있는 <code>~/.tmux.conf</code> 파일에 사용자가 더 편하게 사용할 수 있도록 설정을 조작하는 것입니다. 그렇기 때문에 여기에서는 제가 설정한 <code>~/.tmux.conf</code> 파일을 중심으로 <code>tmux</code> 를 사용하기가 얼마나 편해졌는지 살펴보겠습니다. </p>
+<h3 id="alias">더 빨라진 alias<a class="headerlink" href="#alias" title="Permanent link">&para;</a></h3>
+<p>먼저 <code>tmux</code> 라는 명령어를 매번 치는 것은 너무 비효율적입니다. 무려 <code>4</code> 번이나 키보드를 쳐야하기 때문이죠. 그래서 <code>~/.zsh_aliases</code> 에 </p>
+<div class="highlight"><pre><span></span><code><span class="nb">alias</span> <span class="nv">t</span><span class="o">=</span>tmux
+</code></pre></div>
+<p>를 추가하여 <code>t</code> 만 눌러도 <code>tmux</code> 가 켜지도록 합니다. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>bash</code> 쉘 유저는 <code>~/.bashrc</code> 파일에 추가하면 됩니다.</p>
+</div>
+<p>이제 다음 명령어로 <code>tmux</code> 를 켰다가 끌 수 있습니다.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code>$ t
+$ q
+</code></pre></div>
+<p><img alt="CSpyoIvAGI" src="https://user-images.githubusercontent.com/16812446/81962812-41dff300-964f-11ea-99db-8cf7727f849e.gif" /></p>
+</div>
+<h3 id="_1">더 이뻐진 테마<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<p><code>tmux</code> 의 오리지널 테마는 너무 안이쁘네요. 그래서 좀 더 가독성도 높아지고 보기에도 좋고 시간도 알 수 있도록 다음과 같은 설정으로 테마를 고칩니다.</p>
+<div class="highlight"><pre><span></span><code><span class="nb">set</span> -g status-bg default
+<span class="nb">set</span> -g status-fg colour137
+<span class="nb">set</span> -g status-style dim
+<span class="nb">set</span> -g status-left <span class="s1">&#39;#[fg=colour51,bg=colour0,bold] %R &#39;</span>
+<span class="c1"># set -g status-right &#39;#[fg=colour51,bg=colour0,bold] #(uname -r) &#39;</span>
+<span class="nb">set</span> -g status-right <span class="s1">&#39;#[fg=colour51,bg=colour0,bold] #(osname) &#39;</span>
+<span class="nb">set</span> -g status-right-length <span class="m">100</span>
+setw -g window-status-current-style <span class="nv">bg</span><span class="o">=</span>colour14,fg<span class="o">=</span>colour00,bold
+setw -g window-status-current-format <span class="s1">&#39; #I#[fg=colour0] #[fg=colour0]#W#[fg=colour0] &#39;</span>
+setw -g window-status-style <span class="nv">fg</span><span class="o">=</span>colour49,none,bg<span class="o">=</span>colour00
+setw -g window-status-format <span class="s1">&#39;#I #W &#39;</span>
+setw -g window-status-bell-style <span class="nv">fg</span><span class="o">=</span>colour255,bold,bg<span class="o">=</span>colour1
+<span class="nb">set</span> -g message-style <span class="nv">fg</span><span class="o">=</span>colour232,bold,bg<span class="o">=</span>colour16
+</code></pre></div>
+<p>이 설정들을 <code>~/.tmux.conf</code> 에 넣으면 됩니다.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음은 테마를 설정하기 전의 오리지널 <code>tmux</code> 의 테마입니다. 상태바가 아래쪽에 있고, 새 화면을 만들었지만 한 눈에 들어오지가 않습니다. 오른쪽에 시간도 표시되는데 역시 한 눈에 들어오지 않네요. </p>
+<p><img src="https://user-images.githubusercontent.com/16812446/82010318-ba28d180-96ac-11ea-833a-e2a7d65ef1c6.png" width="70%" height="auto"></p>
+<p>하지만 다음과 같이 테마를 바꿔서 가독성을 확연히 높혔습니다. 상태바가 위로 올라갔고, 왼쪽에는 시간이 간략하지만 눈에 확 들어오게 보입니다. </p>
+<p><img src="https://user-images.githubusercontent.com/16812446/82010331-c319a300-96ac-11ea-9fc8-12505574f461.png" width="70%" height="auto"></p>
+<p>그리고 <code>0</code> 번째 화면에는 <code>zsh</code> 이 켜져있고, <code>1</code> 번째 화면에는 <code>vim</code> 이 켜져있는데 현재 상주하고 있는 화면에 하이라이팅이 되서 가독성이 매우 높아집니다. 오른쪽에는 운영체제의 이름도 나타납니다.</p>
+</div>
+<h3 id="_2">더 빨라진 메타 키<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th align="center">기능</th>
+<th align="center">기존 단축키</th>
+<th align="center">새로운 단축키</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><strong>Meta</strong> 키</td>
+<td align="center"><kbd>Ctrl</kbd>+<kbd>b</kbd></td>
+<td align="center"><kbd>Ctrl</kbd>+<kbd>a</kbd></td>
+</tr>
+</tbody>
+</table>
+<p><code>tmux</code> 는 <strong>Meta</strong> 키 를 사용하여 명령어들을 정의하기 때문에 <kbd>Ctrl</kbd>+<kbd>b</kbd> 를 입력했어야 했습니다. 하지만 <kbd>Ctrl</kbd> 와 <kbd>b</kbd> 는 거리가 너무 멀어서 손이 아픕니다. 그래서 <code>~/.tmux.conf</code> 에 </p>
+<div class="highlight"><pre><span></span><code>unbind C-b
+set-option -g prefix C-a
+bind-key C-a send-prefix
+</code></pre></div>
+<p>를 추가하여 거리가 가까운 <kbd>Ctrl</kbd>+<kbd>a</kbd> 로 <strong>Meta</strong> 키를 재설정합니다. 여러분의 도커 컨테이너에는 이미 설정 되어있으니 걱정하지 마세요.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>앞으로 살펴볼 <code>tmux</code> 업그레이드들도 위와 같은 설정 파일을 조작하는 것으로 이루어졌지만, 일일이 어떤 설정으로 <code>tmux</code> 가 업그레이드되었는지 상세히 설명하지는 않겠습니다. </p>
+<p><code>.tmux.conf</code> 를 보시려면 <a href="https://github.com/ccss17/dotfiles-cli/blob/master/.tmux.conf"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M3 3a2 2 0 012-2h9.982a2 2 0 011.414.586l4.018 4.018A2 2 0 0121 7.018V21a2 2 0 01-2 2H4.75a.75.75 0 010-1.5H19a.5.5 0 00.5-.5V8.5h-4a2 2 0 01-2-2v-4H5a.5.5 0 00-.5.5v6.25a.75.75 0 01-1.5 0V3zm12-.5v4a.5.5 0 00.5.5h4a.5.5 0 00-.146-.336l-4.018-4.018A.5.5 0 0015 2.5z"/><path d="M4.53 12.24a.75.75 0 01-.039 1.06l-2.639 2.45 2.64 2.45a.75.75 0 11-1.022 1.1l-3.23-3a.75.75 0 010-1.1l3.23-3a.75.75 0 011.06.04zm3.979 1.06a.75.75 0 111.02-1.1l3.231 3a.75.75 0 010 1.1l-3.23 3a.75.75 0 11-1.021-1.1l2.639-2.45-2.64-2.45z"/></svg></span> .tmux.conf</a> 를 확인해주세요.</p>
+</div>
+<h3 id="_3">더 빨라진 터미널 분할<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th align="center">기능</th>
+<th align="center">기존 단축키</th>
+<th align="center">새로운 단축키</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">터미널 수직 분할</td>
+<td align="center"><kbd>Meta</kbd>+<kbd>%</kbd></td>
+<td align="center"><kbd>Meta</kbd>+<kbd>⧵</kbd></td>
+</tr>
+<tr>
+<td align="center">터미널 수평 분할</td>
+<td align="center"><kbd>Meta</kbd>+<kbd>"</kbd></td>
+<td align="center"><kbd>Meta</kbd>+<kbd>-</kbd></td>
+</tr>
+<tr>
+<td align="center">다음 터미널으로 이동</td>
+<td align="center"><kbd>Meta</kbd>+<kbd>o</kbd></td>
+<td align="center"><kbd>Alt</kbd>+<kbd>o</kbd></td>
+</tr>
+<tr>
+<td align="center">(숫자) 터미널으로 이동</td>
+<td align="center"><kbd>Meta</kbd>+<kbd>q</kbd> + (숫자)</td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<p><code>tmux</code> 에서 터미널을 수평으로 분할하려면 기존의 명령어 <kbd>Meta</kbd>+ <kbd>"</kbd> 를 입력해야 하는데 이건 외우기가 너무 어렵습니다. 그래서 외우기 쉽도록 수평으로 나눈다는 의미에서 <kbd>Meta</kbd>+ <kbd>-</kbd> 로 직관적으로 바꿉니다. </p>
+<p>또한 터미널을 수직으로 분할하려면 기존의 명령어 <kbd>Meta</kbd>+ <kbd>%</kbd> 를 입력해야 하는데 이것 역시 외우기가 너무 어렵습니다. 그래서 외우기 쉽도록 수직으로 나눈다는 의미에서 백슬래쉬로 바꿔서 <kbd>Meta</kbd>+ <kbd>⧵</kbd> 로 직관적인 단축키를 설정합니다. </p>
+<p>그리고 다음 터미널로 이동하는 단축키 <kbd>Meta</kbd>+<kbd>o</kbd> 는 실제로 (<kbd>Ctrl</kbd>+<kbd>a</kbd>) + <kbd>o</kbd> 인데, 다음 터미널로 이동하는 작업은 매우 많이 일어나므로 키를 <code>3</code> 번이나 눌러야 하는 것은 너무 비효율적이어서 참을 수가 없습니다. 그래서 <kbd>Alt</kbd>+<kbd>o</kbd> 로 바꿉니다. </p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음과 같이 터미널을 수직, 수평으로 여러번 분할해보고 <kbd>Alt</kbd> 를 계속 누른 채로 <kbd>o</kbd> 를 눌러서 터미널을 이동해보세요. </p>
+<p><img alt="mMkWtsbnpw" src="https://user-images.githubusercontent.com/16812446/81961730-bca80e80-964d-11ea-935f-e6e5f5699b12.gif" /></p>
+<p>터미널 이동이 정말 빨라졌습니다. </p>
+</div>
+<h3 id="_4">더 빨라진 화면 생성<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th align="center">기능</th>
+<th align="center">기존 단축키</th>
+<th align="center">새로운 단축키</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">새로운 화면 생성</td>
+<td align="center"><kbd>Meta</kbd>+<kbd>c</kbd></td>
+<td align="center"><kbd>Alt</kbd>+<kbd>c</kbd></td>
+</tr>
+<tr>
+<td align="center">다음 화면으로 이동</td>
+<td align="center"><kbd>Meta</kbd>+<kbd>n</kbd></td>
+<td align="center"><kbd>Alt</kbd>+<kbd>n</kbd></td>
+</tr>
+<tr>
+<td align="center">이전 화면으로 이동</td>
+<td align="center"><kbd>Meta</kbd>+<kbd>p</kbd></td>
+<td align="center"><kbd>Alt</kbd>+<kbd>p</kbd></td>
+</tr>
+</tbody>
+</table>
+<p>새로운 화면을 생성하고 화면을 넘기는 일도 편하게 하기 위하여 <kbd>Meta</kbd> 키 대신 <kbd>Alt</kbd> 를 사용합시다. 메타키를 <kbd>Alt</kbd> 키로 바꾸는 것만으로 얼마나 작업이 빨라지는지 보세요. </p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음과 같이 <kbd>Alt</kbd> 를 계속 누른채로 <kbd>c</kbd> 를 연타해서 화면을 더욱 빠르게 만들 수 있습니다. 그리고 여러 화면을 마찬가지로 <kbd>Alt</kbd> 를 계속 누른채로 <kbd>n</kbd> 또는 <kbd>p</kbd> 를 누르면서 이동해보세요. </p>
+<p><img alt="q4pP5K9WGF" src="https://user-images.githubusercontent.com/16812446/81962006-14467a00-964e-11ea-9743-eeca5b7b271d.gif" /></p>
+</div>
+<h3 id="_5">더 빨라진 터미널 이동<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th align="center">기능</th>
+<th align="center">기존 단축키</th>
+<th align="center">새로운 단축키</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">왼쪽 터미널으로 이동</td>
+<td align="center">(기억이 안남..)</td>
+<td align="center"><kbd>Alt</kbd>+<kbd>h</kbd></td>
+</tr>
+<tr>
+<td align="center">오른쪽 터미널으로 이동</td>
+<td align="center">(기억이 안남..)</td>
+<td align="center"><kbd>Alt</kbd>+<kbd>l</kbd></td>
+</tr>
+<tr>
+<td align="center">위쪽 터미널으로 이동</td>
+<td align="center">(기억이 안남..)</td>
+<td align="center"><kbd>Alt</kbd>+<kbd>k</kbd></td>
+</tr>
+<tr>
+<td align="center">아래쪽 터미널으로 이동</td>
+<td align="center">(기억이 안남..)</td>
+<td align="center"><kbd>Alt</kbd>+<kbd>j</kbd></td>
+</tr>
+</tbody>
+</table>
+<p>터미널 이동을 <kbd>Alt</kbd>+<kbd>o</kbd> 로 매우 빠르게 할 수 있게 되었지만서도 터미널이 여러개로 나뉘었을 때 <kbd>Alt</kbd>+<kbd>o</kbd> 로 다음 터미널로밖에 이동할 수 없다면, 정확히 원하는 터미널로 이동할 수 없습니다. 이런 경우를 위하여 <code>tmux</code> 는 정확히 왼쪽, 오른쪽, 위쪽, 아래쪽 터미널로 이동할 수 있는 명령어를 제공합니다. </p>
+<p>하지만 그건 너무 복잡했었고 그게 뭐였는지 솔직히 까먹었습니다. 그 대신 <code>vim</code> 에서의 커서 이동키였던 <kbd>h</kbd>, <kbd>l</kbd>, <kbd>k</kbd>, <kbd>j</kbd> 에서 착안하여 터미널 이동을 매우 쉽게 할 수 있습니다. </p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음과 같이 터미널을 여러개로 분할하고 <kbd>Alt</kbd> 를 누른채로 <kbd>h</kbd>, <kbd>l</kbd>, <kbd>k</kbd>, <kbd>j</kbd> 를 누르면서 터미널을 이동해보세요. </p>
+<p><img alt="YvxI7GtfRb" src="https://user-images.githubusercontent.com/16812446/81962572-e0b81f80-964e-11ea-8340-006084f302da.gif" /></p>
+</div>
+<h3 id="_6">더 빨라진 터미널 크기 조절<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th align="center">기능</th>
+<th align="center">기존 단축키</th>
+<th align="center">새로운 단축키</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">터미널 크기를 왼쪽으로 방향으로 조절</td>
+<td align="center">(너무 복잡함)</td>
+<td align="center"><kbd>Alt</kbd>+<kbd>&larr;</kbd></td>
+</tr>
+<tr>
+<td align="center">터미널 크기를 오른쪽으로 방향으로 조절</td>
+<td align="center">(너무 복잡함)</td>
+<td align="center"><kbd>Alt</kbd>+<kbd>&rarr;</kbd></td>
+</tr>
+<tr>
+<td align="center">터미널 크기를 위쪽으로 방향으로 조절</td>
+<td align="center">(너무 복잡함)</td>
+<td align="center"><kbd>Alt</kbd>+<kbd>&uarr;</kbd></td>
+</tr>
+<tr>
+<td align="center">터미널 크기를 아래쪽으로 방향으로 조절</td>
+<td align="center">(너무 복잡함)</td>
+<td align="center"><kbd>Alt</kbd>+<kbd>&darr;</kbd></td>
+</tr>
+</tbody>
+</table>
+<p><strong>더 빨라진</strong> 터미널 크기 조절이라고 해봐야 터미널 크기 조절하는 방법을 배우지도 않았는데 라고 생각할 수도 있겠지만, 터미널 크기 조절하는 방법이 외울 수 없을 만큼 너무 복잡한 것이어서 안썼습니다. 과거의 제가 터미널 크기를 너무너무 쉽게 조절할 수 있도록 위와 같이 설정해놓았습니다. </p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음과 같이 터미널 단축키 <kbd>Alt</kbd> 를 계속 누른 채로 <kbd>&rarr;</kbd>, <kbd>&larr;</kbd>, <kbd>&uarr;</kbd>, <kbd>&darr;</kbd> 을 눌러서 터미널 크기를 너무나도 쉽게 조절해보세요. </p>
+<p><img alt="mpiJ2Gh3hi" src="https://user-images.githubusercontent.com/16812446/81962685-06452900-964f-11ea-8da0-e7363eb2dd4a.gif" /></p>
+</div>
+<h2 id="tmux_2"><code>tmux</code> 사용 예시<a class="headerlink" href="#tmux_2" title="Permanent link">&para;</a></h2>
+<p>다음은 <code>tmux</code> 를 통하여 <code>nvtop</code> 과 <code>gotop</code> 으로 <strong>GPU</strong> 상황과 <strong>CPU, RAM</strong> 상황을 모니터링하면서 딥러닝을 돌리고 있는 모습입니다.</p>
+<p><img alt="" src="https://user-images.githubusercontent.com/16812446/89183484-44a90f00-d5d2-11ea-91f2-9cd1c189b387.png" /></p>
+<div align="center">
+<figcaption><i>nvtop 과 gotop 으로 시스템 모니터링 하면서 딥러닝하는 모습</i></figcaption>
+</div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../zsh/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  이전
+                </span>
+                zsh
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../../../sync/fewshot/step1-1/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  다음
+                </span>
+                Analysis&#58; LFW 1
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2018-2020 HGU DL Lab
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+        
+        
+      
+      <a href="https://github.com/WICWIU" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/vendor.6a3d08fc.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.71201edf.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "search.config.lang": "en", "search.config.pipeline": " ", "search.config.separator": "[\\s\\-]+", "search.placeholder": "\uac80\uc0c9", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../../..",
+          features: [],
+          search: Object.assign({
+            worker: "../../../assets/javascripts/worker/search.4ac00218.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.js"></script>
+      
+        <script src="../../../javascripts/config.js"></script>
+      
+        <script src="../../../javascripts/all.js"></script>
+      
+    
+  </body>
+</html>

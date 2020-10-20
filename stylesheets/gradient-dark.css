@@ -1,0 +1,141 @@
+/*
+Gradient Dark (c) Samia Ali <samiaab1990@gmail.com>
+*/
+
+code {
+    /* background: linear-gradient(166deg, rgba(80,31,122,1) 0%, rgba(40,32,179,1) 80%); */
+    background: #3f119c !important;
+    /* background: #3f119c; */
+    color: #e2f0cb !important;
+}
+
+.hljs
+{
+display: block;
+overflow-x: auto;
+padding: 0.5em;
+background: rgb(80,31,122); 
+background: linear-gradient(166deg, rgba(80,31,122,1) 0%, rgba(40,32,179,1) 90%) !important; 
+/* background: #3f119c !important; */
+color:#e7e4eb;
+}
+
+.hljs-subtr{
+  color:#e7e4eb;
+}
+
+.codehilite .c, .highlight .c, .codehilite .cm, .highlight .cm, .codehilite .c1, .highlight .c1, .codehilite .ch, .highlight .ch, .codehilite .cs, .highlight .cs, .codehilite .sd, .highlight .sd
+{
+  /* color: red; */
+  /* color: #E0BBE4; */
+  color: #957DAD;
+  
+}
+.hljs-comment
+{
+  color:#af8dd9;
+}
+
+.hljs-doctag,
+.hljs-meta,
+.hljs-quote
+{
+  /* color:#af8dd9; */
+  color: #0ff;
+}
+
+.hljs-selector-tag,
+.hljs-selector-id,
+.hljs-template-tag,
+.hljs-regexp,
+.hljs-attr,
+.hljs-tag
+{
+  color:#AEFBFF;
+}
+
+.hljs-params,
+.hljs-selector-class,
+.hljs-bullet
+
+{
+  color:#F19FFF;
+  
+}
+
+.hljs-keyword,
+.hljs-section,
+.hljs-meta-keyword,
+.hljs-symbol,
+.hljs-type
+
+{
+
+  color:#17fc95;
+}
+
+.hljs-addition,
+.hljs-number,
+.hljs-link
+{
+  color:#C5FE00;
+}
+
+
+.hljs-string
+{
+  /* color: #38c0ff; */
+  color: #EED73F;
+}
+
+
+.hljs-attribute,
+.hljs-addition
+{
+  color:#E7FF9F;
+}
+
+.hljs-variable,
+.hljs-template-variable
+
+{
+  color:#E447FF;
+}
+
+.hljs-builtin-name,
+.hljs-built_in,
+.hljs-formula,
+.hljs-name,
+.hljs-title,
+.hljs-class,
+.hljs-function
+{
+  color: #FFC800;
+
+}
+
+.hljs-selector-pseudo,
+.hljs-deletion,
+.hljs-literal
+{
+  color:#FF9E44;
+
+}
+
+.hljs-emphasis,
+.hljs-quote
+{
+  font-style:italic;
+}
+
+.hljs-params,
+.hljs-selector-class,
+.hljs-strong,
+.hljs-selector-tag,
+.hljs-selector-id,
+.hljs-template-tag,
+.hljs-section,
+.hljs-keyword
+{
+  font-weight:bold;
+}

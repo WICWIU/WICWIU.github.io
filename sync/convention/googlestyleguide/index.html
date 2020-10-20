@@ -1,0 +1,3678 @@
+
+<!doctype html>
+<html lang="kr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <meta name="author" content="HGU DL Lab">
+      
+      <link rel="shortcut icon" href="../../../assets/images/favicon.ico">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.1.0">
+    
+    
+      
+        <title>(ABANDONED)Google C++ Style Guide - WICWIU</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.bc7e593a.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab28b872.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#4051b5">
+        
+      
+    
+    
+    
+      
+        
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css">
+    
+      <link rel="stylesheet" href="../../../stylesheets/gradient-dark.css">
+    
+      <link rel="stylesheet" href="../../../stylesheets/config.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="">
+      
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#bazel" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="../../.." title="WICWIU" class="md-header-nav__button md-logo" aria-label="WICWIU">
+      
+  <img src="../../../assets/images/favicon.png" alt="logo">
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            WICWIU
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              (ABANDONED)Google C++ Style Guide
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="검색" placeholder="검색" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/WICWIU/WICWIU/" title="저장소로 이동" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    WICWIU
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="WICWIU" class="md-nav__button md-logo" aria-label="WICWIU">
+      
+  <img src="../../../assets/images/favicon.png" alt="logo">
+
+    </a>
+    WICWIU
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/WICWIU/WICWIU/" title="저장소로 이동" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    WICWIU
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../.." class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../about/" class="md-nav__link">
+      About
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../api/" class="md-nav__link">
+      API
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      논문 정리
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="논문 정리" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        <span class="md-nav__icon md-icon"></span>
+        논문 정리
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../paper/resnet/" class="md-nav__link">
+      ResNet
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../paper/facenet/" class="md-nav__link">
+      FaceNet
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../paper/quadruplet/" class="md-nav__link">
+      Quadruplet
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      WICWIU 개발 가이드
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="WICWIU 개발 가이드" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        <span class="md-nav__icon md-icon"></span>
+        WICWIU 개발 가이드
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-1" type="checkbox" id="nav-5-1">
+    
+    <label class="md-nav__link" for="nav-5-1">
+      WICWIU
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="WICWIU" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-1">
+        <span class="md-nav__icon md-icon"></span>
+        WICWIU
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../dev/wicwiu/about/" class="md-nav__link">
+      1. About WICWIU
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../dev/wicwiu/nn/" class="md-nav__link">
+      2. WICWIU 신경망 구성
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../dev/wicwiu/learn/" class="md-nav__link">
+      3. WICWIU 로 학습하기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../dev/wicwiu/code/" class="md-nav__link">
+      4. WICWIU 코드 같이보기
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-2" type="checkbox" id="nav-5-2">
+    
+    <label class="md-nav__link" for="nav-5-2">
+      Git
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Git" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-2">
+        <span class="md-nav__icon md-icon"></span>
+        Git
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../dev/Git/git/" class="md-nav__link">
+      Collaborate with Git
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../dev/Git/message/" class="md-nav__link">
+      Commit/PR protocol
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../dev/Git/update/" class="md-nav__link">
+      Update forked repo
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-3" type="checkbox" id="nav-5-3">
+    
+    <label class="md-nav__link" for="nav-5-3">
+      VSCode
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="VSCode" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-3">
+        <span class="md-nav__icon md-icon"></span>
+        VSCode
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../dev/VSCode/remote/" class="md-nav__link">
+      딥러닝 서버 VSCode 연동
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../dev/VSCode/git/" class="md-nav__link">
+      VSCode Git 연동
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-4" type="checkbox" id="nav-5-4">
+    
+    <label class="md-nav__link" for="nav-5-4">
+      GPU Acceleration
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="GPU Acceleration" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-4">
+        <span class="md-nav__icon md-icon"></span>
+        GPU Acceleration
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../dev/GPU/cuda/" class="md-nav__link">
+      cuda
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-5" type="checkbox" id="nav-5-5">
+    
+    <label class="md-nav__link" for="nav-5-5">
+      Makefile
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Makefile" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-5">
+        <span class="md-nav__icon md-icon"></span>
+        Makefile
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../dev/makefile/makefile/" class="md-nav__link">
+      Makefile 기본
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../dev/makefile/makefile2/" class="md-nav__link">
+      Makefile 고급
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5-6" type="checkbox" id="nav-5-6">
+    
+    <label class="md-nav__link" for="nav-5-6">
+      CLI
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="CLI" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-6">
+        <span class="md-nav__icon md-icon"></span>
+        CLI
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../dev/cli/cli/" class="md-nav__link">
+      CLI
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../dev/cli/zsh/" class="md-nav__link">
+      zsh
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../dev/cli/tmux/" class="md-nav__link">
+      tmux
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6" checked>
+    
+    <label class="md-nav__link" for="nav-6">
+      WICWIU 지식동기화
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="WICWIU 지식동기화" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        <span class="md-nav__icon md-icon"></span>
+        WICWIU 지식동기화
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6-1" type="checkbox" id="nav-6-1">
+    
+    <label class="md-nav__link" for="nav-6-1">
+      fewshot diary
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="fewshot diary" data-md-level="2">
+      <label class="md-nav__title" for="nav-6-1">
+        <span class="md-nav__icon md-icon"></span>
+        fewshot diary
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6-1-1" type="checkbox" id="nav-6-1-1">
+    
+    <label class="md-nav__link" for="nav-6-1-1">
+      Step 1. Data &rarr; Tensor
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Step 1. Data &rarr; Tensor" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-1-1">
+        <span class="md-nav__icon md-icon"></span>
+        Step 1. Data &rarr; Tensor
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../fewshot/step1-1/" class="md-nav__link">
+      Analysis&#58; LFW 1
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../fewshot/step1-2/" class="md-nav__link">
+      Analysis&#58; LFW 2
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../fewshot/step1-3/" class="md-nav__link">
+      Coding&#58; PNG, CImg
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../fewshot/step2/" class="md-nav__link">
+      Step 2. 순전파
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../fewshot/step3/" class="md-nav__link">
+      Step 3. 역전파
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../fewshot/step4/" class="md-nav__link">
+      Step 4. 최적화
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6-2" type="checkbox" id="nav-6-2" checked>
+    
+    <label class="md-nav__link" for="nav-6-2">
+      Coding Convention
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Coding Convention" data-md-level="2">
+      <label class="md-nav__title" for="nav-6-2">
+        <span class="md-nav__icon md-icon"></span>
+        Coding Convention
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../step1-1/" class="md-nav__link">
+      About Coding Convention
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        (ABANDONED)Google C++ Style Guide
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" class="md-nav__link md-nav__link--active">
+      (ABANDONED)Google C++ Style Guide
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#bazel" class="md-nav__link">
+    Bazel
+  </a>
+  
+    <nav class="md-nav" aria-label="Bazel">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-bazel" class="md-nav__link">
+    Why Bazel?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tutorial" class="md-nav__link">
+    Tutorial
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#abseil" class="md-nav__link">
+    Abseil
+  </a>
+  
+    <nav class="md-nav" aria-label="Abseil">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-abseil" class="md-nav__link">
+    Why Abseil?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#codemap" class="md-nav__link">
+    Codemap
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c-version" class="md-nav__link">
+    C++ Version
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#google-c-style-guide" class="md-nav__link">
+    Google C++ Style Guide
+  </a>
+  
+    <nav class="md-nav" aria-label="Google C++ Style Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#background" class="md-nav__link">
+    Background
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#goals-of-the-style-guide" class="md-nav__link">
+    Goals of the Style Guide
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#header-files" class="md-nav__link">
+    Header Files
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scoping" class="md-nav__link">
+    Scoping
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#classes" class="md-nav__link">
+    Classes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    Functions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#google-specific-magic" class="md-nav__link">
+    Google-Specific Magic
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#other-c-features" class="md-nav__link">
+    Other C++ Features
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#naming" class="md-nav__link">
+    Naming
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#comments" class="md-nav__link">
+    Comments
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#formatting" class="md-nav__link">
+    Formatting
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exceptions-to-the-rules" class="md-nav__link">
+    Exceptions to the Rules
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parting-words" class="md-nav__link">
+    Parting Words
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    총평
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
+    
+    <label class="md-nav__link" for="nav-7">
+      이곳에 문서 작성하기
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="이곳에 문서 작성하기" data-md-level="1">
+      <label class="md-nav__title" for="nav-7">
+        <span class="md-nav__icon md-icon"></span>
+        이곳에 문서 작성하기
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/markdown/" class="md-nav__link">
+      Step 1. Markdown 파일
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/code/" class="md-nav__link">
+      Step 2. 소스코드 설명하기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/format/" class="md-nav__link">
+      Step 3. 고오급 포매팅
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/admonitions/" class="md-nav__link">
+      Step 4. Admonitions
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/tab/" class="md-nav__link">
+      Step 5. 컨텐츠 탭
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/button/" class="md-nav__link">
+      Step 6. 버튼 넣기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/math/" class="md-nav__link">
+      Step 7. 수식 보여주기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../write/api/" class="md-nav__link">
+      Step 8. API 작성
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#bazel" class="md-nav__link">
+    Bazel
+  </a>
+  
+    <nav class="md-nav" aria-label="Bazel">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-bazel" class="md-nav__link">
+    Why Bazel?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tutorial" class="md-nav__link">
+    Tutorial
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#abseil" class="md-nav__link">
+    Abseil
+  </a>
+  
+    <nav class="md-nav" aria-label="Abseil">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-abseil" class="md-nav__link">
+    Why Abseil?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#codemap" class="md-nav__link">
+    Codemap
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c-version" class="md-nav__link">
+    C++ Version
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#google-c-style-guide" class="md-nav__link">
+    Google C++ Style Guide
+  </a>
+  
+    <nav class="md-nav" aria-label="Google C++ Style Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#background" class="md-nav__link">
+    Background
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#goals-of-the-style-guide" class="md-nav__link">
+    Goals of the Style Guide
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#header-files" class="md-nav__link">
+    Header Files
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scoping" class="md-nav__link">
+    Scoping
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#classes" class="md-nav__link">
+    Classes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    Functions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#google-specific-magic" class="md-nav__link">
+    Google-Specific Magic
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#other-c-features" class="md-nav__link">
+    Other C++ Features
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#naming" class="md-nav__link">
+    Naming
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#comments" class="md-nav__link">
+    Comments
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#formatting" class="md-nav__link">
+    Formatting
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exceptions-to-the-rules" class="md-nav__link">
+    Exceptions to the Rules
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parting-words" class="md-nav__link">
+    Parting Words
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    총평
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/WICWIU/WICWIU/edit/master/docs/sync/convention/googlestyleguide.md" title="이 페이지를 편집" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  <h1>(ABANDONED)Google C++ Style Guide</h1>
+                
+                <div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>이번 포스트에서는 <a href="https://google.github.io/styleguide/cppguide.html">Google C++ Style Guide</a> 의 목표까지만 다루고 실질적인 코딩 컨벤션 규칙은 다음 포스트에서 다루겠습니다. </p>
+<p>다음 포스트에서 다룰 <a href="https://google.github.io/styleguide/cppguide.html">Google C++ Style Guide</a> 은 독자가 <a href="https://abseil.io/">Abseil</a> 을 기본적으로 사용할 수 있다고 가정하고 있기 때문에 기초적인 <a href="https://abseil.io/">Abseil</a> 사용법을 알고 넘어가야 합니다.</p>
+<p>그런데 <a href="https://abseil.io/">Abseil</a> 의 공식적인 빌드 툴은 <a href="https://bazel.build/">bazel</a> 이기 때문에 <a href="https://bazel.build/">bazel</a> 에 대하여 먼저 간단히 알아보겠습니다.</p>
+</div>
+<hr />
+<h2 id="bazel">Bazel<a class="headerlink" href="#bazel" title="Permanent link">&para;</a></h2>
+<p><a href="https://bazel.build/">bazel</a> 은 <code>C++</code>, <code>Java</code>, <code>Android</code>, <code>iOS</code>, <code>Go</code> 등의 소프트웨어의 빌드 및 테스트를 자동화시켜주는 툴이다.</p>
+<h3 id="why-bazel">Why Bazel?<a class="headerlink" href="#why-bazel" title="Permanent link">&para;</a></h3>
+<p><a href="https://bazel.build/">bazel</a> 은 <strong>Make</strong>, <strong>Ant</strong>, <strong>Gradle</strong> 등의 툴과 비슷하다. 하지만 <a href="https://bazel.build/">bazel</a> 은 다음의 이유 때문에 특별하다.</p>
+<ul>
+<li>
+<p><a href="https://bazel.build/">bazel</a> 은 <strong>Google</strong> 의 빌드 시스템이다.</p>
+</li>
+<li>
+<p><a href="https://bazel.build/">bazel</a> 의 빌드 명령어는 매우 쉽고 간단하고 고수준이다. 가령 <strong>Make</strong> 로 빌드하기 위하여 <strong>Makefile</strong> 을 만들면 모든 파일을 일일이 컴파일러에게 명시해주어야만 해서 너무 어렵다.</p>
+</li>
+<li>
+<p>똑같은 빌드 파일로 여러 플랫폼과 아키텍처로 컴파일 할 수 있다. <strong>Google</strong> 은 실제로 데이터센터 서버에서 실행될 거대한 프로그램부터 핸드폰에서 실행될 어플리케이션까지 모두 다 <a href="https://bazel.build/">bazel</a> 을 사용하여 컴파일한다.</p>
+</li>
+<li>
+<p><a href="https://bazel.build/">bazel</a> 은 빌드 파일을 분석해서 다시 컴파일해야하는 부분만 컴파일한다.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Flutter</strong> 로 개발 해보신 분들은 수정된 코드만 탐지해서 빠르게 리빌딩하는 <strong>Hot reload</strong> 기능이 떠오르실 겁니다. 그것을 <code>C++</code> 프로젝트에서도 할 수 있다는 것이지요.</p>
+</div>
+</li>
+<li>
+<p><a href="https://bazel.build/">bazel</a> 은 매우 큰 프로그램도 매우 빠르게 빌드한다. 가령 우리 <strong>Google</strong> 에서는 서버에서 실행될 소스파일만 <code>10</code> 만개 정도인 프로젝트가 있는데 파일이 변경되지 않으면 빌드 시간이 단지 <code>0.2</code> 초밖에 안걸린다.</p>
+</li>
+<li>
+<p><a href="https://bazel.build/">bazel</a> 은 Linux, macOS, Windows 에서 실행가능하고 손쉽게 cross-compile 을 할 수 있다. </p>
+</li>
+<li>
+<p><a href="https://bazel.build/">bazel</a> 이 crash 가 거의 나지 않는다는 것을 우리 <strong>Google</strong> 이 보증한다. 우리도 <a href="https://bazel.build/">bazel</a> 로 <strong>Google</strong> 의 프로젝트를 관리하고 있다.</p>
+</li>
+</ul>
+<p>그렇다면 우리 <strong>Google</strong> 은 왜 다른 빌드 시스템을 사용하지 않는가?</p>
+<ul>
+<li>
+<p><code>Make</code>, <code>Ninja</code>: 이 툴들은 타겟에 대한 매우 정확한 명령을 제공한다. 하지만 그것을 올바르게 사용하는 것은 전적으로 개발자의 몫이다. 반면 <a href="https://bazel.build/">bazel</a> 의 유저 인터페이스는 매우 고수준이다.</p>
+</li>
+<li>
+<p><code>Ant</code>, <code>Maven</code>: 이들은 <strong>Java</strong> 만 지원하는 반면 <a href="https://bazel.build/">bazel</a> 은 다양한 언어를 모두 다 지원한다.</p>
+</li>
+<li>
+<p><code>Gradle</code>: <a href="https://bazel.build/">bazel</a> 의 빌드 파일은 <code>Gradle</code> 보다 구조화되어 있어서 더 이해하기 쉽고 재사용하기 쉽다.</p>
+</li>
+</ul>
+<p>우리 <strong>Google</strong> 도 원래 <strong>Makefile</strong> 을 사용해왔다. 그런데 소프트웨어의 규모가 커지면 커질수록 <strong>Makefile</strong> 은 빌드 속도를 느리게했다. 그리고 <strong>Makefile</strong> 의 빌드를 신뢰할 수도 없었다. 결과적으로 <strong>Makefile</strong> 은 <strong>Google</strong> 개발자들의 생산성에 직격타를 날렸고 우리 <strong>Google</strong> 의 기업적인 민첩성에도 영향을 미쳤다. <a href="https://bazel.build/">bazel</a> 은 이 문제를 해결했다. </p>
+<p><a href="https://bazel.build/">bazel</a> 은 처음에는 <strong>Google</strong> 내부의 서버 프로그램 개발 도구였다. 하지만 그 유용성이 입증되어 계속 확장되었다. 그 결과 지금은 심지어 핸드폰 어플을 위한 <code>iOS</code> 와 <code>Android</code> 빌드에도 쓸 수 있다.</p>
+<p><a href="https://bazel.build/">bazel</a> 은 다음과 같은 프로젝트에서 빛을 발한다.</p>
+<ul>
+<li>
+<p>매우 큰 프로젝트.</p>
+</li>
+<li>
+<p>여러 언어로 작성된 프로젝트.</p>
+</li>
+<li>
+<p>여러 플랫폼에 배포되어야 하는 프로젝트.</p>
+</li>
+<li>
+<p>수많은 테스트를 해야 하는 프로젝트.</p>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>모두 <a href="https://github.com/WICWIU/WICWIU"><strong>WICWIU</strong></a> 에 유용한 기능들 같네요. 모든 <strong>Google</strong> 프로젝트가 <a href="https://bazel.build/">bazel</a> 로 빌드되기 때문에 TensorFlow 도 <a href="https://bazel.build/">bazel</a> 로 빌드됩니다.</p>
+<p>심지어 우리 연구실이 좋아하는 <strong>PyTorch</strong> 도 <a href="https://bazel.build/">bazel</a> 로 빌드되더군요. <a href="https://github.com/pytorch/pytorch/blob/master/BUILD.bazel">https://github.com/pytorch/pytorch/blob/master/BUILD.bazel</a> 를 보세요.</p>
+</div>
+<h3 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h3>
+<p>그러면 <a href="https://bazel.build/">bazel</a> 을 쉽게 배울 수 있도록 <a href="https://bazel.build/">bazel</a>  튜토리얼을 딥러닝 서버에서 가볍게 배워보겠습니다.</p>
+<p>다음의 명령어로 <a href="https://bazel.build/">bazel</a> 의 실행파일을 다운로드 받고 <a href="https://bazel.build/">bazel</a> 을 명령어 <code>bazel</code> 로 실행할 수 있도록 환경변수에 추가합니다.</p>
+<div class="highlight"><pre><span></span><code>$ wget https://github.com/bazelbuild/bazel/releases/download/3.4.1/bazel-3.4.1-linux-x86_64
+$ mkdir ~/bin
+$ mv bazel-3.4.1-linux-x86_64 ~/bin/bazel
+$ chmod +x ~/bin/bazel
+</code></pre></div>
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">bash 쉘 사용자</label><div class="tabbed-content">
+<p>그리고 <code>export PATH="$PATH:$HOME/bin"</code> 를 <code>.bashrc</code> 에 추가해주세요. 다음의 명령어로 간단하게 추가할 수 있습니다.</p>
+<div class="highlight"><pre><span></span><code>$ <span class="nb">echo</span> <span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;\$PATH:\$HOME/bin&quot;</span> &gt;&gt; ~/.bashrc
+</code></pre></div>
+<p>그리고 다음 명령어를 통해 <code>rc</code> 파일을 쉘에 적용해주거나 쉘을 다시 시작하세요.</p>
+<div class="highlight"><pre><span></span><code>$ <span class="nb">source</span> ~/.bashrc
+</code></pre></div>
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">zsh 쉘 사용자</label><div class="tabbed-content">
+<p>그리고 <code>export PATH="$PATH:$HOME/bin"</code> 를 <code>.zshrc</code> 에 추가해주세요. 다음의 명령어로 간단하게 추가할 수 있습니다.</p>
+<div class="highlight"><pre><span></span><code>$ <span class="nb">echo</span> <span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;\$PATH:\$HOME/bin&quot;</span> &gt;&gt; ~/.zshrc
+</code></pre></div>
+<p>그리고 다음 명령어를 통해 <code>rc</code> 파일을 쉘에 적용해주거나 쉘을 다시 시작하세요.</p>
+<div class="highlight"><pre><span></span><code>$ <span class="nb">source</span> ~/.zshrc 
+</code></pre></div>
+</div>
+</div>
+<p>이제 <a href="https://bazel.build/">bazel</a> 을 시험삼아 실행해보세요.</p>
+<div class="highlight"><pre><span></span><code>$ bazel
+</code></pre></div>
+<h3 id="tutorial">Tutorial<a class="headerlink" href="#tutorial" title="Permanent link">&para;</a></h3>
+<p>다음의 튜토리얼을 통하여 <a href="https://bazel.build/">bazel</a> 의 기본적인 사용법을 알 수 있습니다.</p>
+<ol>
+<li>
+<p><a href="https://docs.bazel.build/versions/3.4.0/tutorial/cpp.html">Bazel C++ Simple Tutorial</a> </p>
+</li>
+<li>
+<p><a href="https://docs.bazel.build/versions/3.4.0/cpp-use-cases.html">Bazel C++ Common Use Cases</a></p>
+</li>
+</ol>
+<p>이 튜토리얼을 마쳤다면 다음의 <a href="https://bazel.build/">bazel</a> 사용법을 알 수 있습니다.</p>
+<ul>
+<li>
+<p><a href="https://bazel.build/">bazel</a> 로 프로젝트를 빌드하려면 workspace 를 설정해야 한다. workspace 란 프로젝트의 소스파일과 <a href="https://bazel.build/">bazel</a> 의 빌드를 저장하는 디렉토리이다. workspace 는 <code>WORKSPACE</code> 파일을 갖고 있어야 하고, 하나 이상의 <code>BUILD</code> 파일을 갖고 있어야 한다.</p>
+</li>
+<li>
+<p><code>C++</code> 빌드 규칙을 선언하기 위하여 <code>BUILD</code> 파일에 먼저 다음의 선언을 해야 한다.</p>
+<div class="highlight"><pre><span></span><code><span class="n">load</span><span class="p">(</span><span class="s">&quot;@rules_cc//cc:defs.bzl&quot;</span><span class="p">,</span> <span class="s">&quot;cc_binary&quot;</span><span class="p">,</span> <span class="s">&quot;cc_library&quot;</span><span class="p">)</span>
+</code></pre></div>
+</li>
+<li>
+<p><code>C++</code> 파일의 컴파일을 위하여 <code>cc_binary</code> 빌드 규칙을 만들어야 한다. 다음과 같이 <code>name</code> 에 실행파일의 이름, <code>srcs</code> 에 소스파일을 명시한다.</p>
+<div class="highlight"><pre><span></span><code><span class="n">cc_binary</span><span class="p">(</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;hello-world&quot;</span><span class="p">,</span>
+    <span class="n">srcs</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;hello-world.cc&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+</code></pre></div>
+</li>
+<li>
+<p><a href="https://bazel.build/">bazel</a> 로 프로젝트를 빌드하기 위하여 다음 명령어를 사용한다. 이때 <code>WORKSPACE</code> 파일이 있는 곳에서 이 명령어를 실행해야 한다.</p>
+<div class="highlight"><pre><span></span><code>$ bazel build //path/to/package:target-name
+</code></pre></div>
+</li>
+<li>
+<p>다음 명령어의 출력 결과를 <a href="http://www.webgraphviz.com/">Graphviz</a> 에 입력하면 프로젝트 의존성을 그래프 형태로 비쥬얼하게 볼 수 있다.</p>
+<div class="highlight"><pre><span></span><code>$ bazel query --notool_deps --noimplicit_deps <span class="s2">&quot;deps(//main:hello-world)&quot;</span> --output graph
+</code></pre></div>
+</li>
+<li>
+<p>다음과 같이 빌드 규칙의 <code>deps</code> 에 의존성을 추가하면 된다. 그러면 <a href="https://bazel.build/">bazel</a> 이 의존성을 먼저 빌드해준다.</p>
+<div class="highlight"><pre><span></span><code><span class="n">cc_library</span><span class="p">(</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;hello-greet&quot;</span><span class="p">,</span>
+    <span class="n">srcs</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;hello-greet.cc&quot;</span><span class="p">],</span>
+    <span class="n">hdrs</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;hello-greet.h&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+
+<span class="n">cc_binary</span><span class="p">(</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;hello-world&quot;</span><span class="p">,</span>
+    <span class="n">srcs</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;hello-world.cc&quot;</span><span class="p">],</span>
+    <span class="n">deps</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s">&quot;:hello-greet&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+</code></pre></div>
+</li>
+<li>
+<p>의존성이 다른 디렉토리에 있다면 다음과 같이 <code>//path/to/library:target-name</code> 을 <code>dets</code> 에 추가하면 된다.</p>
+<div class="highlight"><pre><span></span><code><span class="n">cc_library</span><span class="p">(</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;hello-greet&quot;</span><span class="p">,</span>
+    <span class="n">srcs</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;hello-greet.cc&quot;</span><span class="p">],</span>
+    <span class="n">hdrs</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;hello-greet.h&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+
+<span class="n">cc_binary</span><span class="p">(</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;hello-world&quot;</span><span class="p">,</span>
+    <span class="n">srcs</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;hello-world.cc&quot;</span><span class="p">],</span>
+    <span class="n">deps</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s">&quot;:hello-greet&quot;</span><span class="p">,</span>
+        <span class="s">&quot;//lib:hello-time&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>이때 <code>hello-time</code> 빌드 규칙에서 다음과 같이 <code>visibility</code> 옵션에 <code>//path/to/target:__pkg__</code> 를 추가하여 가시성 설정을 해주어야 한다.</p>
+<div class="highlight"><pre><span></span><code><span class="n">cc_library</span><span class="p">(</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;hello-time&quot;</span><span class="p">,</span>
+    <span class="n">srcs</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;hello-time.cc&quot;</span><span class="p">],</span>
+    <span class="n">hdrs</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;hello-time.h&quot;</span><span class="p">],</span>
+    <span class="n">visibility</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;//main:__pkg__&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+</code></pre></div>
+</li>
+<li>
+<p>여러 파일을 한꺼번에 컴파일하고 싶다면 다음과 같이 <code>glob</code> 을 사용한다.</p>
+<div class="highlight"><pre><span></span><code><span class="n">cc_library</span><span class="p">(</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;build-all-the-files&quot;</span><span class="p">,</span>
+    <span class="n">srcs</span> <span class="o">=</span> <span class="n">glob</span><span class="p">([</span><span class="s">&quot;*.cc&quot;</span><span class="p">]),</span>
+    <span class="n">hdrs</span> <span class="o">=</span> <span class="n">glob</span><span class="p">([</span><span class="s">&quot;*.h&quot;</span><span class="p">]),</span>
+<span class="p">)</span>
+</code></pre></div>
+</li>
+<li>
+<p>다음은 의존성에 대한 예시이다. <code>sandwich.h</code> 가 <code>bread.h</code> 에 의존하고, <code>bread.h</code> 가 <code>flour.h</code> 에 의존한다면 <code>BUILD</code> 파일을 다음과 같이 설정하면 된다.</p>
+<div class="highlight"><pre><span></span><code><span class="n">cc_library</span><span class="p">(</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;sandwich&quot;</span><span class="p">,</span>
+    <span class="n">srcs</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;sandwich.cc&quot;</span><span class="p">],</span>
+    <span class="n">hdrs</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;sandwich.h&quot;</span><span class="p">],</span>
+    <span class="n">deps</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;:bread&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+
+<span class="n">cc_library</span><span class="p">(</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;bread&quot;</span><span class="p">,</span>
+    <span class="n">srcs</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;bread.cc&quot;</span><span class="p">],</span>
+    <span class="n">hdrs</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;bread.h&quot;</span><span class="p">],</span>
+    <span class="n">deps</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;:flour&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+
+<span class="n">cc_library</span><span class="p">(</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;flour&quot;</span><span class="p">,</span>
+    <span class="n">srcs</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;flour.cc&quot;</span><span class="p">],</span>
+    <span class="n">hdrs</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;flour.h&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+</code></pre></div>
+</li>
+<li>
+<p>다른 디렉토리에 있는 의존성에 대한 예시이다. <code>C++</code> 프로젝트가 다음과 같은 파일 구조를 갖고 있다고 하자.</p>
+<div class="highlight"><pre><span></span><code><span class="err">└──</span> <span class="n">my</span><span class="o">-</span><span class="n">project</span>
+    <span class="err">├──</span> <span class="n">legacy</span>
+    <span class="err">│</span>   <span class="err">└──</span> <span class="n">some_lib</span>
+    <span class="err">│</span>       <span class="err">├──</span> <span class="n">BUILD</span>
+    <span class="err">│</span>       <span class="err">├──</span> <span class="n">include</span>
+    <span class="err">│</span>       <span class="err">│</span>   <span class="err">└──</span> <span class="n">some_lib</span><span class="p">.</span><span class="n">h</span>
+    <span class="err">│</span>       <span class="err">└──</span> <span class="n">some_lib</span><span class="p">.</span><span class="n">cc</span>
+    <span class="err">└──</span> <span class="n">WORKSPACE</span>
+</code></pre></div>
+<p>이때 <code>some_lib.cc</code> 가 <code>some_lib.h</code> 에 의존하고 있다. 그런데 <code>#include "legacy/some_lib/include/some_lib.h</code> 로 헤더를 선언한 것이 아니라. <code>#include "some_lib.h</code> 로 헤더를 선언했다고 하자. 그러면 <a href="https://bazel.build/">bazel</a> 이 <code>some_lib.cc</code> 를 빌드하기 위하여 헤더 파일을 탐색할 경로 <code>legacy/some_lib/include</code> 를 추가해주어야 한다.</p>
+<div class="highlight"><pre><span></span><code><span class="n">cc_library</span><span class="p">(</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;some_lib&quot;</span><span class="p">,</span>
+    <span class="n">srcs</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;some_lib.cc&quot;</span><span class="p">],</span>
+    <span class="n">hdrs</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;include/some_lib.h&quot;</span><span class="p">],</span>
+    <span class="n">copts</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;-Ilegacy/some_lib/include&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+</code></pre></div>
+</li>
+<li>
+<p><code>C++</code> 프로젝트가 다른 디렉토리에 있는 <code>mylib.so</code> 라는 라이브러리와 <code>mylib.h</code> 라는 헤더에 의존성이 있다면 <code>cc_library</code> 를 다음과 같이 선언하면 된다.</p>
+<div class="highlight"><pre><span></span><code><span class="n">cc_library</span><span class="p">(</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;mylib&quot;</span><span class="p">,</span>
+    <span class="n">srcs</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;mylib.so&quot;</span><span class="p">],</span>
+    <span class="n">hdrs</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;mylib.h&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+</code></pre></div>
+</li>
+</ul>
+<dl>
+<dt><em>References</em>: </dt>
+<dd>
+<p><a href="https://bazel.build/">https://bazel.build/</a> </p>
+</dd>
+</dl>
+<hr />
+<h2 id="abseil">Abseil<a class="headerlink" href="#abseil" title="Permanent link">&para;</a></h2>
+<p><a href="https://abseil.io/">Abseil</a> 은 <strong>Google</strong> 에서 제작한 <code>C++</code> 표준 STL 라이브러리의 확장이다. <strong>Google</strong> 은 <a href="https://abseil.io/">Abseil</a> 을 통하여 STL 의 부족한 부분을 보완했다. <a href="https://abseil.io/">Abseil</a> 은 <strong>Google</strong> 의 <code>C++</code> 프로젝트의 기반으로 광범위하게 사용되고 있다.</p>
+<h3 id="why-abseil">Why Abseil?<a class="headerlink" href="#why-abseil" title="Permanent link">&para;</a></h3>
+<p><strong>Google</strong> 은 <code>C++</code> 프로젝트에 <a href="https://abseil.io/">Abseil</a> 을 사용하는 것을 추천한다.</p>
+<p><em>Why</em>:</p>
+<ul>
+<li>
+<p><a href="https://abseil.io/">Abseil</a> 은 항상 최신 <code>C++</code> 표준과 호환된다.</p>
+</li>
+<li>
+<p><strong>Google</strong> 의 오픈소스 프로젝트와 호환된다. 가령 <strong>TensorFlow</strong>, <strong>gRPC</strong> 등등.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>TensorFlow 소스코드 분석을 해야 할 때도 <a href="https://abseil.io/">Abseil</a> 을 알아야 하겠네요.</p>
+</div>
+</li>
+<li>
+<p><a href="https://abseil.io/">Abseil</a> 은 <strong>Google</strong> 이 <code>C++</code> 제품을 만드는 인터페이스이기 때문에 <strong>Google</strong> 이 어떻게 <code>C++</code> 프로젝트를 개발하는지 배울 수 있다.</p>
+</li>
+<li>
+<p><strong>Google</strong> 은 <a href="https://abseil.io/">Abseil</a> 을 매일 발전시키고 있고 <code>C++</code> 개발자들의 요구를 끊임없이 <a href="https://abseil.io/">Abseil</a> 에 구현하고 있다.</p>
+</li>
+</ul>
+<h3 id="codemap">Codemap<a class="headerlink" href="#codemap" title="Permanent link">&para;</a></h3>
+<p><a href="https://abseil.io/">Abseil</a> 은 다음의 <code>C++</code> 라이브러리들로 이루어져 있다.</p>
+<ul>
+<li>
+<p><code>base</code> : 다른 라이브러리의 초기화 코드를 담고 있다. 다른 라이브러리가 이 라이브러리에 의존한다.</p>
+</li>
+<li>
+<p><code>algorithm</code> : <code>C++</code> STL 의 <code>algorithm</code>의 확장이다.</p>
+</li>
+<li>
+<p><code>container</code> : <code>C++</code> STL 의 <code>container</code>의 확장이다.</p>
+</li>
+<li>
+<p><code>debugging</code> : 메모리 누수 검증, stacktrace 등등 을 지원하는 디버깅 라이브러리이다.</p>
+</li>
+<li>
+<p><code>hash</code> : hash 타입과 관련 기능을 제공하는 프레임워크이다.</p>
+</li>
+<li>
+<p><code>memory</code> : <code>std::make_unique()</code> 와 호환되는 메모리 관리 관련 라이브러리이다.</p>
+</li>
+<li>
+<p><code>meta</code> : 타입 체크 관련 기능을 제공한다.</p>
+</li>
+<li>
+<p><code>numeric</code> : <code>128</code> 비트 정수형 관련 기능을 제공한다.</p>
+</li>
+<li>
+<p><code>strings</code> : STL 과 호환되는 <code>string</code> 관련 기능을 제공한다.</p>
+</li>
+<li>
+<p><code>synchronization</code> : <code>std::mutex</code> 를 대체하는 <code>absl:Mutex</code> 등 병렬 실행에 관한 기능을 제공한다.</p>
+</li>
+<li>
+<p><code>time</code> : 시간과 관련된 다양한 기능을 제공한다.</p>
+</li>
+<li>
+<p><code>types</code> : non-container 타입 관련 기능을 제공한다.</p>
+</li>
+<li>
+<p><code>utility</code> : 여러 유틸리티와 도움이 될만한 코드들을 제공한다.</p>
+</li>
+</ul>
+<dl>
+<dt><em>References</em>: </dt>
+<dd>
+<p><a href="https://abseil.io">https://abseil.io</a></p>
+</dd>
+</dl>
+<hr />
+<h2 id="c-version">C++ Version<a class="headerlink" href="#c-version" title="Permanent link">&para;</a></h2>
+<p>C++17 을 써라. 아직 C++2x 는 쓰지 마라. 비표준 C++ 확장은 쓰지 마라. </p>
+<p>비표준 C++ 확장에 대해서는 아래에서 더 자세히 설명한다.</p>
+<hr />
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>아래의 내용은 <a href="https://google.github.io/styleguide/cppguide.html">Google C++ Style Guide</a> 을 정리한 것입니다.</p>
+<p>아래의 내용에서 말하는 1인칭 "나" 또는 "우리" 등등은 제가 아니라 <strong>Google</strong> 이며, 타겟 독자들은 <strong>Google</strong> 의 개발자입니다.</p>
+</div>
+<h2 id="google-c-style-guide">Google C++ Style Guide<a class="headerlink" href="#google-c-style-guide" title="Permanent link">&para;</a></h2>
+<h3 id="background">Background<a class="headerlink" href="#background" title="Permanent link">&para;</a></h3>
+<p>구글의 많은 프로젝트가 C++ 로 진행된다. 이는 C++ 의 강력함 때문이다. 그러나 그 강력함이 종종 복잡함을 낳는다. 복잡함은 곧바로 버그를 낳고 가독성과 유지보수성과 확장성을 떨어뜨린다.</p>
+<p>이 가이드는 그러한 C++ 의 복잡함을 통제하기 위하여 <strong>Do</strong> 들과 <strong>Don't</strong> 들을 알려줄 것이다. 구글의 대부분의 C++ 프로젝트가 이 컨벤션을 따른다.</p>
+<h3 id="goals-of-the-style-guide">Goals of the Style Guide<a class="headerlink" href="#goals-of-the-style-guide" title="Permanent link">&para;</a></h3>
+<p>앞으로 소개할 컨벤션들은 다음과 같은 목표를 달성하기 위하여 정립된 규칙들이다. 왜 이런 스타일로 코딩해야 하는지 의문이 드는 사람에게 이러한 목표를 달성하기 위하여 라고 말할 수 있을 것이다.</p>
+<ol>
+<li>
+<p>Style rules should pull their weight</p>
+<p>(코딩 컨벤션은 가치가 있어야 한다.)</p>
+<p>코딩 컨벤션은 해당 공동체의 모든 개발자에게 설명되고 기억되어야 할만한 가치가 있어야 한다. 그러므로 매우 안좋은 코딩 컨벤션은 어차피 사람들이 그렇게 코딩하지 않을 것이므로 굳이 정립해둘 필요가 없다. 가령 <code>goto</code> 문이 매우 안좋은 코드라는 것은 이미 널리 알려졌기 때문에 이것들은 굳이 코딩 컨벤션에 언급하지 않았다.</p>
+</li>
+<li>
+<p>Optimize for the reader, not the writer</p>
+<p>(writer 가 아닌 reader 를 위하여 최적화하라.)</p>
+<p>구글의 대부분의 프로젝트은 단기성 프로젝트가 아니라 장기 프로젝트이다. 그러므로 프로젝트는 계속해서 후임 개발자에게 읽힌다. 이는 프로젝트에 <strong>writing</strong> 시간보다 <strong>reading</strong> 시간이 더 많이 소모된다는 것이다. 그러므로 우리는 코드를 <strong>writing</strong> 에 최적화시킨 것이 아니라 가독성, 유지보수, 디버깅에 좋도록 최적화시켰다. 그러므로 이 목표를 기반으로 "Leave a trace for the reader"(독자에게 흔적을 남겨라) 라는 세부 목표 등이 세워질 수 있다. 가령 포인터의 ownership 을 옮기는 등의 매우 흔치 않은 일이 발생하면 왜 이렇게 했는지 후임 개발자가 알 수 있도록 힌트를 남겨야 한다.</p>
+</li>
+<li>
+<p>Be consistent with existing code</p>
+<p>(코딩 컨벤션을 지키면서 코딩해라.)</p>
+<p>일관된 코딩 컨벤션을 유지하는 것은 우리를 다른 더 중요한 문제에 집중할 수 있게 해준다. 대부분 Style 의 통일은 자동화 될 수 있다. "Be Consistent" 라는 목표는 항상 "just pick one and stop worrying about it."(하나를 택하고 더 이상 걱정마세요) 로 요약된다. 코딩 컨벤션에 자유를 주면 오히려 이 스타일이 더 낫냐 저 스타일이 더 낫냐고 토론하면서 더 많은 비용이 발생한다.</p>
+</li>
+<li>
+<p>Be consistent with the broader C++ community when appropriate</p>
+<p>(가능하면 널리 알려진 C++ 코딩 컨벤션도 지켜라.)</p>
+<p>다른 C++ 커뮤니티가 지키는 코딩 컨벤션에 대한 적절한 일관성을 유지하는 것도 <strong>목표 3</strong> 과 같은 맥락에서 이해될 수 있다. 하지만 널리 통용되는 C++ 코딩 컨벤션에도 장점이 있고 단점이 있다. 장점은 받아들여야 하지만, 단점은 널리 통용되는 C++ 코딩 컨벤션이라도 과감히 받아들이지 않는다.</p>
+</li>
+<li>
+<p>Avoid surprising or dangerous constructs</p>
+<p>(위험한 C++ 문법은 피해라.)</p>
+<p>C++ 은 한 사람이 잠깐 생각하고 설계한 것과 달리 생각보다 놀랍고 위험한 기능들을 갖고 있다. 어떤 Style 가이드는 이런 함정에 빠지지 않기 위하여 정립되었다.</p>
+</li>
+<li>
+<p>Avoid constructs that our average C++ programmer would find tricky or hard to maintain</p>
+<p>(대부분의 개발자들이 어려워하는 C++ 문법도 피해라.)</p>
+<p>C++ 은 그 복잡함 때문에 프로젝트에 추가되어서는 안되는 기능들도 갖고 있다. 까다로운 문법을 사용하는 것을 현 시점에서 당신의 팀원이 다 이해하였고 그 유용성도 잘 사용하게 되었다고 해도, 그 다음 팀, 또는 그 다음 팀의 팀원들이 그 까다로운 문법을 이해할 수 있을지 알 수 없다. </p>
+</li>
+<li>
+<p>Be mindful of our scale</p>
+<p>(당신의 코드 한 줄이 얼마나 큰 파급력을 미칠지 경각심을 가져라.)</p>
+<p>코드가 1억 줄이 넘어가는 프로젝트에는 수천명의 개발자가 함께 작업하고 있다. 이런 프로젝트에서는 사소한 실수가 막대하게 큰 비용을 발생시킬 수 있다. 가령 개인 프로젝트에서는 <code>namespace</code> 의 충돌이 아주 사소한 실수이지만, 큰 규모의 프로젝트에서는 매우 큰 비용을 발생시키는 문제가 된다.</p>
+</li>
+<li>
+<p>Concede to optimization when necessary</p>
+<p>(가끔 성능 최적화가 필요하다면 코딩 컨벤션을 어겨도 좋다.)</p>
+<p>성능 최적화는 종종 필요하고 적절하다. 심지어 코딩 컨벤션을 어겨서라도 성능 최적화가 이루어질 수 있다면 성능 최적화된 코드를 과감히 작성하라. </p>
+</li>
+</ol>
+<p>이 문서는 모든 합리적 제약을 기술하도록 작성된 것이다. 하지만 비판적인 자세를 가져라. 그리고 당신에게 확신이 안선다면 프로젝트 팀장에게 이 규칙에 대하여 당신의 비판을 말하라.</p>
+<h2 id="header-files">Header Files<a class="headerlink" href="#header-files" title="Permanent link">&para;</a></h2>
+<p>모든 <code>.cc</code> 파일은 <code>.h</code> 헤더 파일과 연관되어 있다. 아주 예외적으로 유닛 테스트에 사용되는 작은 <code>.cc</code> 파일들은 단지 <code>main()</code> 함수만 갖고 있다.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>C++</code> 프로그램을 작성하기 위한 파일의 확장자는 <code>.cc</code>, <code>.cpp</code>, <code>.cxx</code>, <code>.c++</code> 등이 있는데 <a href="https://github.com/WICWIU/WICWIU"><strong>WICWIU</strong></a> 는 <code>.cpp</code> 확장자를 사용하고 있습니다.</p>
+</div>
+<p>헤더 파일의 올바른 사용은 가독성, 프로젝트 크기, 프로젝트의 성능에 큰 영향을 미친다. 다음의 규칙들은 헤더 파일을 어떻게 올바르게 사용할 수 있는지 가이드해준다.</p>
+<h4>Self-contained Headers</h4>
+<p>헤더 파일은 반드시 독립적이어야 한다. 즉, 그 자체로 컴파일 되어야 한다. 그리고 반드시 <code>.h</code> 확장자를 가져야 한다. 포함되어야 하는 비헤더 파일은 <code>.inc</code> 확장자를 가져야 하며 아주 예외적으로 사용되어야 한다. 헤더 파일이 반드시 독립적이어야 한다는 것은 그것이 필요한 모든 것을 지니고 있어야 한다는 것이다. </p>
+<p>헤더 파일은 아래에서 설명할 헤더 가드를 가져야만 한다.</p>
+<p><code>template</code> 과 <code>inline</code> 함수는 선언과 동시에 정의해라. 그렇지 않으면 link 단계에서 에러가 발생한다. 예외적으로 template 구현을 특수화시켜야 할 경우 오직 해당 <code>.cc</code> 파일에서 구현하는 것이 허락된다.</p>
+<h4>The <code>#define</code> Guard</h4>
+<p>모든 헤더 파일은 중복 선언을 막기 위해 <code>#define</code> 가드를 가져야 한다. <code>#define</code> 가드의 형식은 다음과 같이 하라.</p>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="n">PROJECT</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">PATH</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="kt">FILE</span><span class="o">&gt;</span><span class="n">_H_</span>
+</code></pre></div>
+<p>유일성을 보장하기 위하여 경로는 전체 경로여야 한다. </p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>가령 파일이 <code>foo/src/bar/baz.h</code> 라면 다음과 같이 <code>#define</code> 가드를 생성하라.</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#ifndef FOO_BAR_BAZ_H_</span>
+<span class="cp">#define FOO_BAR_BAZ_H_</span>
+<span class="p">...</span>
+<span class="cp">#endif </span><span class="c1">// FOO_BAR_BAZ_H_</span>
+</code></pre></div>
+</div>
+<h4>Forward Declarations</h4>
+<p>가능한 한 forward declarations 을 피해라. forward declarations 는 정의 없이 선언하는 것이다.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>함수의 forward declarations 의 예시이다.</p>
+<div class="highlight"><pre><span></span><code><span class="kt">void</span> <span class="nf">printThisInteger</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
+</code></pre></div>
+<p>클래스의 forward declarations 의 예시이다.</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">MyClass</span><span class="p">;</span>
+<span class="k">struct</span> <span class="nc">MyStruct</span><span class="p">;</span>
+</code></pre></div>
+</div>
+<h4>Inline Functions</h4>
+<p><code>inline</code> 함수는 오직 코드가 작을 때, 즉 코드가 10 줄 이하일 때 사용하라.</p>
+<dl>
+<dt><em>Why</em>:</dt>
+<dd>
+<p>inline 함수는 그 코드가 작으면 작을수록 효율적이다. 하지만 <code>inline</code> 함수를 남용하면 프로그램이 오히려 느려진다. 함수의 크기가 커지면 inlining 은 코드의 크기를 매우 크게 한다.</p>
+</dd>
+</dl>
+<p><code>virtual</code> 이나 리커시브 함수 같은 함수들은 보통 <code>inline</code> 되지 않는다. 특히 리커시브 함수는 절대 <code>inline</code> 화 시키면 안 된다.</p>
+<h4>Order of Includes</h4>
+<p>헤더를 다음의 순서로 포함시켜라. 그리고 각각의 헤더 파트들을 꼭 한 칸 띄워줘라.</p>
+<ol>
+<li>
+<p>파일과 관련된 헤더</p>
+</li>
+<li>
+<p><code>C</code> 시스템 헤더 </p>
+</li>
+<li>
+<p><code>C++</code> STL 헤더</p>
+</li>
+<li>
+<p>다른 라이브러리 헤더 </p>
+</li>
+<li>
+<p>당신의 프로젝트의 헤더</p>
+</li>
+</ol>
+<p>각각의 헤더 파트 내부에서는 알파벳 순서로 헤더를 정렬해라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><code>dir2/foo2.h</code> 를 구현하거나 테스트하는 것이 목적인 <code>dir/foo.cc</code> 와 <code>dir/foo_test.cc</code> 에서는 다음과 같이 헤더를 포함시키면 된다.</p>
+<ol>
+<li>
+<p><code>dir2/foo2.h</code></p>
+</li>
+<li>
+<p>A blank line</p>
+</li>
+<li>
+<p>C system headers, 가령 <code>&lt;unistd.h&gt;</code>, <code>&lt;stdlib.h&gt;</code></p>
+</li>
+<li>
+<p>A blank line</p>
+</li>
+<li>
+<p>C++ standard library headers, 가령 <code>&lt;algorithm&gt;</code>, <code>&lt;cstddef&gt;</code></p>
+</li>
+<li>
+<p>A blank line</p>
+</li>
+<li>
+<p>다른 라이브러리의 <code>.h</code> 파일</p>
+</li>
+<li>
+<p>당신의 프로젝트의 <code>.h</code> 파일</p>
+</li>
+</ol>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>"파일과 관련된 헤더" 란 그것이 빠지면 전체 프로젝트의 컴파일 빌드가 되지 않는 헤더를 뜻한다. 가령 위의 예시에서 <code>dir2/foo2.h</code> 헤더가 <code>dir/foo.cc</code> 와 <code>dir/foo_test.cc</code> 파일에서 빠지면 프로젝트가 빌드에 실패한다.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>stddef.h</code> 같은 <code>C</code> 헤더는 <code>cstddef</code> 의 <code>C++</code> 스타일로 바꿀 수 있다. 두 스타일 다 가능하지만 기존에 있는 코드와 일관성을 지키면 된다.</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><code>google-awesome-project/src/foo/internal/fooserver.cc</code> 의 헤더 포함은 다음과 같을 수 있다.</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;foo/server/fooserver.h&quot;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&quot;base/basictypes.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;base/commandlineflags.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;foo/server/bar.h&quot;</span><span class="cp"></span>
+</code></pre></div>
+<p>먼저 <code>fooserver.cc</code> 가 구현해야 할 <code>foo/server/fooserver.h</code> 를 맨 처음에 포함시켰다. 그 다음에 <code>C</code> 시스템 헤더, <code>C++</code> 헤더, 다른 라이브러리 헤더, 그리고 해당 프로젝트의 헤더를 포함시킨다.</p>
+</div>
+<h4>Names of Includes</h4>
+<p>모든 헤더 파일은 <code>.</code> 이나 <code>..</code> 이 없이 포함되어야 한다. </p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><code>google-awesome-project/src/base/logging.h</code> 헤더 파일은 다음과 같이 포함되어야 한다.</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;base/logging.h&quot;</span><span class="cp"></span>
+</code></pre></div>
+</div>
+<h4>헤더 포함 규칙</h4>
+<p>필요한 모든 헤더를 포함시켜라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>만약 당신이 <code>bar.h</code> 와 <code>foo.h</code> 헤더를 포함해야 하는데 <code>bar.h</code> 가 <code>foo.h</code> 를 포함하고 있다면 당신의 파일에서 실제로 <code>bar.h</code> 만 포함해도 된다. 하지만 <code>bar.h</code> 와 <code>foo.h</code> 를 포함시켜라.</p>
+</div>
+<h4>조건부 헤더</h4>
+<p>조건부 헤더가 필요하다면 모든 헤더 밑에 포함시켜라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>가끔 다음과 같이 시스템 사양을 체크해야 하는 조건부 헤더가 필요하다. 그러면 모든 헤더들보다 밑에 선언하면 된다.</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;foo/public/fooserver.h&quot;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&quot;base/port.h&quot;</span><span class="c1">  // For LANG_CXX11.</span><span class="cp"></span>
+
+<span class="cp">#ifdef LANG_CXX11</span>
+<span class="cp">#include</span> <span class="cpf">&lt;initializer_list&gt;</span><span class="cp"></span>
+<span class="cp">#endif  </span><span class="c1">// LANG_CXX11</span>
+</code></pre></div>
+</div>
+<hr />
+<h2 id="scoping">Scoping<a class="headerlink" href="#scoping" title="Permanent link">&para;</a></h2>
+<h4>Namespaces</h4>
+<p>예외적인 상황을 제외하고 모든 코드를 <code>namespace</code> 내부에 작성해라. 이름공간은 프로젝트의 이름이나 경로처럼 유니크해야 한다.</p>
+<p><code>namespace</code> 의 <code>using</code> 을 사용하지 마라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><code>using namespace std;</code> 를 사용하지 않는 것이다.</p>
+</div>
+<p><code>inline namespace</code> 를 사용하지 마라.</p>
+<p><code>namespace</code> 를 어떤 이름공간인지 알려주는 코멘트로 닫아라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음과 같이 <code>namespace</code> 가 끝날 때 코멘트를 달아라.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="k">namespace</span> <span class="n">mynamespace</span> <span class="p">{</span>
+<span class="k">class</span> <span class="nc">MyClass</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="p">...</span>
+<span class="kt">void</span> <span class="n">Foo</span><span class="p">();</span>
+<span class="p">};</span>
+
+<span class="p">}</span>  <span class="c1">// namespace mynamespace</span>
+</code></pre></div>
+</td></tr></table>
+</div>
+<p><code>namespace</code> 의 <code>alias</code> 를 사용하지 마라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><code>namespace baz = ::foo::bar::baz;</code> 를 사용하지 마라.</p>
+</div>
+<h4>Unnamed Namespaces and Static Variables</h4>
+<p>만약 어떤 <code>.cc</code> 파일이 외부에서 참조되지 않는다면 코드를 이름없는 <code>namespace</code> 로 묶거나 <code>static</code> 으로 선언해라. <code>main()</code> 함수를 정의하는 <code>main.cpp</code> 이 보통 이 경우에 해당한다.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>이름없는 <code>namespace</code> 로 묶거나 함수를 <code>static</code> 으로 선언하면 외부에서 접근할 수 없게 된다.</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>외부에서 참조되지 않는 <code>.cc</code> 파일이라면 모든 코드를 다음의 이름없는 <code>namespace</code> 로 묶어라. </p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">namespace</span> <span class="p">{</span>
+<span class="p">...</span>
+<span class="p">}</span>   <span class="c1">// namespace</span>
+</code></pre></div>
+</div>
+<h4>Nonmember, Static Member, and Global Functions</h4>
+<p>함수를 <code>namespace</code> 에 두는 것을 선호해라. 완전한 전역함수를 사용하지 마라. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>"메소드"</strong> 는 클래스의 멤버 함수이고, <strong>"함수"</strong> 는 클래스에 속하지 않은 일반적인 함수입니다.</p>
+</div>
+<p>그렇다고 모든 함수를 어떤 클래스의 <code>static</code> 메소드로 선언하지는 마라. <code>static</code> 메소드는 반드시 그 클래스와 밀접하게 연관되어 있어야 한다.</p>
+<h4>Local Variables</h4>
+<p>변수를 가능한 한 가장 좁은 scope 에 배치해라. 그리고 변수를 변수의 첫 사용과 가능한 한 가까이 배치해라.</p>
+<p>변수를 가능한 한 선언과 동시에 초기화해라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Don't:</em></p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+<span class="n">i</span> <span class="o">=</span> <span class="n">f</span><span class="p">();</span>      <span class="c1">// Bad -- initialization separate from declaration.</span>
+</code></pre></div>
+<p><em>Do:</em></p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">g</span><span class="p">();</span>  <span class="c1">// Good -- declaration has initialization.</span>
+</code></pre></div>
+<p><em>Don't:</em></p>
+<div class="highlight"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span><span class="p">;</span>
+<span class="n">v</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>  <span class="c1">// Prefer initializing using brace initialization.</span>
+<span class="n">v</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</code></pre></div>
+<p><em>Do:</em></p>
+<div class="highlight"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">};</span>  <span class="c1">// Good -- v start</span>
+</code></pre></div>
+</div>
+<p><code>if</code> 나 <code>while</code> 이나 <code>for</code> 문에서 사용될 변수는 그 scope 내부에서 선언하여 바깥에서 사용될 수 없게 하라. </p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Do:</em></p>
+<div class="highlight"><pre><span></span><code><span class="k">while</span> <span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="n">strchr</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="sc">&#39;/&#39;</span><span class="p">))</span> <span class="n">str</span> <span class="o">=</span> <span class="n">p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</code></pre></div>
+</div>
+<p>단, 변수가 객체라면 매번 생성되고 소멸되기를 반복하게 된다. 그러므로 이 경우 반복문 바깥에 선언해라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Don't:</em></p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Inefficient implementation:</span>
+<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">1000000</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+<span class="n">Foo</span> <span class="n">f</span><span class="p">;</span>  <span class="c1">// My ctor and dtor get called 1000000 times each.</span>
+<span class="n">f</span><span class="p">.</span><span class="n">DoSomething</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><em>Do:</em></p>
+<div class="highlight"><pre><span></span><code><span class="n">Foo</span> <span class="n">f</span><span class="p">;</span>  <span class="c1">// My ctor and dtor get called once each.</span>
+<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">1000000</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+<span class="n">f</span><span class="p">.</span><span class="n">DoSomething</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<h4>Static and Global Variables</h4>
+<p><code>static</code> 변수를 갖는 객체를 만들지 마라.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>자세한 설명은 <a href="https://google.github.io/styleguide/cppguide.html#Static_and_Global_Variables">https://google.github.io/styleguide/cppguide.html#Static_and_Global_Variables</a> 참고</p>
+</div>
+<p>(일단 Pass)</p>
+<h5>Decision on destruction</h5>
+<p>(일단 Pass)</p>
+<h5>Decision on initialization</h5>
+<p>(일단 Pass)</p>
+<h5>Common patterns</h5>
+<p>(일단 Pass)</p>
+<h4>thread_local Variables</h4>
+<p>(일단 Pass)</p>
+<hr />
+<h2 id="classes">Classes<a class="headerlink" href="#classes" title="Permanent link">&para;</a></h2>
+<p>우리는 클래스를 광범위하게 사용한다. 이 섹션에서 클래스를 사용할 때 <strong>Do</strong> 들과 <strong>Don't</strong> 들을 설명한다.</p>
+<h4>Doing Work in Constructors</h4>
+<p>생성자에서 <code>virtual</code> 메소드를 호출하지 마라.</p>
+<p>생성자에서 에러 신호를 보낼 수 없는 경우 에러가 발생할만한 초기화는 피해라. 프로그램에 적합하다면 생성자에서 에러가 발생했을 때 프로그램을 중단하도록 해라.</p>
+<h4>Implicit Conversions</h4>
+<p>암시적 형변환을 정의하지 마라. <code>explicit</code> 키워드로 형변환을 막거나 일변수 생성자의 호출을 차단해라.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>암시적 형변환은 가령 <code>double</code> 변수를 받는 메소드에 <code>int</code> 형 변수를 전달할 때 발생한다.</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음과 같이 <code>explicit</code> 키워드로 암시적 형변환을 막아라.</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Foo</span> <span class="p">{</span>
+<span class="k">explicit</span> <span class="nf">Foo</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">);</span>
+<span class="p">...</span>
+<span class="p">};</span>
+
+<span class="kt">void</span> <span class="nf">Func</span><span class="p">(</span><span class="n">Foo</span> <span class="n">f</span><span class="p">);</span>
+<span class="p">...</span>
+
+<span class="n">Func</span><span class="p">({</span><span class="mi">42</span><span class="p">,</span> <span class="mf">3.14</span><span class="p">});</span>  <span class="c1">// Error</span>
+</code></pre></div>
+<p><code>operator bool()</code> 등을 막을 수 있다.</p>
+</div>
+<p>가끔 설계 목적이 값을 교환가능한 객체를 만드는 것이라면 암시적 형변환은 필요하고 적절하다. 이 경우 프로젝트 팀장에게 말해서 이 규칙을 예외적으로 면제해달라고 요청해라. </p>
+<h4>Copyable and Movable Types</h4>
+<p>클래스의 API 에서 클래스가 copyable 인지 movable 인지, copyable 도 아니고 movable 도 아닌지 명시해야 한다.</p>
+<p>movable 은 임시적으로 생성되고 할당할 수 있는 객체이다. </p>
+<p>copyable 은 다른 객체로부터 할당될 수 있는 객체이다.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><code>std::unique_ptr&lt;int&gt;</code> 는 movable 인데 copyable 은 아니다.</p>
+<p><code>int</code> 나 <code>std::string</code> 은 movable 이고 copyable 이다.</p>
+<p>user-defined 타입에서는 copy constructor 나 copy-assignment operator 가 정의되면 copyable 이고, move constructor 와 move-assignment operator 가 정의되면 movable 이다.</p>
+</div>
+<p>copy-only 클래스에서는 copy operation 을 명확하게 정의하고, move-only 클래스에서는 move operation 을 명확하게 정의해라.</p>
+<p>non-copyable/movable 클래스에서는 명확하게 copy operation 을 지워라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Copyable</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="n">Copyable</span><span class="p">(</span><span class="k">const</span> <span class="n">Copyable</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+<span class="n">Copyable</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Copyable</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+
+<span class="c1">// The implicit move operations are suppressed by the declarations above.</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">MoveOnly</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="n">MoveOnly</span><span class="p">(</span><span class="n">MoveOnly</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">);</span>
+<span class="n">MoveOnly</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">MoveOnly</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">);</span>
+
+<span class="c1">// The copy operations are implicitly deleted, but you can</span>
+<span class="c1">// spell that out explicitly if you want:</span>
+<span class="n">MoveOnly</span><span class="p">(</span><span class="k">const</span> <span class="n">MoveOnly</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+<span class="n">MoveOnly</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">MoveOnly</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">NotCopyableOrMovable</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="c1">// Not copyable or movable</span>
+<span class="n">NotCopyableOrMovable</span><span class="p">(</span><span class="k">const</span> <span class="n">NotCopyableOrMovable</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+<span class="n">NotCopyableOrMovable</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">NotCopyableOrMovable</span><span class="o">&amp;</span><span class="p">)</span>
+    <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+
+<span class="c1">// The move operations are implicitly disabled, but you can</span>
+<span class="c1">// spell that out explicitly if you want:</span>
+<span class="n">NotCopyableOrMovable</span><span class="p">(</span><span class="n">NotCopyableOrMovable</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+<span class="n">NotCopyableOrMovable</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">NotCopyableOrMovable</span><span class="o">&amp;&amp;</span><span class="p">)</span>
+    <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+</div>
+<p>상위 클래스가 copyable 이라면 상속받는 하위 클래스도 copyable 이어야 한다. 이 경우 <code>public virtual clone()</code> 메소드 등을 상위 클래스에 정의해둬라.</p>
+<h4>Structs vs. Classes</h4>
+<p>상수와 관련된 데이터만을 지니는 수동적인 객체만을 <code>struct</code> 로 선언해라.</p>
+<p>다른 모든 객체를 <code>class</code> 로 선언해라.</p>
+<h4>Structs vs. Pairs and Tuples</h4>
+<p>변수가 의미있는 이름을 가질 수 있도록 <code>std::tuple</code> 이나 <code>std::pair</code> 보다 <code>struct</code> 를 사용해라.</p>
+<dl>
+<dt><em>Why?</em>:</dt>
+<dd>
+<p><code>std::tuple</code> 이나 <code>std::pair</code> 를 사용하면 커스텀 데이터 구조를 정의하지 안하도 되지만, <code>.first</code>, <code>.second</code>, <code>std::get&lt;X&gt;</code> 를 사용해야 하기 때문에 각 변수의 의미를 알아차리기가 쉽지 않다. 이때 <code>struct</code> 를 사용하면 코드를 읽을 때 각 변수들이 어떤 의미인지 쉽게 알 수 있다.</p>
+<p><code>pair</code> 나 <code>tuple</code> 은 그 의미가 특정되지 않은 일반적인 코드에 적합하다.</p>
+</dd>
+</dl>
+<p>상속은 반드시 <strong>is-a</strong> 관계에서만 사용해라. 상속을 너무 많이 사용하지 마라.</p>
+<dl>
+<dt><em>Why</em>:</dt>
+<dd>
+<p>과도한 상속은 오버헤드를 발생시켜 성능 저하를 일으킨다.</p>
+</dd>
+</dl>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><code>Foo</code> 가 <code>Bar</code> 클래스를 상속받는다면 반드시 <strong>"<code>Foo</code> 는 <code>Bar</code> 의 한 종류이다."</strong> 라는 관계가 성립해야만 한다.</p>
+</div>
+<p><code>virtual</code> 함수나 <code>virtual</code> 소멸자를 오버라이딩할 때 명시적으로 주석을 달아라.</p>
+<h4>Inheritance</h4>
+<p>상속을 사용하려면 <code>public</code> 상속으로 해라.</p>
+<p>오버라이딩을 했다면 오버라이딩 했다는 주석을 달거나 <code>override</code> 키워드 또는 <code>final</code> 키워드를 꼭 붙여라.</p>
+<p>오버라이딩 할 때에는 <code>virtual</code> 키워드를 달지 말아라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>메소드를 오버라이딩 했다면 다음과 같이 <code>virtual</code> 키워드는 달지 말고, <code>override</code> 키워드를 반드시 달고, 추상 클래스의 메소드는 <code>= 0</code> 또는 <code>= delete</code> 또는 <code>= defualt</code> 로 선언하여 구현 불가능하게 만들어라.</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Shape</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="n">Rotate</span><span class="p">(</span><span class="kt">double</span> <span class="n">radians</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">Circle</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Shape</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">void</span> <span class="n">Rotate</span><span class="p">(</span><span class="kt">double</span> <span class="n">radians</span><span class="p">)</span> <span class="k">override</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+</div>
+<dl>
+<dt><em>Why:</em></dt>
+<dd>
+<p>상위 클래스의 <code>virtual</code> 메소드를 오버라이딩 하는 메소드가 아닌데도 <code>override</code> 키워드나 <code>final</code> 키워드가 존재하면 컴파일 에러가 발생하여 에러를 손쉽게 잡아낼 수 있다.</p>
+<p>또한 이 키워드들 자체가 하나의 Documentation 처럼 기능한다. 이로써 코드를 읽는 사람이 모든 상위 클래스를 확인하면서 문제의 메소드가 <code>virtual</code> 인지 아닌지 확인하지 않아도 된다.</p>
+</dd>
+</dl>
+<p>오버라이딩 메소드에는 <code>virtual</code> 키워드를 붙이지 말아라.</p>
+<h4>Operator Overloading</h4>
+<p>연산자 오버로딩은 신중하게 선택해라. 연산자의 의미가 명백하고, 뭔가 과격하거나 놀라운 것이 아니고, 기존의 연산자의 의미와 일관성이 있을 때에만 연산자 오버로딩을 해라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><code>|</code> 은 <code>C++</code> 에서 OR 연산에 사용된다. <code>|</code> 은 쉘에서 파이프로 쓰이는데, 갑자기 <code>|</code> 연산자를 파이프의 의미를 갖는 연산자로 오버로딩 하면 안된다.</p>
+</div>
+<p>user-defined literals 은 사용하지 말아라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><code>C+</code> 은 <code>operator""</code> 로써 user-defined literals 을 사용할 수 있게 한다. 하지만 사용하지 마라.</p>
+</div>
+<p>연산자를 오버로딩했으면 그와 관련된 연산자도 오버로딩해라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><code>&gt;</code> 연산자를 오버로딩 했으면 <code>&lt;</code> 연산자도 오버로딩 해라.</p>
+</div>
+<p>연산자 오버로딩을 피하기 위하여 당신만의 함수나 메소드를 구현하지는 말아라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><code>==</code>, <code>=</code>, <code>&lt;&lt;</code> 연산자 오버로딩을 하지 않고 싶어서 <code>Equals()</code>, <code>CopyFrom()</code>, <code>PrintTo()</code> 같은 함수나 메소드를 구현하지 말아라. 그냥 연산자 오버로딩을 해라.</p>
+</div>
+<p><code>&amp;&amp;</code>, <code>||</code>, <code>,</code>(comma), <code>&amp;</code> 연산자와 <code>operator""</code> 는 오버로딩 하지 마라.</p>
+<h4>Access Control</h4>
+<p>클래스 데이터 멤버는 그것이 상수가 아닌 이상 <code>private</code> 으로 선언해라.</p>
+<dl>
+<dt><em>Why</em>:</dt>
+<dd>
+<p>이것은 데이터의 불변성을 보장해준다.</p>
+</dd>
+</dl>
+<h4>Declaration Order</h4>
+<p><code>public:</code> 으로 선언을 시작하고, 그 다음은 <code>protected:</code>, 마지막으로 <code>private:</code> 을 선언해라.</p>
+<p>각 섹션의 선언의 순서는 이렇게 해라. <code>type</code> 들, 상수들, factory 함수들, 생성자들, 할당 연산자들, 소멸자, 다른 메소드들, 데이터 멤버들.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>(실제 구글 C++ 프로젝트의 클래스 선언의 예시를 가져와야 할 듯)</p>
+</div>
+<p>각 섹션의 비슷한 선언들을 함께 묶어라.</p>
+<hr />
+<h2 id="functions">Functions<a class="headerlink" href="#functions" title="Permanent link">&para;</a></h2>
+<h4>Inputs and Outputs</h4>
+<p><code>C++</code> 에서 함수의 출력은 <code>return</code> 값 또는 output parameter 로 전달된다. 이때 output parameter 보다 <code>return</code> 값으로 출력을 전달해라. </p>
+<dl>
+<dt><em>Why</em>:</dt>
+<dd>
+<p>그게 가독성이 더 좋고 성능이 output parameter 와 같거나 더 낫다.</p>
+</dd>
+</dl>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Don't</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#define OUT</span>
+<span class="kt">void</span> <span class="nf">calculate</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">,</span> <span class="n">OUT</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>위의 함수는 output parameter 로 출력을 전달한다. 이렇게 하지 말고 다음과 같이 <code>return</code> 을 사용해라.</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span> <span class="nf">calculate</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<p>입력 파라미터는 값을 사용하거나 <code>const</code> 참조자를 사용해라.</p>
+<p>옵션 입력을 나타내기 위하여 <code>absl::optional</code> 을 사용해라. 그리고 옵션 출력을 나타내기 위하여 <code>const</code> 가 아닌 포인터를 사용해라.</p>
+<p>파라미터로 들어온 <code>const</code> 참조자가 함수의 호출보다 오래 남아있길 바라는 함수는 정의하지 마라. 왜냐하면 <code>const</code> 참조자는 임시적으로 생성되기 때문이다. 그 대신 lifetime 요구를 없앨 수 있는 방법을 찾아라. 가령 파라미터를 복사하거나 <code>const</code> 포인터를 사용해라.</p>
+<p>모든 input parameter 를 output parameter 보다 먼저 선언해라. 파라미터가 단지 새롭게 추가되었다는 이유로 가장 마지막에 선언하지 말아라. </p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>새롭게 추가된 input parameter 라면 output parameter 이전에 선언해라.</p>
+</div>
+<p>input parameter 이면서 output parameter 인 파라미터는 함수를 혼란스럽게 만든다.</p>
+<h4>Write Short Functions</h4>
+<p>함수를 작게 만들어라.</p>
+<p>함수가 하나의 기능만 하도록 만들어라.</p>
+<p>우리는 가끔 큰 함수가 필요하다는 것을 알고 있으므로 함수 크기에 대한 엄격한 길이 제한을 두지 않을 것이다. 그러나 함수의 길이가 <code>40</code> 줄이 넘어간다면 함수를 세부 기능으로 쪼개서 더 작은 함수로 만들 수 있는지 검토해봐라.</p>
+<p>함수를 짧고 단순하게 유지시키고, 다른 사람이 읽었을 때 쉽게 이해하고 바꿀 수 있도록 만들어라.</p>
+<dl>
+<dt><em>Why</em>:</dt>
+<dd>
+<p>당신이 만든 함수가 엄청 큰데도 잘 기능한다고 하자. 그래도 후임 개발자가 나중에 와서 당신이 만든 함수에 새로운 기능을 추가해야할 때 시간이 오래걸리고 버그를 발생시킬 가능성이 크다.</p>
+<p>또 작은 함수를 만들면 테스트 하기에도 편하다.</p>
+</dd>
+</dl>
+<h4>Function Overloading</h4>
+<p>오버로딩은 코드를 읽는 사람이 호출문만 보고 왜 이렇게 오버로딩했는지 이해할 수 있을 때에만 사용해라. 즉, 의미적으로 별 차이가 없는 오버로딩만 사용해라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><code>const std::string&amp;</code> 을 파라미터로 받는 함수와 <code>const char*</code> 를 파라미터로 받는 함수를 오버로딩 할 수 있다.</p>
+<p>하지만 <code>std::string_view</code> 로 통합하는 것이 더 낫다.</p>
+</div>
+<h4>Default Arguments</h4>
+<p><code>virtual</code> 이 아닌 메소드에 디폴트 값이 항상 같은 값을 가질 때에만 디폴트 파라미터를 사용해라.</p>
+<p><code>virtual</code> 메소드에서는 디폴트 값을 사용하지 마라.</p>
+<p>물론 디폴트 파라미터도 가끔 적절하고 가독성을 높혀준다. 만약 디폴트 파라미터를 써야할지 말지 혼란스럽다면 그냥 오버로딩해라.</p>
+<h4>Trailing Return Type Syntax</h4>
+<p>람다 표현식을 제외하면 대부분의 경우에서 trailing return type 을 사용하지 마라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span> <span class="nf">foo</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">);</span>
+</code></pre></div>
+<p>위와 같은 함수 선언이 일반적인 함수 선언이다. 하지만 trailing return type 을 사용하면 다음과 같이 함수를 선언할 수 있다.</p>
+<p><em>Don't</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">auto</span> <span class="nf">foo</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">int</span><span class="p">;</span>
+</code></pre></div>
+<p>이 둘은 완전히 똑같은 선언이다. 하지만 람다 표현식 같은 예외적인 경우를 제외하고 기존의 함수 선언을 사용해라.</p>
+</div>
+<hr />
+<h2 id="google-specific-magic">Google-Specific Magic<a class="headerlink" href="#google-specific-magic" title="Permanent link">&para;</a></h2>
+<p>우리는 우리의 <code>C++</code> 프로젝트를 더욱 견고하게 만들기 위하여 많은 트릭과 유틸리티를 사용한다. </p>
+<h4>Ownership and Smart Pointers</h4>
+<p>Ownership 이 고정된, 동적으로 할당된 객체를 사용해라.</p>
+<p>Ownership 을 스마트 포인터로 넘겨주어라.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Ownership 이란 동적 할당 객체를 관리하기 위한 기술이다. Owner 란 동적으로 할당된 객체가 더 이상 필요가 없어졌을 때 그것의 할당을 해제해줄 의무가 있는 객체를 뜻한다. </p>
+<p>Ownership 은 다른 객체에게 넘겨줄 수 있다. 마지막으로 Ownership 을 넘겨 받은 객체가 동적 할당을 해제해줄 의무를 갖게 된다.</p>
+<p>스마트 포인터는 <code>*</code> 와 <code>-&gt;</code> 연산자를 오버로딩하여 포인터처럼 행동하는 클래스이다. 스마트 포인터의 장점은 Ownership 관리를 자동으로 해준다는 것이다. <code>std::unique_ptr</code> 이 스마트 포인터의 한 예시이다. <code>std::shared_ptr</code> 도 스마트 포인터의 예시이다.</p>
+</div>
+<p>동적 할당 객체가 필요하다면 Ownership 을 그것을 할당한 코드가 계속 가지고 있을 수 있도록 해라. </p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>만약 다른 코드가 그 객체에 접근해야 한다면 Ownership 을 넘겨주지 않으면서 복사하거나 포인터를 전달해줄 수 있도록 해라.</p>
+</div>
+<p><code>std::unique_ptr</code> 을 스마트 포인터로써 사용해라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span> <span class="n">FooFactory</span><span class="p">();</span>
+<span class="kt">void</span> <span class="nf">FooConsumer</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span> <span class="n">ptr</span><span class="p">);</span>
+</code></pre></div>
+</div>
+<p>합리적인 이유가 없다면 Ownership 을 공유할 수 없도록 코딩해라.</p>
+<dl>
+<dt><em>Why</em>:</dt>
+<dd>
+<p>Ownership 을 공유하면서 복사하는 비용이 많이 든다. 만약 성능 향상이 기대되고 <code>std::shared_ptr&lt;const Foo&gt;</code> 처럼 객체의 불변성이 보장된다면 Ownership 공유를 해도 좋다.</p>
+</dd>
+</dl>
+<p>Ownership 을 공유해야 한다면 <code>std::shared_ptr</code> 을 사용해라.</p>
+<p>절대로 <code>std::auto_ptr</code> 을 사용하지 말아라. 그 대신 <code>std::unique_ptr</code> 를 사용해라.</p>
+<h4>cpplint</h4>
+<p>스타일을 점검하기 위하여 <a href="https://raw.githubusercontent.com/google/styleguide/gh-pages/cpplint/cpplint.py">cpplint.py</a> 를 사용해라.</p>
+<dl>
+<dt><em>Why</em>:</dt>
+<dd>
+<p><a href="https://raw.githubusercontent.com/google/styleguide/gh-pages/cpplint/cpplint.py">cpplint.py</a> 는 파일을 읽고 스타일 에러를 점검해주는 툴이다.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>구글의 프로젝트는 저마다 <code>cpplint.py</code> 를 어떻게 사용해야 하는지 메뉴얼을 갖고 있다. 만약 당신의 프로젝트에 <code>cpplint.py</code> 가 없다면 당신이 따로 <a href="https://raw.githubusercontent.com/google/styleguide/gh-pages/cpplint/cpplint.py">cpplint.py</a> 를 다운로드해라.</p>
+</div>
+<hr />
+<h2 id="other-c-features">Other C++ Features<a class="headerlink" href="#other-c-features" title="Permanent link">&para;</a></h2>
+<h4>Rvalue References</h4>
+<p>Rvalue 참조자를 아래에서 정의하는 특별한 경우에서만 사용해라. Rvalue 참조자는 오직 임시 객체에만 사용되는 참조자이다.</p>
+<p>(<a href="https://google.github.io/styleguide/cppguide.html#Rvalue_references">https://google.github.io/styleguide/cppguide.html#Rvalue_references</a>)</p>
+<h4>Friends</h4>
+<p><code>friend</code> 키워드는 반드시 같은 파일 내에서 사용해라. </p>
+<dl>
+<dt><em>Why:</em></dt>
+<dd>
+<p>이로써 코드를 읽는 사람이 다른 파일을 찾아볼 필요가 없도록 해라.</p>
+</dd>
+</dl>
+<h4>Exceptions</h4>
+<p><ins><code>C++</code> 의 예외를 사용하지 마라.</ins> 즉, <code>try-catch</code> 문과 <code>throw</code> 키워드를 사용하지 마라.</p>
+<dl>
+<dt><em>Why:</em></dt>
+<dd>
+<p><code>C++</code> 의 예외는 고수준에서 일어나서는 안되는 상황을 처리할 수 있게 해준다. <strong>Python</strong>, <strong>Java</strong> 같은 다른 언어에서도 예외가 사용되므로 <strong>C++</strong> 에서 예외를 사용하면 코드가 일관성이 있어진다. </p>
+<p>하지만 만약 당신이 예외를 발생시키기 위하여 <code>throw</code> 를 사용한다면 그것을 호출하는 모든 함수를 점검해야만 한다. 그 결과 모든 호출 함수들이 기본적인 예외 처리문이라도 지니고 있어야 한다. 그렇지 않으면 프로그램은 곧바로 종료된다.</p>
+<p>일반적으로 예외는 프로그램의 실행 흐름을 어렵게 만들어서 코드를 읽는 사람이 코드를 이해하기 어려워 진다. 예외는 함수의 실행 흐름을 당신이 예측하지 못하는 곳으로 넘어가게 한다. 이는 곧바로 유지보수와 디버깅을 어렵게 만들고 개발 비용을 높인다. 아마 당신은 이 문제를 어떤 상황에서 언제 예외를 사용해야 할지 정함으로써 해결할 수도 있을 거라고 생각할 것이다. 하지만 그것을 정립하고 그것을 다른 사람에게 이해시키고 기억시키는 비용이 더 많이 들어갈 것이다.</p>
+<p>또 예외를 사용하면 바이너리 프로시져에 데이터가 추가되고 컴파일 시간이 늘어나며 주소 공간도 커진다.</p>
+<p>또 예외를 사용하도록 하면 개발자는 <code>throw</code> 를 적절하지 못한 때에 사용할 수도 있고, 안전하지 못한 상황에서 사용할 수도 있다. 가령 적절하지 못한 파라미터가 입력되었을 때 그것은 예외로 던져져서는 안된다. </p>
+<p>그리고 예외에 관련된 제한 규칙을 만들려면 이 코딩 컨벤션 문서가 막대하게 더 커질 것이다.</p>
+</dd>
+</dl>
+<p>즉, 예외를 사용했을 때 발생하는 효용보다 발생하는 비용이 압도적으로 더 크다는 것이다. 우리는 에러처리 코드나 <code>assert</code> 를 사용하는 것이 더 좋다고 본다. 이것은 철학적이나 도의적인 결론이 아니라 순전히 우리(<strong>Google</strong>)의 경험적이고 실용적인 결론이다. 왜냐하면 지금까지 예외를 사용하는 프로젝트를 사용해야 할 때면 우리는 매번 막대한 어려움을 겪었기 때문이다.</p>
+<p>이 금지 규칙은 앞으로 계속 추가되는 <code>C++</code> 의 예외 처리 문법에도 똑같이 적용된다. 앞으로도 <code>C++</code> 의 예외를 절대로 사용하지 말아라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><code>C++11</code> 에서는 <code>std::exception_ptr</code> 과 <code>std::nested_exception</code> 이 추가되었다. 하지만 사용하지 마라.</p>
+</div>
+<h4>noexcept</h4>
+<p>(일단 Pass)</p>
+<h4>Run-Time Type Information (RTTI)</h4>
+<p>RTTI 를 사용하지 마라. 즉, <code>typeid</code> 키워드와 <code>dynamic_cast</code> 형변환을 사용하지 마라.</p>
+<p>RTTI 를 유닛 테스트, 테스트 코드에서는 사용해라.</p>
+<dl>
+<dt><em>Why:</em></dt>
+<dd>
+<p>물론 <code>dynamic_cast</code> 는 다음과 같이 추상 클래스의 포인터를 하위 클래스로 형변환 할 때 적절하게 사용될 수 있다.</p>
+<div class="highlight"><pre><span></span><code><span class="kt">bool</span> <span class="n">Base</span><span class="o">::</span><span class="n">Equal</span><span class="p">(</span><span class="n">Base</span><span class="o">*</span> <span class="n">other</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kt">bool</span> <span class="n">Derived</span><span class="o">::</span><span class="n">Equal</span><span class="p">(</span><span class="n">Base</span><span class="o">*</span> <span class="n">other</span><span class="p">)</span> <span class="p">{</span>
+<span class="n">Derived</span><span class="o">*</span> <span class="n">that</span> <span class="o">=</span> <span class="k">dynamic_cast</span><span class="o">&lt;</span><span class="n">Derived</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">other</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">that</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+<span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>하지만 RTTI 는 런타임 상에서 객체의 타입을 조사하는데 이것은 곧 설계 문제를 뜻한다. 런타임에서 당신의 클래스 구조를 알 수 있다는 말은 당신이 클래스를 잘못 설계했다는 것이다.</p>
+<p>또한 무분별한 RTTI 의 사용은 프로젝트의 유지보수성을 떨어뜨린다. 왜냐하면 코드를 읽는 사람이 프로젝트를 분석하면서 <code>typeid</code> 나 <code>dynamic_cast</code> 가 나올 때마다 포인터가 실제로 갖고 있는 객체에 따라 분기를 나눠가면서 분석해야 하기 때문이다. 가령 다음과 같은 코드를 보자.</p>
+<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="p">(</span><span class="k">typeid</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="k">typeid</span><span class="p">(</span><span class="n">D1</span><span class="p">))</span> <span class="p">{</span>
+<span class="p">...</span>
+<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="k">typeid</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="k">typeid</span><span class="p">(</span><span class="n">D2</span><span class="p">))</span> <span class="p">{</span>
+<span class="p">...</span>
+<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="k">typeid</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="k">typeid</span><span class="p">(</span><span class="n">D3</span><span class="p">))</span> <span class="p">{</span>
+<span class="p">...</span>
+</code></pre></div>
+<p>위와 같은 코드의 <code>typeid</code> 와 <code>dynamic_cast</code> 는 객체의 타입이 런타임 상에서 결정되므로 프로그램 로직에 따라 완전히 결정되지 않는다는 것을 의미한다. 이것은 코드를 읽는 사람 입장에서는 정말 개똥같은 상황이다. 심지어 하위 클래스를 이후에 확장했다면 위와 같은 모든 코드를 다 수정해야만 한다.</p>
+</dd>
+</dl>
+<p>만약 RTTI 를 사용해야겠다는 생각이 들거든 다음의 대안을 고려해봐라. <code>virtual</code> 메소드를 사용하는 것은 클래스 타입에 따라 코드 실행을 바꿔주는 적절한 방법이다.</p>
+<p>만약 프로그램의 로직 자체가 상위 클래스의 포인터에 하위 클래스의 객체가 저장되었음을 완벽하게 보장한다면, 그때는 코드 분석이 모호해지지 않으므로 <code>dynamic_cast</code> 를 사용해도 상관없다. 하지만 당신은 이런 경우 성능 향상을 위하여 <code>static_cast</code> 를 사용하게 될 것이다. </p>
+<h4>Casting</h4>
+<p><code>C</code> 스타일 형변환을 사용하지 말고 <code>C++</code> 스타일의 형변환을 사용해라.</p>
+<dl>
+<dt><em>Why:</em></dt>
+<dd>
+<p><code>C</code> 스타일 형변환은 매우 모호하다. 이로써 여러가지 문제가 발생한다. 데이터가 손실되는 것은 물론이고 어떤 의도로 작성된 코드인지 이해하기 힘들 수도 있다.</p>
+</dd>
+</dl>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Do</em>:</p>
+<p>가령 <code>C++</code> 스타일 형변환은 <code>static_cast&lt;float&gt;(double_value)</code> 이다. </p>
+<p>또 <code>int64 y = int64{1} &lt;&lt; 42</code> 와 같은 brace initialization 도 <code>C++</code> 형변환이다.</p>
+<p>이러한 <code>C++</code> 스타일 형변환을 사용해라.</p>
+<p><em>Don't</em>:</p>
+<p>하지만 <code>(int)x</code> 같은 <code>C</code> 스타일 형변환은 사용하지 마라.</p>
+</div>
+<p>산술 타입의 데이터를 형변환 할 때 <code>int64{x}</code> 와 같은 brace initialization 을 사용해라.</p>
+<dl>
+<dt><em>Why:</em></dt>
+<dd>
+<p>brace initialization 은 데이터 손실이 일어나면 컴파일이 되지 않도록 해주기 때문에 가장 안전하다.</p>
+</dd>
+</dl>
+<p><code>static_cast</code> 는 상위 클래스의 포인터를 하위 클래스로 형변환할 때, 또는 하위 클래스의 포인터를 상위 클래스로 형변환할 때 사용해라. 단, 이때 상위 클래스 포인터를 하위 클래스 포인터로 형변환 한다면 객체가 반드시 하위 클래스이어야 한다.</p>
+<p><code>const</code> 의 의미를 제거해야 하는 상황에서 <code>const_case</code> 형변환을 사용해라.</p>
+<p>위험한 형변환이나 <code>int</code> 를 포인터로 형변환 하는 등 가끔 말도 안 되는 형변환이 필요할 때 <code>reinterpret_cast</code> 를 사용해라. 단, <code>reinterpret_cast</code> 는 당신이 지금 하고 있는 행동이 무엇인지 완벽하게 이해하고 있을 때 사용해라. 또한 <code>reinterpret_cast</code> 를 사용하기 전에 <code>absl::bit_cast</code> 를 사용할 수 있는 상황인지 점검해봐라.</p>
+<p>비트수준의 데이터를 다른 타입으로 바꾸어야 할 때 <code>absl::bit_cast</code> 를 사용해라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Do</em>:</p>
+<p><code>double</code> 타입의 데이터를 <code>int64</code> 로 바꾸고 싶을 때 <code>absl::bit_cast</code> 를 사용해라.</p>
+</div>
+<p><code>dynamic_cast</code> 에 대한 가이드는 RTTI 섹션을 보아라.</p>
+<h4>Streams</h4>
+<p>상황에 따라 스트림을 적절히 사용해라. 스트림이란 <code>&lt;iostream&gt;</code> 헤더로 추가되는 <code>C++</code>의 표준 I/O 기능이다. 구글의 많은 프로젝트가 디버깅 로그와 테스트 코드 진단을 위하여 스트림을 사용한다.</p>
+<p><code>printf</code> 를 사용하지말고 <code>&lt;&lt;</code> 또는 <code>&gt;&gt;</code> 를 사용해라.</p>
+<dl>
+<dt><em>Why:</em></dt>
+<dd>
+<p><code>printf</code> 는 사용하기 어렵고 이식성이 매우 떨어진다. 심지어 <code>std::string</code> 을 사용할 수도 없고 user-defined 타입은 당연히 사용 불가능하다. 스트림은 콘솔 I/O 를 위하여 <code>std::cin</code>, <code>std::cout</code>, <code>std::cerr</code>, <code>std::clog</code> 를 제공하는데 이것을 사용해라.</p>
+</dd>
+</dl>
+<p><code>&lt;&lt;</code> 를 오버로딩 한다면 스트림을 위하여서만 오버로딩해라.</p>
+<p>하지만 <code>std::cerr</code> 나 <code>std:clog</code> 를 사용하는 것보다 로그 라이브러리를 사용해라.</p>
+<p>또한 <code>std::stringstream</code> 을 사용하지 말고 <code>absl/strings</code> 나 그와 비슷한 라이브러리를 사용해라.</p>
+<p>end-user 를 위하여 I/O 스트림을 사용하지 말고 개발자를 위하여, 진단을 위하여, 테스트를 위하여 사용해라.</p>
+<h4>Preincrement and Predecrement</h4>
+<p>후위 증감 연산자(<code>i++</code>, <code>i--</code>)가 꼭 필요하지 않은 이상 전위 증감 연산자(<code>++i</code>, <code>--i</code>) 를 사용해라.</p>
+<dl>
+<dt><em>Why</em>:</dt>
+<dd>
+<p>전위 증감 연산자가 일반적으로 가독성이 더 좋고, 좀 더 효율적이다.</p>
+</dd>
+</dl>
+<h4>Use of const</h4>
+<p>의미가 적절하다면 언제 어디에서나 <code>const</code> 를 사용해라. 이로써 가능한 모든 코드에서 <code>const</code> 변수와 <code>const</code> 메소드를 만들어라.</p>
+<dl>
+<dt><em>Why</em>:</dt>
+<dd>
+<p>코드를 읽는 사람이 변수가 어떻게 쓰이는지 쉽게 이해할 수 있다. </p>
+<p>컴파일러가 더 빠르게 컴파일을 할 수 있다. </p>
+<p>멀티 스레딩을 해야 하는 사람에게 어떤 메소드를 <code>lock</code> 하지 않고도 thread-safe 하게 사용할 수 있는지 알려준다.</p>
+</dd>
+</dl>
+<p>가끔은 <code>constexpr</code> 가 더 좋은 선택일 수도 있으니 고려해봐라.</p>
+<p>우리는 의미가 적절하다면 모든 함수의 파라미터, 모든 메소드, 모든 전역 변수 등에 <code>const</code> 를 쓰는 것을 강력하게 권고한다.</p>
+<p>함수가 파라미터로 전달된 참조자와 포인터의 값을 변경하지 않는다면 각각 <code>const T&amp;</code> 와 <code>const T*</code> 를 사용해라.</p>
+<p>값으로 파라미터를 전달한다면 <code>const</code> 를 붙이는 것은 의미없기 때문에 이것은 권고하지 않는다. </p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음 코드에서 <code>int b</code> 는 값을 전달하는 파라미터이므로 <code>const int b</code> 는 의미가 없다.</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<p>클래스의 메소드가 클래스의 데이터를 변경하지 않는 한 모든 메소드를 <code>const</code> 메소드로 선언해라. 이때 모든 클래스의 <code>const</code> 메소드는 thread-safe 해야 한다. 그렇지 않다면 주석이나 API 에 분명하게 thread-unsafe 하다고 명시해라.</p>
+<p>지역변수에 <code>const</code> 키워드를 붙이는 것은 권고하지도 않고, 권고하지 않지도 않는다.</p>
+<h5>Where to put the const</h5>
+<p>(일단 Pass)</p>
+<h4>Use of constexpr</h4>
+<p>적절한 상황이라면 모든 코드에서 <code>constexpr</code> 을 반드시 사용해라.</p>
+<dl>
+<dt><em>Why</em>:</dt>
+<dd>
+<p><code>constexpr</code> 을 사용하면 프로젝트 성능이 막대하게 향상된다. <code>constexpr</code> 은 실행 결과를 런타임 상에서 계산하게 하지 않고 컴파일 상에서 계산하게 만들기 때문이다. 가령 다음의 코드는 피보나치 수열의 <code>30</code> 번째 수를 구하는 코드이다. </p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">fib</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span> 
+    <span class="k">return</span> <span class="p">(</span><span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span><span class="o">?</span> <span class="nl">n</span> <span class="p">:</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="mi">-1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="mi">-2</span><span class="p">);</span> 
+<span class="p">}</span> 
+<span class="kt">int</span> <span class="n">main</span> <span class="p">()</span> <span class="p">{</span> 
+    <span class="c1">// value of res is computed at compile time.  </span>
+    <span class="k">const</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="n">fib</span><span class="p">(</span><span class="mi">30</span><span class="p">);</span> 
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">res</span><span class="p">;</span> 
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span> 
+<span class="p">}</span> 
+</code></pre></div>
+<p><code>fib</code> 함수가 <code>constexpr</code> 로 선언되었다. 이 <strong>프로그램의 실행시간은 단지 <code>0.003</code> 초</strong> 이다. 성능이 무지막지하게 향상된 것이다. 만약 <code>res</code> 를 <code>const</code> 가 아니라 <code>long int res</code> 로 선언한다면 실행시간이 <code>0.017</code> 로 올라간다. <code>fib(5)</code> 가 컴파일 상에서 계산되지 않기 때문이다.</p>
+</dd>
+</dl>
+<p>따라서 함수에서, 생성자에서, 메소드에서 가능하다면 모든 곳에서 <code>constexpr</code> 을 사용해라. 단, <code>constexpr</code> 은 몇 가지 제약사항이 있으므로 주의해야 한다.</p>
+<h4>Integer Types</h4>
+<p>당신은 보통 <code>int</code> 를 사용해왔을 것이다. 그러나 상황에 따라서 정확한 사이즈의 정수 타입을 사용해라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><code>16</code> 비트만 있어도 된다면 <code>&lt;stdint.h&gt;</code> 의 <code>int16_t</code> 를 사용해라.</p>
+<p>어떤 데이터가 <span class="arithmatex">\(2 ^{31}\)</span> 와 같거나 큰 데이터를 표현한다면 <code>int64_t</code> 같은 <code>64</code> 비트 변수타입을 사용해라.</p>
+</div>
+<p>당신이 사용하는 변수 타입이 너무 크지 않은지 항상 확인해라. 하지만 만약 의심된다면 그냥 큰 타입을 사용해라.</p>
+<p>지금까지 당신은 <code>16</code> 비트를 위하여 <code>short</code> 를 사용하고, <code>32</code> 비트를 위하여 <code>int</code> 를 사용하고, <code>32</code> 비트를 위하여 <code>long</code> 을 사용하고, <code>64</code> 비트를 위하여 <code>long long</code> 을 사용했을 것이다. 하지만 이것을 사용하지 말고 <code>&lt;cstdint&gt;</code> 를 통하여 <code>int16_t</code>, <code>uint32_t</code>, <code>int64_t</code> 등등을 사용해라.</p>
+<dl>
+<dt><em>Why</em>:</dt>
+<dd>
+<p><code>int</code> 타입을 보통 <code>4</code> 바이트로 생각하지만, 아키텍쳐와 컴파일러에 따라서 사이즈가 달라질 수도 있다. 그러므로 <code>&lt;cstdint&gt;</code> 에서 제공하는 정확한 사이즈의 변수 타입(<code>int16_t</code>, <code>uint32_t</code>, <code>int64_t</code>)을 사용해라.</p>
+</dd>
+</dl>
+<p>사이즈를 저장하기 위하여 <code>size_t</code> 나 <code>ptrdiff_t</code> 를 사용해라.</p>
+<p>물론 우리도 <code>for-loop</code> 같은 곳에서는 변수가 너무 커지지 않는다는 것을 알기 때문에 <code>int</code> 를 자주 사용한다. 그런 사소한 부분에서는 그냥 <code>int</code> 를 사용해라.</p>
+<p><code>int</code> 가 최소한 <code>4</code> 바이트일 것이라고 생각하는 것은 좋다. 하지만 <code>int</code> 가 <code>4</code> 바이트 이상일 것이라고 가정하지 마라. <code>4</code> 바이트 이상의 변수가 필요하다면 <code>int64_t</code> 나 <code>uint64_t</code> 를 써라.</p>
+<p>합리적인 이유가 없는 이상 <code>uint32_t</code> 같은 unsigned 정수타입을 사용하지 마라. 특히, 숫자가 음수가 되지 않는다는 이유로 unsigned 타입을 사용하지 마라. 그 대신 <code>assert</code> 를 사용해라.</p>
+<dl>
+<dt><em>Why</em>:</dt>
+<dd>
+<p>역사적인 사고로 인하여 <code>C++</code> 도 unsigned 타입을 사용하긴 하지만 표준 기구의 여러 구성원들이 이것을 실수라고 보고 있다. 하지만 지금 이 시점에서 <code>C++</code> 의 unsigned 를 고치는 것은 불가능하다.</p>
+</dd>
+</dl>
+<p>당신의 코드가 사이즈를 반환한다면 차라리 큰 사이즈를 써서 모든 사이즈를 잘 표현할 수 있도록 해라.</p>
+<p>정수형 변수를 변환할 때 매우 신중하도록 해라.</p>
+<dl>
+<dt><em>Why</em>:</dt>
+<dd>
+<p>정수형 변수의 형변환을 할 때 잘못하면 취약점과 다른 여타 문제가 쉽게 발생한다.</p>
+</dd>
+</dl>
+<h4>64-bit Portability</h4>
+<p>코드는 항상 <code>64</code> 비트와 <code>32</code> 비트에 친화적이어야 한다.</p>
+<p><code>printf</code> 계열 함수를 사용하지 말고 <code>StrCat</code> 이나 <code>Substitute</code> 나 <code>std::ostream</code> 에서 제공하는 <code>std::cout</code> 등을 사용해라.</p>
+<dl>
+<dt><em>Why</em>:</dt>
+<dd>
+<p><code>printf()</code> 함수는 일부 정수 타입에 대하여 사용하기 어렵고 시용적이지 않은 매크로를 요구한다. 합리적인 이유가 없다면 <code>printf</code> 계열 함수를 사용하지 마라. 그 대신 typesafe 한 <code>StrCat</code> 이나 <code>Substitute</code> 나 <code>std::ostream</code> 에서 제공하는 <code>std::cout</code> 등을 사용해라.</p>
+</dd>
+</dl>
+<p><code>sizeof(void *) != sizeof(int)</code> 라는 것을 기억해라. 포인터 사이즈 정수형 변수를 원한다면 <code>intptr_t</code> 를 사용해라.</p>
+<p>You may need to be careful with structure alignments, particularly for structures being stored on disk. Any class/structure with a int64_t/uint64_t member will by default end up being 8-byte aligned on a 64-bit system. If you have such structures being shared on disk between 32-bit and 64-bit code, you will need to ensure that they are packed the same on both architectures. Most compilers offer a way to alter structure alignment. For gcc, you can use <strong>attribute</strong>((packed)). MSVC offers #pragma pack() and __declspec(align()).</p>
+<div class="admonition help">
+<p class="admonition-title">Help</p>
+<p>(내용이 이해 안됨)</p>
+</div>
+<p><code>64</code> 비트 상수를 만들려면 braced-initialization 을 사용해라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int64_t</span> <span class="n">my_value</span><span class="p">{</span><span class="mh">0x123456789</span><span class="p">};</span>
+<span class="kt">uint64_t</span> <span class="n">my_mask</span><span class="p">{</span><span class="mi">3ULL</span> <span class="o">&lt;&lt;</span> <span class="mi">48</span><span class="p">};</span>
+</code></pre></div>
+</div>
+<h4>Preprocessor Macros</h4>
+<p>매크로를 사용하지 마라. 특히 <code>.h</code> 파일에서 매크로를 절대로 사용하지 마라.</p>
+<p><code>C++</code> API 를 만들라고 절대로 매크로를 사용하지 마라.</p>
+<dl>
+<dt><em>Why</em>:</dt>
+<dd>
+<p>당신이 보는 매크로 코드는 컴파일러가 보는 코드와 전혀 다르다. 이것은 예측하지 못하는 실행결과를 낳을 수도 있다. 특히 매크로가 전역 scope 에서 선언되었을 때 예측 못하는 결과를 낳는다.</p>
+<p><code>C++</code> API 를 만들기 위하여 매크로를 사용하면 문제는 더 심각해진다. 개발자가 API 인터페이스를 잘못 사용함으로써 컴파일러로부터 나오는 모든 에러메시지로 매크로가 인터페이스를 어떻게 구성하고 있는지 설명해야 한다.</p>
+</dd>
+</dl>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음과 같은 패턴으로 코딩하지 마라.</p>
+<p><em>Don't</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nf">WOMBAT_TYPE</span><span class="p">(</span><span class="n">Foo</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">...</span>
+    <span class="k">public</span><span class="o">:</span>
+    <span class="n">EXPAND_PUBLIC_WOMBAT_API</span><span class="p">(</span><span class="n">Foo</span><span class="p">)</span>
+
+    <span class="n">EXPAND_WOMBAT_COMPARISONS</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="o">==</span><span class="p">,</span> <span class="o">&lt;</span><span class="p">)</span>
+<span class="p">};</span>
+</code></pre></div>
+</div>
+<p>매크로 대신 <code>inline</code> 함수, enums, <code>const</code> 변수를 사용해라.</p>
+<p>매크로로 성능을 향상 시키려 하지 말고 <code>inline</code> 함수를 써라.</p>
+<p>매크로로 상수를 저장하려고 하지 말고 <code>const</code> 변수를 선언해라.</p>
+<p>매크로로 약어를 만들려고 하지 말고 참조자를 사용해라.</p>
+<p>매크로를 사용하기 전에 매크로를 사용하지 않고 원하는 기능을 구현할 수 있는지 검토해라. 그래도 굳이 매크로를 사용해야 한다고 판단이 선다면 당신의 프로젝트 팀장과 논의해봐라.</p>
+<p>매크로를 사용했다면 사용한 직후 바로 <code>#undef</code> 를 해라.</p>
+<h4>0 and nullptr/NULL</h4>
+<p>빈 포인터를 표현하기 위하여 <code>NULL</code> 이 아니라 <code>nullptr</code> 을 사용해라.</p>
+<p>빈 <code>char</code> 를 표현하기 위하여 <code>0</code> 이 아니라 <code>'\0'</code> 을 사용해라.</p>
+<h4>sizeof</h4>
+<p><code>sizeof(type)</code> 이 아닌 <code>sizeof(varname)</code> 을 사용해라.</p>
+<dl>
+<dt><em>Why</em>:</dt>
+<dd>
+<p><code>sizeof(varname)</code> 은 특정 변수에 대한 사이즈를 반환한다. 만약 이후에 누군가 <code>varname</code> 을 다른 타입으로 바꾼다면 <code>sizeof(varname)</code> 의 사이즈는 안전하게 업데이트된다.</p>
+</dd>
+</dl>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">MyStruct</span> <span class="n">data</span><span class="p">;</span>
+<span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">data</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">data</span><span class="p">));</span>
+</code></pre></div>
+<p>위와 같이 코딩해라. 그리고 다음과 같이 코딩하지 마라.</p>
+<p><em>Don't</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">data</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">MyStruct</span><span class="p">));</span>
+</code></pre></div>
+</div>
+<h4>Type deduction</h4>
+<p>가독성이 좋아지거나 성능 향상이 기대될 때에만 type deduction 을 사용해라.</p>
+<p>단지 코딩할 때 더 편하다는 이유로 type deduction 을 사용하지 마라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음과 같은 함수 템플릿에서 명확한 타입 지정없이 <code>0</code> 만 전달하면 컴파일러가 type deduction 을 한다.</p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">f</span><span class="p">(</span><span class="n">T</span> <span class="n">t</span><span class="p">);</span>
+
+<span class="n">f</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>  <span class="c1">// Invokes f&lt;int&gt;(0)</span>
+</code></pre></div>
+<p>함수 템플릿의 type deduction 은 거의 대부분의 상황에서 해도 좋다.</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음과 같이 <code>auto</code> 로 변수를 선언하면 컴파일러가 알아서 type deduction 을 해준다.</p>
+<div class="highlight"><pre><span></span><code><span class="k">auto</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">42</span><span class="p">;</span>  <span class="c1">// a is an int</span>
+<span class="k">auto</span><span class="o">&amp;</span> <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>  <span class="c1">// b is an int&amp;</span>
+<span class="k">auto</span> <span class="n">c</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>   <span class="c1">// c is an int</span>
+<span class="k">auto</span> <span class="n">d</span><span class="p">{</span><span class="mi">42</span><span class="p">};</span>   <span class="c1">// d is an int, not a std::initializer_list&lt;int&gt;</span>
+</code></pre></div>
+<p>다음의 코드를 보자.</p>
+<div class="highlight"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">WidgetWithBellsAndWhistles</span><span class="o">&gt;</span> <span class="n">widget_ptr</span> <span class="o">=</span>
+<span class="n">absl</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">WidgetWithBellsAndWhistles</span><span class="o">&gt;</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">);</span>
+<span class="n">absl</span><span class="o">::</span><span class="n">flat_hash_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span>
+                    <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">WidgetWithBellsAndWhistles</span><span class="o">&gt;&gt;::</span><span class="n">const_iterator</span>
+<span class="n">it</span> <span class="o">=</span> <span class="n">my_map_</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="mi">6</span><span class="o">&gt;</span> <span class="n">numbers</span> <span class="o">=</span> <span class="p">{</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">42</span><span class="p">};</span>
+</code></pre></div>
+<p>위 코드를 다음과 같이 type deduction 하면 코드가 더 분명해지고 가독성이 좋아진다. 그렇기 때문에 이런 식의 type deduction 은 해도 좋다. </p>
+<div class="highlight"><pre><span></span><code><span class="k">auto</span> <span class="n">widget_ptr</span> <span class="o">=</span> <span class="n">absl</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">WidgetWithBellsAndWhistles</span><span class="o">&gt;</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">);</span>
+<span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">my_map_</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">array</span> <span class="n">numbers</span> <span class="o">=</span> <span class="p">{</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">42</span><span class="p">};</span>
+</code></pre></div>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음과 같이 함수 반환형에도 type deduction 을 사용할 수 있다. </p>
+<div class="highlight"><pre><span></span><code><span class="k">auto</span> <span class="nf">f</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span> <span class="p">}</span>  <span class="c1">// The return type of f is int</span>
+</code></pre></div>
+<p>함수 반환형의 type deduction 은 함수가 매우 작을 때에만 사용해라.</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음과 같이 람다 표현식에도 <code>auto</code> 를 사용할 수 있다.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Sort `vec` in decreasing order</span>
+<span class="n">std</span><span class="o">::</span><span class="n">sort</span><span class="p">(</span><span class="n">vec</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">vec</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[](</span><span class="k">auto</span> <span class="n">lhs</span><span class="p">,</span> <span class="k">auto</span> <span class="n">rhs</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">lhs</span> <span class="o">&gt;</span> <span class="n">rhs</span><span class="p">;</span> <span class="p">});</span>
+</code></pre></div>
+<p>람다 표현식의 파라미터에 type deduction 을 사용하는 것은 타입 에러가 나지 않도록 주의해라. 이 겨웅 대부분의 상황에서 type deduction 을 하지 않고 그냥 자료형을 명시적으로 선언하는 것이 좋다.</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음은 Lambda capture 의 type deduction 예시이다.</p>
+<div class="highlight"><pre><span></span><code><span class="p">[</span><span class="n">x</span> <span class="o">=</span> <span class="mi">42</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="s">&quot;foo&quot;</span><span class="p">]</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span>  <span class="c1">// x is an int, and y is a const char*</span>
+</code></pre></div>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><code>tuple</code>, <code>struct</code>, <code>array</code> 나 <code>map</code> 같은 것에서도 <code>auto</code> 를 사용할 수 있다. </p>
+<div class="highlight"><pre><span></span><code><span class="k">auto</span> <span class="p">[</span><span class="n">iter</span><span class="p">,</span> <span class="n">success</span><span class="p">]</span> <span class="o">=</span> <span class="n">my_map</span><span class="p">.</span><span class="n">insert</span><span class="p">({</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">});</span>
+<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">success</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">iter</span><span class="o">-&gt;</span><span class="n">second</span> <span class="o">=</span> <span class="n">value</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>이 경우의 type deduction 은 가독성을 높혀준다. <code>struct</code> 에서도 type deduction 을 할 수도 있지만 다음과 같이 어떤 필드인지 주석을 달아줘라. </p>
+<div class="highlight"><pre><span></span><code><span class="k">auto</span> <span class="p">[</span><span class="cm">/*field_name1=*/</span> <span class="n">bound_name1</span><span class="p">,</span> <span class="cm">/*field_name2=*/</span> <span class="n">bound_name2</span><span class="p">]</span> <span class="o">=</span> <span class="p">...</span>
+</code></pre></div>
+</div>
+<p>하지만 type deduction 은 종종 코드를 모호하게 만든다. 코드를 읽는 사람은 type 을 결정하는 코드와 실행 흐름을 일일이 찾아내야만 한다.</p>
+<p>그러므로 type deduction 을 사용하면 코드가 더 명확해지고 안전해질 때에만 사용해라. 단지 더 편하다는 이유로 type deduction 을 사용하지 마라.</p>
+<h4>Designated initializers</h4>
+<p>Designated initializer 는 오직 <code>C++20</code> 프로젝트에서만 써라.</p>
+<p>(참조 : <a href="https://google.github.io/styleguide/cppguide.html#Designated_initializers">https://google.github.io/styleguide/cppguide.html#Designated_initializers</a>)</p>
+<h4>Lambda expressions</h4>
+<p>적절한 상황에서만 lambda 표현식을 써라. 람다 표현식의 파라미터가 scope 를 넘어선다면 적절한 capture 를 사용해라. 꼭 필요한 변수만 capture 해라.</p>
+<dl>
+<dt><em>Why</em>:</dt>
+<dd>
+<p>람다 표현식은 STL 의 알고리즘 라이브러리를 사용할 때 유용하고, 가독성을 높혀준다. capture 를 적절히 사용하면 코드 중복을 줄일 수 있다. </p>
+<p>그러나 capture 의 무분별한 사용은 dangling-pointer 취약점을 발생시킨다. 포인터를 value 로 capture 하는 것은 deep copy 를 해주지 않는다. 또한 매우 긴 함수를 anonymous 함수로 람다 표현식에 전달하는 것은 가독성을 떨어뜨린다.</p>
+</dd>
+</dl>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음과 같은 코드로 scope 바깥의 모든 것을 참조할 수 있도록 capture 를 하지마라.</p>
+<p><em>Don't</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">Foo</span> <span class="n">foo</span><span class="p">;</span>
+<span class="p">...</span>
+<span class="n">executor</span><span class="o">-&gt;</span><span class="n">Schedule</span><span class="p">([</span><span class="o">&amp;</span><span class="p">]</span> <span class="p">{</span> <span class="n">Frobnicate</span><span class="p">(</span><span class="n">foo</span><span class="p">);</span> <span class="p">})</span>
+</code></pre></div>
+<p>다음과 같이 필요한 것만 capture 해라.</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">Foo</span> <span class="n">foo</span><span class="p">;</span>
+<span class="p">...</span>
+<span class="n">executor</span><span class="o">-&gt;</span><span class="n">Schedule</span><span class="p">([</span><span class="o">&amp;</span><span class="n">foo</span><span class="p">]</span> <span class="p">{</span> <span class="n">Frobnicate</span><span class="p">(</span><span class="n">foo</span><span class="p">);</span> <span class="p">})</span>
+<span class="c1">// BETTER - The compile will fail if `Frobnicate` is a member</span>
+<span class="c1">// function, and it&#39;s clearer that `foo` is dangerously captured by</span>
+<span class="c1">// reference.</span>
+</code></pre></div>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>dangling-pointer 란 이미 메모리 할당 해제가 된 객체를 포인팅하고 있는 포인터입니다.</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>람다 표현식은 다음과 같이 anonymous 함수를 사용해야할 때 편하다.</p>
+<div class="highlight"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">sort</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[](</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nf">Weight</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">Weight</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<p>람다 표현식은 다음과 같이 capture <code>[]</code> 를 통하여 현재 scope 를 넘어선 변수의 접근도 허용해준다. <code>weight</code> 는 value 롤 capture 했고, <code>sum</code> 은 참조자로 capture 했다.</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span> <span class="n">weight</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">for_each</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[</span><span class="n">weight</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sum</span><span class="p">](</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">sum</span> <span class="o">+=</span> <span class="n">weight</span> <span class="o">*</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre></div>
+<p>캡처를 <code>[&amp;]</code> 로 하면 다음과 같이 scope 바깥의 모든 것을 참조할 수 있게 된다.</p>
+<div class="highlight"><pre><span></span><code><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">lookup_table</span> <span class="o">=</span> <span class="p">...;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">indices</span> <span class="o">=</span> <span class="p">...;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">sort</span><span class="p">(</span><span class="n">indices</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">indices</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">lookup_table</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">lookup_table</span><span class="p">[</span><span class="n">b</span><span class="p">];</span>
+<span class="p">});</span>
+</code></pre></div>
+</div>
+<h4>Template metaprogramming</h4>
+<p>템플릿을 너무 복잡하게 사용하지 마라. 템플릿을 low level 에 존재하는 소수의 인터페이스를 구현하기 위하여 사용해라. </p>
+<p>템플릿을 사용하기 전에 당신의 팀원과 후임 개발자들이 코드를 잘 이해할 수 있고 유지보수하기에 편할지 두 번 생각해라.</p>
+<dl>
+<dt><em>Why</em>:</dt>
+<dd>
+<p>템플릿은 매우 유연한 인터페이스를 제공해준다. <a href="https://github.com/google/googletest">Google C++ Test</a>, <code>std::tuple</code>, <code>std::function</code>, Boost.Spirit 같은 것들은 템플릿 없이 존재할 수 없었을 것이다.</p>
+<p>하지만 템플릿을 과도하게 쓰면 코드의 의미가 모호해진다. 또 전문가가 아닌 이상 코드를 쉽게 이해할 수 없게 만든다. 또 템플릿은 그 객체가 매우 단순하더라도 컴파일을 매우 느리게 만든다.</p>
+<p>템플릿을 </p>
+</dd>
+</dl>
+<h4>Boost</h4>
+<p>반드시 다음 리스트에 있는 <a href="https://www.boost.org/">Boost library</a> 만 사용해라.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p><a href="https://www.boost.org/">Boost library</a> 는 <code>C++</code> 의 STL 을 보완하기 위한 라이브러리입니다. <a href="https://www.boost.org/">Boost library</a> 는 <code>C++</code> 의 표준 라이브러리에서 제공하지 않는 파일시스템 기능, 선형대수학 기능, 무작위 숫자 생성 기능, 멀티 스레딩, 정규표현식, 유닛 테스트, <code>64</code> 비트를 넘어서는 데이터타입(<code>128</code> 비트 변수, <code>256</code> 비트 변수, <code>512</code> 비트 변수, <code>1024</code> 비트 변수), 스마트 포인터 등등을 제공합니다.</p>
+</div>
+<ul>
+<li>
+<p><a href="https://www.boost.org/doc/libs/1_74_0/libs/utility/call_traits.htm">Call Traits</a> from <code>boost/call_traits.hpp</code></p>
+</li>
+<li>
+<p><a href="https://www.boost.org/libs/utility/compressed_pair.htm">Compressed Pair</a> from <code>boost/compressed_pair.hpp</code></p>
+</li>
+<li>
+<p><a href="https://www.boost.org/libs/graph/">The Boost Graph Library (BGL)</a> from <code>boost/graph</code>, except serialization (<code>adj_list_serialize.hpp</code>) and parallel/distributed algorithms and data structures (<code>boost/graph/parallel/*</code> and <code>boost/graph/distributed/*</code>).</p>
+</li>
+<li>
+<p><a href="https://www.boost.org/libs/property_map/">Property Map</a> from <code>boost/property_map</code>, except parallel/distributed property maps (<code>boost/property_map/parallel/*</code>).</p>
+</li>
+<li>
+<p><a href="https://www.boost.org/libs/iterator/">Iterator</a> from <code>boost/iterator</code>  </p>
+</li>
+<li>
+<p>The part of <a href="https://www.boost.org/libs/polygon/">Polygon</a> that deals with Voronoi diagram construction and doesn't depend on the rest of Polygon: <code>boost/polygon/voronoi_builder.hpp</code>, <code>boost/polygon/voronoi_diagram.hpp</code>, and <code>boost/polygon/voronoi_geometry_type.hpp</code></p>
+</li>
+<li>
+<p><a href="https://www.boost.org/libs/bimap/">Bimap</a> from <code>boost/bimap</code></p>
+</li>
+<li>
+<p><a href="https://www.boost.org/libs/math/doc/html/dist.html">Statistical Distributions and Functions</a> from <code>boost/math/distributions</code></p>
+</li>
+<li>
+<p><a href="https://www.boost.org/libs/math/doc/html/special.html">Special Functions</a> from <code>boost/math/special_functions</code></p>
+</li>
+<li>
+<p><a href="https://www.boost.org/libs/math/doc/html/root_finding.html">Root Finding Functions</a> from <code>boost/math/tools</code></p>
+</li>
+<li>
+<p><a href="https://www.boost.org/libs/multi_index/">Multi-index</a> from <code>boost/multi_index</code></p>
+</li>
+<li>
+<p><a href="https://www.boost.org/libs/heap/">Heap</a> from <code>boost/heap</code></p>
+</li>
+<li>
+<p>The flat containers from <a href="https://www.boost.org/libs/container/">Container</a>: <code>boost/container/flat_map</code>, and <code>boost/container/flat_set</code></p>
+</li>
+<li>
+<p><a href="https://www.boost.org/libs/intrusive/">Intrusive</a> from <code>boost/intrusive</code>.</p>
+</li>
+<li>
+<p><a href="https://www.boost.org/libs/sort/">The boost/sort library</a>.</p>
+</li>
+<li>
+<p><a href="https://www.boost.org/libs/preprocessor/">Preprocessor</a> from <code>boost/preprocessor</code>.</p>
+</li>
+</ul>
+<dl>
+<dt><em>Why</em>:</dt>
+<dd>
+<p><a href="https://www.boost.org/">Boost library</a> 는 매우 고퀼리티의 일반화된 이식가능한 여러 기능을 제공하면서 <code>C++</code> 의 STL 이 제공해주지 못하는 갭을 채워준다. 하지만 몇몇 <a href="https://www.boost.org/">Boost library</a> 라이브러리는 높은 코딩 스킬을 요구하기도 하고 가독성을 떨어뜨린다. 그러나 <a href="https://www.boost.org/">Boost library</a> 를 적절히 사용하면 코딩 생산성이 매우 높아지고, 개발자가 <code>C++</code> 의 STL 이 제공하지 않는 유틸리티를 만드느라 시간낭비 하는 것을 방지해주고 자신의 프로젝트의 기능을 구현하는 것에 집중할 수 있게 해준다.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>우리는 위의 허가된 <a href="https://www.boost.org/">Boost library</a> 리스트를 추가하기 위하여 계속 검토중이다. 그러므로 이후에 이 리스트는 계속 확장될 수 있다.</p>
+</div>
+<h4>std::hash</h4>
+<p><code>std::hash</code> 의 특수화를 정의하지 마라.</p>
+<p>(참고 : <a href="https://google.github.io/styleguide/cppguide.html#Designated_initializers">https://google.github.io/styleguide/cppguide.html#Designated_initializers</a>)</p>
+<h4>Other C++ Features</h4>
+<p><a href="https://www.boost.org/">Boost library</a> 같은 다른 <code>C++</code> 의 최신 확장들을 무분별하게 사용하는 것은 가독성을 떨어뜨린다. 다른 <code>C++</code> 확장은 기존의 메커니즘과 중복되는 것들이 있기 때문에 혼란을 초래한다. Nonstandard Extensions 섹션에서 더 자세하게 논해본다.</p>
+<p>한편 다음의 <code>C++</code> 기능은 사용하지 마라.</p>
+<ul>
+<li>
+<p><code>&lt;ratio&gt;</code> 가 제공하는 컴파일 타임 rational number. </p>
+</li>
+<li>
+<p><code>&lt;cfenv&gt;</code> 와 <code>&lt;fenv.h&gt;</code>. 왜냐면 많은 컴파일러가 이 기능을 지원하지 않는다. </p>
+</li>
+<li>
+<p><code>&lt;filesystem&gt;</code>. 테스트가 충분히 되지 않았기에 취약점이 존재한다.</p>
+</li>
+</ul>
+<h4>Nonstandard Extensions</h4>
+<p>위에서 언급한 <a href="https://www.boost.org/">Boost library</a> 의 허가 리스트를 제외하고는 비표준 확장을 사용하지 마라.</p>
+<h4>Aliases</h4>
+<p>alias 는 API 를 사용하는 사용자를 편하게 한다. 하지만 그 의도와 의미를 분명하게 문서화하라.</p>
+<p>이때 <code>typedef</code> 보다 <code>using</code> 을 사용해라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음의 코드를 봐라. <code>typedef</code> 보다 <code>using</code> 을 써라.</p>
+<div class="highlight"><pre><span></span><code><span class="k">typedef</span> <span class="n">Foo</span> <span class="n">Bar</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">Bar</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">other_namespace</span><span class="o">::</span><span class="n">Foo</span><span class="p">;</span>
+</code></pre></div>
+</div>
+<p>그러나 단지 타이핑을 덜 하기 위하여 alias 를 공용 API 에서 사용하지 마라. 만약 alias 를 정의했다면 그 의도와 의미를 분명하게 문서화를 해라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">namespace</span> <span class="n">mynamespace</span> <span class="p">{</span>
+    <span class="c1">// Used to store field measurements. DataPoint may change from Bar* to some internal type.</span>
+    <span class="c1">// Client code should treat it as an opaque pointer.</span>
+    <span class="k">using</span> <span class="n">DataPoint</span> <span class="o">=</span> <span class="n">foo</span><span class="o">::</span><span class="n">Bar</span><span class="o">*</span><span class="p">;</span>
+
+    <span class="c1">// A set of measurements. Just an alias for user convenience.</span>
+    <span class="k">using</span> <span class="n">TimeSeries</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">DataPoint</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">hash</span><span class="o">&lt;</span><span class="n">DataPoint</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">DataPointComparator</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">}</span>  <span class="c1">// namespace mynamespace</span>
+</code></pre></div>
+<p>위와 같은 코드는 alias 의 의도와 의미를 분명하게 문서화해뒀다. 하지만 다음의 코드는 그 의미와 의도가 문서화되지 않아서 코드가 모호해졌다.</p>
+<p><em>Don't</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">namespace</span> <span class="n">mynamespace</span> <span class="p">{</span>
+    <span class="c1">// Bad: none of these say how they should be used.</span>
+    <span class="k">using</span> <span class="n">DataPoint</span> <span class="o">=</span> <span class="o">::</span><span class="n">foo</span><span class="o">::</span><span class="n">Bar</span><span class="o">*</span><span class="p">;</span>
+    <span class="k">using</span> <span class="o">::</span><span class="n">std</span><span class="o">::</span><span class="n">unordered_set</span><span class="p">;</span>  <span class="c1">// Bad: just for local convenience</span>
+    <span class="k">using</span> <span class="o">::</span><span class="n">std</span><span class="o">::</span><span class="n">hash</span><span class="p">;</span>           <span class="c1">// Bad: just for local convenience</span>
+    <span class="k">typedef</span> <span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">DataPoint</span><span class="p">,</span> <span class="n">hash</span><span class="o">&lt;</span><span class="n">DataPoint</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">DataPointComparator</span><span class="o">&gt;</span> <span class="n">TimeSeries</span><span class="p">;</span>
+<span class="p">}</span>  <span class="c1">// namespace mynamespace</span>
+</code></pre></div>
+</div>
+<hr />
+<h2 id="naming">Naming<a class="headerlink" href="#naming" title="Permanent link">&para;</a></h2>
+<p>가장 중요한 컨벤션이 바로 네이밍 컨벤션이다. 네이밍 스타일로써 코드를 읽는 사람은 곧바로 이것이 타입인지 변수인지 함수인지 상수인지 매크로인지 이해할 수 있기 때문이다. 따라서 개개인의 네이밍 선호에 자유를 주는 것보다 네이밍을 통일하는 것이 압도적으로 더 좋다.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p><strong>Pascal case</strong> 는 단어가 합쳐진 부분마다 첫글자를 대문자로 나머지 부분을 소문자로 네이밍하는 것입니다. 가령 <code>PascalCaseNamingStyle</code>.</p>
+<p><strong>camel case</strong> 는 <strong>Pascal case</strong> 와 똑같은데 예외적으로 맨 앞 문자를 소문자로 네이밍합니다. 가령 <code>camelCaseNamingStyle</code>.</p>
+<p><strong>snake case</strong> 는 단어가 합쳐진 부분을 <code>_</code> 로 붙이고 모두 소문자로 네이밍합니다. 가령 <code>snake_case_naming_style</code>.</p>
+</div>
+<h4>General Naming Rules</h4>
+<p><ins>일반적인 네이밍 규칙은 그 변수의 의미를 영어로 작성한 후 공백을 지우는 것</ins> 이다. 그리고 아래에서 설명해줄 네이밍의 타입에 따라서 camel case 또는 Pascal case 또는 snake case 를 사용해라.</p>
+<p>후임 개발자가 읽었을 때 이해하기 어려운 약칭과 줄임말로 네이밍을 하지 마라. 만약 Wikipedia 에 존재하는 약칭이나 줄임말이라면 써도 좋다.</p>
+<p>일반적으로 네이밍의 정확성은 그 네이밍이 사용되는 스코프에 비례하여 지어져야 한다. </p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><code>3</code> 줄의 코드에서 쓰이고 말 변수라면 <code>n</code> 이라는 이름을 붙혀도 좋다.</p>
+<p>하지만 전반적인 프로젝트에서 계속 사용되는 변수라면 <code>n</code> 이라는 이름은 너무 모호하기에 사용해서는 안된다.</p>
+</div>
+<p>물론 널리 알려인 약칭으로 네이밍을 해도 된다.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><code>i</code> 는 iteration 변수로 널리 알려져 있으니 써도 된다.</p>
+<p><code>T</code> 는 템플릿 변수로 널리 알려져 있기 때문에 써도 좋다.</p>
+</div>
+<h4>File Names</h4>
+<p><code>C++</code> 파일은 반드시 <code>.cc</code> 로 끝나야 하고 헤더 파일은 반드시 <code>.h</code> 로 끝나야 한다.</p>
+<p>파일 이름은 반드시 소문자여야 한다. 그리고 <code>_</code> 와 <code>-</code> 를 포함시킬 수 있다. 하지만 <code>_</code> 를 쓰는 게 더 좋다.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음과 같이 파일 이름을 지어라.</p>
+<div class="highlight"><pre><span></span><code>my_useful_class.cc
+my-useful-class.cc
+myusefulclass.cc
+myusefulclass_test.cc // _unittest and _regtest are deprecated.
+</code></pre></div>
+</div>
+<p><code>/usr/include</code> 에 이미 존재하는 이름을 절대로 쓰지 말아라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>유닉스 시스템 헤더 파일의 디렉토리인 <code>/usr/include</code> 에는 <code>db.h</code> 가 있다. 그러므로 절대로 <code>db.h</code> 라는 파일 이름을 짓지 말아라.</p>
+</div>
+<p>파일 이름을 매우 자세하게 지어라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><code>logs.h</code> 이 아니라 <code>http_server_logs.h</code> 으로 파일 이름을 지어라. </p>
+</div>
+<p>일반적으로 대표적인 클래스를 파일 이름으로 지어라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><code>FooBar</code> 클래스를 선언하는 헤더 파일의 이름을 <code>foo_bar.h</code> 로 짓고 구현하는 파일 이름을 <code>foo_bar.cc</code> 로 지어라.</p>
+</div>
+<h4>Type Names</h4>
+<p>타입 이름은 Pascal case 로 지어라. 타입 이름에는 <code>class</code>, <code>struct</code>, <code>type aliase</code>, <code>enum</code>, <code>template parameter</code> 등이 있다.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음과 같이 타입 이름을 지어라.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// classes and structs</span>
+<span class="k">class</span> <span class="nc">UrlTable</span> <span class="p">{</span> <span class="p">...</span>
+<span class="k">class</span> <span class="nc">UrlTableTester</span> <span class="p">{</span> <span class="p">...</span>
+<span class="k">struct</span> <span class="nc">UrlTableProperties</span> <span class="p">{</span> <span class="p">...</span>
+
+<span class="c1">// typedefs</span>
+<span class="k">typedef</span> <span class="n">hash_map</span><span class="o">&lt;</span><span class="n">UrlTableProperties</span> <span class="o">*</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">PropertiesMap</span><span class="p">;</span>
+
+<span class="c1">// using aliases</span>
+<span class="k">using</span> <span class="n">PropertiesMap</span> <span class="o">=</span> <span class="n">hash_map</span><span class="o">&lt;</span><span class="n">UrlTableProperties</span> <span class="o">*</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="c1">// enums</span>
+<span class="k">enum</span> <span class="k">class</span> <span class="nc">UrlTableError</span> <span class="p">{</span> <span class="p">...</span>
+</code></pre></div>
+</div>
+<h4>Variable Names</h4>
+<p>변수 이름은 snake case 로 지어라. 변수 이름에는 함수의 변수, 함수의 파라미터, 클래스 멤버 변수 등이 포함된다. </p>
+<h5>Common Variable names</h5>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">table_name</span><span class="p">;</span>  <span class="c1">// OK - lowercase with underscore.`</span>
+</code></pre></div>
+<p>변수 이름을 위와 같이 짓고 다음과 같이 짓지 마라.</p>
+<p><em>Don't</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">tableName</span><span class="p">;</span>   <span class="c1">// Bad - mixed case.</span>
+</code></pre></div>
+</div>
+<h5>Class Data Members</h5>
+<p>클래스의 멤버 변수의 이름도 snake case 로 짓되 마지막에 <code>_</code> 를 하나 더 붙혀라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>클래스의 데이터 멤버는 다음과 같이 이름을 지어라. 이름의 끝에 꼭 <code>_</code> 를 붙혀라.</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">TableInfo</span> <span class="p">{</span>
+    <span class="p">...</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">table_name_</span><span class="p">;</span>  <span class="c1">// OK - underscore at end.</span>
+    <span class="k">static</span> <span class="n">Pool</span><span class="o">&lt;</span><span class="n">TableInfo</span><span class="o">&gt;*</span> <span class="n">pool_</span><span class="p">;</span>  <span class="c1">// OK.</span>
+<span class="p">};</span>
+</code></pre></div>
+<p><code>static</code> 이든 <code>static</code> 이 아니든 이렇게 지어라.</p>
+</div>
+<h5>Struct Data Members</h5>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><code>struct</code> 의 멤버 변수의 이름을 다음과 같이 지어라.</p>
+<div class="highlight"><pre><span></span><code><span class="k">struct</span> <span class="nc">UrlTableProperties</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">num_entries</span><span class="p">;</span>
+    <span class="k">static</span> <span class="n">Pool</span><span class="o">&lt;</span><span class="n">UrlTableProperties</span><span class="o">&gt;*</span> <span class="n">pool</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+</div>
+<h4>Constant Names</h4>
+<p>상수로 선언된 변수 즉, <code>constexpr</code> 이나 <code>const</code> 로 선언된 변수의 이름에는 <code>k</code> 를 맨 앞에 붙이고 Pascal case 로 지어라.</p>
+<p>모든 <a href="https://en.cppreference.com/w/cpp/language/storage_duration#Storage_duration">Static storage duration</a> 을 갖는 변수, 즉 <code>static</code> 변수나 전역 변수를 이렇게 네이밍 해라.</p>
+<p>단, 대문자로 단어를 구분할 수 없는 문자라면 <code>_</code> 를 사용해도 좋다.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="k">const</span> <span class="kt">int</span> <span class="n">kDaysInAWeek</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">kAndroid8_0_0</span> <span class="o">=</span> <span class="mi">24</span><span class="p">;</span>  <span class="c1">// Android 8.0.0</span>
+</code></pre></div>
+</div>
+<h4>Function, Method Names</h4>
+<p>함수와 메소드의 이름은 camel case 로 네이밍해라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음과 같이 함수 이름을 지어라.</p>
+<div class="highlight"><pre><span></span><code><span class="n">addTableEntry</span><span class="p">()</span>
+<span class="n">deleteUrl</span><span class="p">()</span>
+<span class="n">openFileOrDie</span><span class="p">()</span>
+</code></pre></div>
+<p>다음과 같이 메소드 이름을 지어라.</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">MyAwesomeClass</span> <span class="p">{</span>
+<span class="p">...</span>
+<span class="kt">void</span> <span class="n">myAwesomeMethod</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span>
+<span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<h4>Namespace Names</h4>
+<p><code>namespace</code> 의 이름은 snake case 로 지어라. 하지만 <code>namespace</code> 의 이름은 <code>_</code> 가 필요없도록 짧고 간단할수록 좋다.</p>
+<p>가장 최상위 <code>namespace</code> 는 프로젝트의 이름으로 지어라.</p>
+<p>하위 <code>namespace</code> 는 세부 프로젝트의 이름이나 팀의 이름으로 지어라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><code>websearch::index</code> 이나 <code>websearch::index_util</code> 와 같이 네이밍해라.</p>
+</div>
+<h4>Enumerator Names</h4>
+<p>Enumerator 변수의 이름은 상수와 같이 네이밍해라. 즉 <code>k</code> 를 맨 앞에 쓰고 Pascal case 로 네이밍해라. </p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="k">enum</span> <span class="k">class</span> <span class="nc">UrlTableError</span> <span class="p">{</span>
+    <span class="n">kOk</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">kOutOfMemory</span><span class="p">,</span>
+    <span class="n">kMalformedInput</span><span class="p">,</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>위와 같이 네이밍하고 다음과 같이 네이밍하지 마라.</p>
+<div class="highlight"><pre><span></span><code><span class="k">enum</span> <span class="k">class</span> <span class="nc">AlternateUrlTableError</span> <span class="p">{</span>
+    <span class="n">OK</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">OUT_OF_MEMORY</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">MALFORMED_INPUT</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+<span class="p">};</span>
+</code></pre></div>
+</div>
+<dl>
+<dt><em>Why:</em></dt>
+<dd>
+<p>2009년 1월까지, <code>enum</code> 변수의 이름은 매크로의 네이밍과 같았다. 하지만 이 네이밍은 충돌을 일으켰고 막대한 비용이 소모되었다. 그러므로 이렇게 네이밍 하라는 것이다. </p>
+</dd>
+</dl>
+<h4>Macro Names</h4>
+<p>일반적으로 매크로는 사용되어서는 안된다. 하지만 정말로 필요한 경우 매크로를 모두 대문자로 네이밍하고 단어 중간을 <code>_</code> 로 구분지어라. </p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>정말로 매크로가 필요하다면 다음과 같이 네이밍해라.</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#define ROUND(x) ...</span>
+<span class="cp">#define PI_ROUNDED 3.0</span>
+</code></pre></div>
+</div>
+<h4>Exceptions to Naming Rules</h4>
+<p>당신이 기존의 <code>C</code> 와 <code>C++</code> 에 이미 존재하는 비슷한 무언가를 네이밍한다면 기존의 <code>C</code> 와 <code>C++</code> 에서 따르는 네이밍 컨벤션을 따라도 좋다.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><code>bigopen()</code> : function name, follows form of <code>open()</code></p>
+<p><code>uint</code> : typedef</p>
+<p><code>bigpos</code> : struct or class, follows form of pos</p>
+<p><code>sparse_hash_map</code> : STL-like entity; follows STL naming conventions</p>
+<p><code>LONGLONG_MAX</code> : a constant, as in INT_MAX </p>
+</div>
+<hr />
+<h2 id="comments">Comments<a class="headerlink" href="#comments" title="Permanent link">&para;</a></h2>
+<p>주석은 코드 가독성에 있어서 매우 중요한 역할을 한다. 반드시 아래의 규칙을 기반으로 주석을 달아라.</p>
+<p>그러나 기억하라. 가장 좋은 주석이란 주석 없이 코드 그 자체로 이해가 되는 것이다.</p>
+<p>주석을 달 때 타겟을 반드시 당신의 후임 개발자를 대상으로 하라. 그러니 주석을 친절하게 달아라. 그 후임 개발자가 언젠가 당신이 될 것이다.</p>
+<h4>Comment Style</h4>
+<p><code>//</code> 나 <code>/* */</code> 스타일을 모두 사용해도 좋다. 그러나 <code>//</code> 가 좀 더 일반적이다.</p>
+<p>당신의 프로젝트에서 주석을 다는 스타일의 일관성을 지키면 된다.</p>
+<h4>File Comments</h4>
+<p>파일의 시작을 라이센스를 명시하는 주석으로 시작해라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><strong>Apache 2.0</strong> 이나 <strong>BSD</strong> 나 <strong>LGPL</strong> 이나 <strong>GPL</strong> 이나 <strong>MIT</strong> 등의 라이센스를 선택하여 주석을 달아라.</p>
+</div>
+<p>그리고 어떤 파일인지, 어떤 것을 구현하는지, 혹은 어떤 것을 테스트하는지 주석을 달아라.</p>
+<p>모든 파일에 이 주석이 반드시 있어야 한다.</p>
+<p>만약 <code>.h</code> 파일이 다중 추상화를 선언한다면, 그 추상 클래스와 구현 클래스들의 전체 구조에 대한 주석을 반드시 달아라. 각각의 구현에 대한 세세한 설명은 그 구현 코드에서 주석을 달아라.</p>
+<p>이때 <code>.h</code> 와 <code>.cc</code> 파일에 주석을 중복으로 달지 마라.</p>
+<h4>Class Comments</h4>
+<p>모든 <code>class</code> 와 <code>struct</code> 에 코드를 읽는 사람이 이것이 무엇이고, 언제 사용해야 하고, 어떻게 사용하는지 충분히 이해할 수 있도록 반드시 주석을 달아라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음과 같이 코드를 읽는 사람에게 이것을 언제 사용해야 하고, 어떻게 사용해야 하는지 반드시 주석을 달아라.</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Iterates over the contents of a GargantuanTable.</span>
+<span class="c1">// Example:</span>
+<span class="c1">//    GargantuanTableIterator* iter = table-&gt;NewIterator();</span>
+<span class="c1">//    for (iter-&gt;Seek(&quot;foo&quot;); !iter-&gt;done(); iter-&gt;Next()) {</span>
+<span class="c1">//      process(iter-&gt;key(), iter-&gt;value());</span>
+<span class="c1">//    }</span>
+<span class="c1">//    delete iter;</span>
+<span class="k">class</span> <span class="nc">GargantuanTableIterator</span> <span class="p">{</span>
+<span class="p">...</span>
+<span class="p">};</span>
+</code></pre></div>
+</div>
+<p>만약 <code>class</code> 가 멀티스레드에 의하여 다뤄질 수 있다면, 주석을 더더욱 상세하게 달아라. 이로써 thread-safe, blocking, race-condition 등등에 관한 이 객체에서 주의해야하는 멀티스레딩 정보를 충분히 제공해라.</p>
+<p><code>class</code> 선언을 <code>.h</code> 에서 했고 구현을 <code>.cc</code> 에서 했다면 <code>class</code> 에 대한 주석을 <code>.h</code> 에 달아라. 그리고 <code>class</code> 의 세부 작동과 그 구현에 관한 주석을 <code>.cc</code> 에 달아라.</p>
+<h4>Function Comments</h4>
+<p>함수와 클래스의 메소드에 다음과 같이 주석을 달아라.</p>
+<h5>Function Declarations</h5>
+<p>모든 함수의 선언부에는 함수를 어떻게 사용하는지 충분히 이해할 수 있는 주석이 있어야 한다.</p>
+<p>함수가 매우 단순고 매우 명백한 경우에만 주석을 달지 않아도 된다.</p>
+<p>함수의 주석에는 다음의 내용이 있어야만 한다.</p>
+<ul>
+<li>
+<p>입력과 출력이 무엇인지.</p>
+</li>
+<li>
+<p>함수가 동적 메모리를 할당할 경우 함수를 호출한 코드에서 메모리를 해제해주어야 하는지.</p>
+</li>
+<li>
+<p>함수를 어떻게 사용해야 성능이 향상되는지. </p>
+</li>
+</ul>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음과 같이 주석을 달아라.</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Returns an iterator for this table.  It is the client&#39;s</span>
+<span class="c1">// responsibility to delete the iterator when it is done with it,</span>
+<span class="c1">// and it must not use the iterator once the GargantuanTable object</span>
+<span class="c1">// on which the iterator was created has been deleted.</span>
+<span class="c1">//</span>
+<span class="c1">// The iterator is initially positioned at the beginning of the table.</span>
+<span class="c1">//</span>
+<span class="c1">// This method is equivalent to:</span>
+<span class="c1">//    Iterator* iter = table-&gt;NewIterator();</span>
+<span class="c1">//    iter-&gt;Seek(&quot;&quot;);</span>
+<span class="c1">//    return iter;</span>
+<span class="c1">// If you are going to immediately seek to another place in the</span>
+<span class="c1">// returned iterator, it will be faster to use NewIterator()</span>
+<span class="c1">// and avoid the extra seek.</span>
+<span class="n">Iterator</span><span class="o">*</span> <span class="nf">GetIterator</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</code></pre></div>
+</div>
+<p>그러나 불필요하고 장황한 설명은 하지 마라.</p>
+<p>메소드를 오버라이딩 했다면 상위 클래스 메소드에 이미 주석이 있을 것이므로, 설명을 반복하지 말고 오버라이딩에 초점을 맞춰서 주석을 달아라. </p>
+<p>생성자와 소멸자에 주석을 달 때는, 생성자와 소멸자가 무엇을 위한 것인지 주석을 달아라. 단지 <code>// destorys this object</code> 라고 주석을 다는 것은 무의미하다. 생성자가 그 파라미터로 무슨 일을 하는지, 소멸자가 무엇을 소멸하는지 설명해라. 만약 어떤 것이 너무 trivial 하고 명백하다면 주석을 달지 않아도 된다.</p>
+<h5>Function Definitions</h5>
+<p>함수가 tricky 한 코드를 갖고 있다면 당신이 왜 이런 식으로 코드를 구현했는지 반드시 주석으로 설명해라.</p>
+<p><code>.h</code> 에 이미 있는 주석을 반복하지 마라. 그러나 간단하게 요약하는 주석은 허용된다.</p>
+<h4>Variable Comments</h4>
+<p>일반적으로 변수의 이름만 봐도 변수에 대한 아이디어가 충분히 이해될 수 있도록 이름을 지어야 한다. 그러나 분명 주석이 필요한 경우가 있는데, 이 경우 다음과 같이 주석을 달아라.</p>
+<h5>Class Data Members</h5>
+<p><code>class</code> 의 멤버 변수의 목적은 반드시 명확해야 한다. 그런데도 어떤 변수가 그 타입과 이름으로 그 목적이 명확하게 전달되지 않을 것 같으면 반드시 주석을 달아라. 하지만 <code>int num_events_;</code> 처럼 타입과 이름으로 그 목적이 충분히 설명된다면 주석을 달지 마라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음의 변수는 타입과 이름만으로 변수의 목적이 충분히 설명되지 않기에 주석을 달아야 한다.</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">private</span><span class="o">:</span>
+<span class="c1">// Used to bounds-check table accesses. -1 means</span>
+<span class="c1">// that we don&#39;t yet know how many entries the table has.</span>
+<span class="kt">int</span> <span class="n">num_total_entries_</span><span class="p">;</span>
+</code></pre></div>
+</div>
+<h5>Global Variables</h5>
+<p>모든 전역 변수에 그 목적에 대한 주석을 반드시 달아라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// The total number of tests cases that we run through in this regression test.</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">kNumTestCases</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+</code></pre></div>
+</div>
+<h4>Implementation Comments</h4>
+<p>실제 코드 부분에서 tricky 하고 그 의미가 명백하지 않고 중요한 부분에 반드시 주석을 달아라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음의 코드는 매우 tricky 하다. 그러니 주석을 달아라.</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Divide result by two, taking into account that x</span>
+<span class="c1">// contains the carry from the add.</span>
+<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">result</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="o">*</span><span class="n">result</span><span class="p">)[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">(</span><span class="o">*</span><span class="n">result</span><span class="p">)[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">x</span> <span class="o">&amp;=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<p>어떤 코드 한 줄이 tricky 하고 그 의미가 명백하지 않다면 라인의 끝에 공백 <code>2</code> 개 이후에 주석을 달아라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음 코드에서 <code>return;</code> 은 그 의미가 명백하지 않다. 그렇기 때문에 공백 <code>2</code> 개를 띄우고 주석을 달아라.</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// If we have enough memory, mmap the data portion too.</span>
+<span class="n">mmap_budget</span> <span class="o">=</span> <span class="n">max</span><span class="o">&lt;</span><span class="n">int64</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">mmap_budget</span> <span class="o">-</span> <span class="n">index_</span><span class="o">-&gt;</span><span class="n">length</span><span class="p">());</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">mmap_budget</span> <span class="o">&gt;=</span> <span class="n">data_size_</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">MmapData</span><span class="p">(</span><span class="n">mmap_chunk_bytes</span><span class="p">,</span> <span class="n">mlock</span><span class="p">))</span>
+    <span class="k">return</span><span class="p">;</span>  <span class="c1">// Error already logged.</span>
+</code></pre></div>
+</div>
+<h4>Function Argument Comments</h4>
+<p>함수 파라미터의 의미가 명백하지 않게 되었다면 다음과 같이 하라.</p>
+<ul>
+<li>
+<p>함수 파라미터가 상수 literal 이고 그것이 여러군데에서 쓰였다면 그것을 <code>constant</code> 변수로 선언하여 이름을 부여하라. 그리고 그 변수 이름으로써 그 literal 의 의미를 설명해라.</p>
+</li>
+<li>
+<p>함수 파라미터에 <code>bool</code> 타입 변수가 있다면 그것을 <code>enum</code> 으로 바꿔서 그 이름으로써 그 의미를 설명해라.</p>
+</li>
+<li>
+<p>함수의 파라미터들이 함수 기능에 대한 옵션을 설정한다면, 그 파라미터들을 한 군데로 모아서 <code>class</code> 나 <code>struct</code> 로 만드는 것을 고려해봐라. 그러고 나서 파라미터로 객체 하나만 전달해라.</p>
+<dl>
+<dt><em>Why</em>:</dt>
+<dd>
+<p>객체의 이름 자체로 그 의미가 분명해진다. 그리고 함수의 파라미터가 줄어들어서 함수를 읽거나 쓸 때 좋다.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음의 코드는 여러 파라미터가 함수의 기능을 설정한다.</p>
+<p><em>Don't</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// What are these arguments?</span>
+<span class="k">const</span> <span class="n">DecimalNumber</span> <span class="n">product</span> <span class="o">=</span> <span class="n">CalculateProduct</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">);</span>
+</code></pre></div>
+<p>그러나 다음과 같이 이 변수들을 하나로 묶은 <code>class</code> 또는 <code>struct</code> 를 정의해서 그 객체 하나만을 파라미터로 전달할 수 있도록 해라.</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">ProductOptions</span> <span class="n">options</span><span class="p">;</span>
+<span class="n">options</span><span class="p">.</span><span class="n">set_precision_decimals</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span>
+<span class="n">options</span><span class="p">.</span><span class="n">set_use_cache</span><span class="p">(</span><span class="n">ProductOptions</span><span class="o">::</span><span class="n">kDontUseCache</span><span class="p">);</span>
+<span class="k">const</span> <span class="n">DecimalNumber</span> <span class="n">product</span> <span class="o">=</span>
+    <span class="n">CalculateProduct</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="cm">/*completion_callback=*/</span><span class="k">nullptr</span><span class="p">);</span>
+</code></pre></div>
+</div>
+<h4>Don'ts</h4>
+<p>명백한 것에 대한 주석을 달지 마라. 코드가 무엇을 하는지 문자 그대로 설명하지 마라.</p>
+<p><code>C++</code> 을 잘 아는 사람이 봤을 때에도 명백하지 않은 코드에 대한 higher level 인 설명을 해라. 즉, 이 코드가 왜 필요하고 이 코드가 무엇을 하는지 주석으로 설명해라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음의 코드처럼 코드가 무엇을 하는 일을 문자 그대로 설명하지 마라.</p>
+<p><em>Don't</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Find the element in the vector.  &lt;-- Bad: obvious!</span>
+<span class="k">auto</span> <span class="n">iter</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">find</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">element</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">iter</span> <span class="o">!=</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">{</span>
+    <span class="n">Process</span><span class="p">(</span><span class="n">element</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>다음 코드처럼 higher level 의 설명을 해라.</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Process &quot;element&quot; unless it was already processed.</span>
+<span class="k">auto</span> <span class="n">iter</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">find</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">element</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">iter</span> <span class="o">!=</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">{</span>
+    <span class="n">Process</span><span class="p">(</span><span class="n">element</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<p>그러나 다시 말하지만, 가장 좋은 주석은 코드 그 자체로 설명이 되는 코드이다. 위의 예시의 코드는 다음과 같이 코드 그 자체로 설명이 되는 코드로 바꿀 수 있다. 이것이 가장 좋은 코드이고 가장 좋은 주석이다.</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">IsAlreadyProcessed</span><span class="p">(</span><span class="n">element</span><span class="p">))</span> <span class="p">{</span>
+  <span class="n">Process</span><span class="p">(</span><span class="n">element</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h4>Punctuation, Spelling, and Grammar</h4>
+<p>문법과 스펠링을 틀리지 않도록 해라.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><a href="https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker"><strong>VSCode</strong> 의 스펠링 체크 확장</a> 을 쓰면 됩니다.</p>
+</div>
+<h4>TODO Comments</h4>
+<p>(일단 pass)</p>
+<hr />
+<h2 id="formatting">Formatting<a class="headerlink" href="#formatting" title="Permanent link">&para;</a></h2>
+<p>개발자에게 코드 형식의 자유를 주는 것이 아니라 프로젝트의 코드 형식을 일관되게 통일하는 것은 매우 중요하다. 이로써 코드를 읽는 사람이 코드를 쉽게 이해할 수 있기 때문이다.</p>
+<p>코드 포맷팅을 자동으로 할 수 있게 하기 위하여 <a href="https://raw.githubusercontent.com/google/styleguide/gh-pages/google-c-style.el">emacs setting file</a> 을 만들어 뒀다.</p>
+<h4>Line Length</h4>
+<p>모든 코드의 라인은 <code>80</code> 문자를 넘으면 안된다.</p>
+<p>하지만 다음의 예외 상황에서는 지키지 않아도 된다.</p>
+<ul>
+<li>
+<p>주석을 다음 라인으로 넘겼을 때 가독성이 떨어진다.</p>
+</li>
+<li>
+<p>raw-string 이 <code>80</code> 문자를 넘겼다.</p>
+</li>
+<li>
+<p><code>include</code> 헤더 선언.</p>
+</li>
+<li>
+<p>헤더 가드.</p>
+</li>
+<li>
+<p><code>using</code> 문을 사용할 때.</p>
+</li>
+</ul>
+<h4>Non-ASCII Characters</h4>
+<p>Non-ASCII 문자를 사용할 때 반드시 <strong>UTF-8</strong> 을 사용해라.</p>
+<h4>Spaces vs. Tabs</h4>
+<p>탭을 사용하지 말고 공백을 사용하여 <strong>indentation</strong> 을 해라. </p>
+<p>공백 <code>2</code> 개를 사용하여 <strong>indent</strong> 해라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음과 같이 공백 <code>2</code> 개를 사용하여 <strong>indent</strong> 해라.</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">ReturnType</span> <span class="n">ClassName</span><span class="o">::</span><span class="n">FunctionName</span><span class="p">(</span><span class="n">Type</span> <span class="n">par_name1</span><span class="p">,</span> <span class="n">Type</span> <span class="n">par_name2</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">DoSomething</span><span class="p">();</span>
+  <span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>다음의 코드는 <kbd>Tab</kbd> 또는 공백 <code>4</code> 개를 사용하여 <strong>indent</strong> 했다. 이렇게 하지 마라.</p>
+<p><em>Don't</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">ReturnType</span> <span class="n">ClassName</span><span class="o">::</span><span class="n">FunctionName</span><span class="p">(</span><span class="n">Type</span> <span class="n">par_name1</span><span class="p">,</span> <span class="n">Type</span> <span class="n">par_name2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">DoSomething</span><span class="p">();</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p><strong>VSCode</strong> 에서 <kbd>Tab</kbd> 을 눌렀을 때 공백 <code>2</code> 개가 생기도록 설정할 수 있습니다.</p>
+</div>
+<h4>Function Declarations and Definitions</h4>
+<p>함수의 선언에 반환형, 함수 이름, 파라미터를 같은 라인에 두어라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">ReturnType</span> <span class="n">ClassName</span><span class="o">::</span><span class="n">FunctionName</span><span class="p">(</span><span class="n">Type</span> <span class="n">par_name1</span><span class="p">,</span> <span class="n">Type</span> <span class="n">par_name2</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">DoSomething</span><span class="p">();</span>
+  <span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<p>한 줄로 함수 선언을 다 할 수 없다면 파라미터를 다음 라인으로 내리고 첫번째 파라미터의 <strong>indentation</strong> 에 맞춰라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">ReturnType</span> <span class="n">ClassName</span><span class="o">::</span><span class="n">ReallyLongFunctionName</span><span class="p">(</span><span class="n">Type</span> <span class="n">par_name1</span><span class="p">,</span> <span class="n">Type</span> <span class="n">par_name2</span><span class="p">,</span>
+                                             <span class="n">Type</span> <span class="n">par_name3</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">DoSomething</span><span class="p">();</span>
+  <span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<p>첫번째 파라미터조차 함수 선언에 둘 수 없다면 다음과 같이 공백 <code>4</code> 개로 파라미터들을 <strong>indent</strong> 해라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">ReturnType</span> <span class="n">LongClassName</span><span class="o">::</span><span class="n">ReallyReallyReallyLongFunctionName</span><span class="p">(</span>
+    <span class="n">Type</span> <span class="n">par_name1</span><span class="p">,</span>  <span class="c1">// 4 space indent</span>
+    <span class="n">Type</span> <span class="n">par_name2</span><span class="p">,</span>
+    <span class="n">Type</span> <span class="n">par_name3</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">DoSomething</span><span class="p">();</span>  <span class="c1">// 2 space indent</span>
+  <span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<h4>Lambda Expressions</h4>
+<p>람다 표현식은 함수의 포맷팅과 같이 포맷팅해라. 이때 capture 를 표현하는 <code>[]</code> 에는 공백을 남기지 마라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Do</em>:
+<div class="highlight"><pre><span></span><code><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">auto</span> <span class="n">x_plus_n</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">x</span><span class="p">](</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">int</span> <span class="p">{</span> <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">n</span><span class="p">;</span> <span class="p">}</span>
+</code></pre></div></p>
+</div>
+<p>함수의 파라미터로 들어간 람다 표현식은 함수 파라미터 포맷팅과 같이 포맷팅해라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">blacklist</span> <span class="o">=</span> <span class="p">{</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">};</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">digits</span> <span class="o">=</span> <span class="p">{</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">};</span>
+<span class="n">digits</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">remove_if</span><span class="p">(</span><span class="n">digits</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">digits</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">blacklist</span><span class="p">](</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="n">blacklist</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">!=</span> <span class="n">blacklist</span><span class="p">.</span><span class="n">end</span><span class="p">();</span>
+            <span class="p">}),</span>
+            <span class="n">digits</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+</code></pre></div>
+</div>
+<h4>Floating-point Literals</h4>
+<p>부동소수점 변수는 반드시 명확한 소수점을 부여해라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><code>C++</code> 에서는 다음과 같이 소수점을 생략해도 된다. 하지만 이렇게 하지 마라.</p>
+<p><em>Don't</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="kt">float</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">1.f</span><span class="p">;</span>
+<span class="kt">long</span> <span class="kt">double</span> <span class="n">ld</span> <span class="o">=</span> <span class="mf">-.5L</span><span class="p">;</span>
+<span class="kt">double</span> <span class="n">d</span> <span class="o">=</span> <span class="mf">1248e6</span><span class="p">;</span>
+</code></pre></div>
+<p>다음과 같이 소수점을 명확하게 표시하라.</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="kt">float</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">1.0f</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">f2</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>   <span class="c1">// Also OK</span>
+<span class="kt">long</span> <span class="kt">double</span> <span class="n">ld</span> <span class="o">=</span> <span class="mf">-0.5L</span><span class="p">;</span>
+<span class="kt">double</span> <span class="n">d</span> <span class="o">=</span> <span class="mf">1248.0e6</span><span class="p">;</span>
+</code></pre></div>
+</div>
+<h4>Function Calls</h4>
+<p>함수 호출은 하나의 라인에 하라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="kt">bool</span> <span class="n">result</span> <span class="o">=</span> <span class="n">DoSomething</span><span class="p">(</span><span class="n">argument1</span><span class="p">,</span> <span class="n">argument2</span><span class="p">,</span> <span class="n">argument3</span><span class="p">);</span>
+</code></pre></div>
+</div>
+<p>하지만 <code>80</code> 문자를 넘어간다면 파라미터를 다음 라인으로 내리고 첫번째 파라미터의 <strong>indentation</strong> 에 맞춰라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="kt">bool</span> <span class="n">result</span> <span class="o">=</span> <span class="n">DoSomething</span><span class="p">(</span><span class="n">averyveryveryverylongargument1</span><span class="p">,</span>
+                          <span class="n">argument2</span><span class="p">,</span> <span class="n">argument3</span><span class="p">);</span>
+</code></pre></div>
+</div>
+<p>첫번째 파라미터도 한 줄에 표현할 수 없다면 다음과 같이 공백 <code>4</code> 개로 파라미터들을 <strong>indent</strong> 해라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="kt">bool</span> <span class="n">result</span> <span class="o">=</span> <span class="n">DoSomething</span><span class="p">(</span>
+    <span class="n">argument1</span><span class="p">,</span> <span class="n">argument2</span><span class="p">,</span>  <span class="c1">// 4 space indent</span>
+    <span class="n">argument3</span><span class="p">,</span> <span class="n">argument4</span><span class="p">);</span>
+</code></pre></div>
+</div>
+<p>어떤 변수의 의미가 명백하지 않다면 다음과 같이 새로운 변수에 저장하여 그 의미를 변수 이름으로 보여줘라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span> <span class="n">my_heuristic</span> <span class="o">=</span> <span class="n">scores</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">*</span> <span class="n">y</span> <span class="o">+</span> <span class="n">bases</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+<span class="kt">bool</span> <span class="n">result</span> <span class="o">=</span> <span class="n">DoSomething</span><span class="p">(</span><span class="n">my_heuristic</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">);</span>
+</code></pre></div>
+</div>
+<p>변수의 구조가 의미에 영향을 준다면 다음과 같이 구조를 표현할 수 있도록 자유롭게 포맷팅을 해라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Transform the widget by a 3x3 matrix.</span>
+<span class="n">my_widget</span><span class="p">.</span><span class="n">Transform</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">x3</span><span class="p">,</span>
+                    <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">y3</span><span class="p">,</span>
+                    <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">z3</span><span class="p">);</span>
+</code></pre></div>
+</div>
+<h4>Braced Initializer List Format</h4>
+<p>(일단 pass)</p>
+<h4>Conditionals</h4>
+<p><code>if-else</code> 문을 사용할 때 <code>if</code> 문 다음에 공백을 하나 둬라.</p>
+<p><code>else</code> 문은 <code>{</code> 와 같은 라인에 써라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="p">(</span><span class="n">condition</span><span class="p">)</span> <span class="p">{</span>  <span class="c1">// no spaces inside parentheses</span>
+  <span class="p">...</span>  <span class="c1">// 2 space indent.</span>
+<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(...)</span> <span class="p">{</span>  <span class="c1">// The else goes on the same line as the closing brace.</span>
+  <span class="p">...</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+  <span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<p>조건을 표현하는 <code>(...)</code> 에 공백을 두지 마라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="p">(</span><span class="n">condition</span><span class="p">)</span> <span class="p">{</span>  <span class="c1">// Good - proper space after IF and before {.</span>
+</code></pre></div>
+<p><em>Don't</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">if</span><span class="p">(</span><span class="n">condition</span><span class="p">)</span> <span class="p">{</span>   <span class="c1">// Bad - space missing after IF.</span>
+<span class="k">if</span> <span class="p">(</span> <span class="n">condition</span> <span class="p">)</span> <span class="p">{</span> <span class="c1">// Bad - space between the parentheses and the condition</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">condition</span><span class="p">){</span>   <span class="c1">// Bad - space missing before {.</span>
+<span class="k">if</span><span class="p">(</span><span class="n">condition</span><span class="p">){</span>    <span class="c1">// Doubly bad.</span>
+</code></pre></div>
+</div>
+<p>조건문이 매우 간단하고 <code>else</code> 를 쓰지 않을 때에만 조건문을 한줄에 써라. </p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="n">kFoo</span><span class="p">)</span> <span class="k">return</span> <span class="k">new</span> <span class="n">Foo</span><span class="p">();</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="n">kBar</span><span class="p">)</span> <span class="k">return</span> <span class="k">new</span> <span class="n">Bar</span><span class="p">();</span>
+</code></pre></div>
+<p>다음의 조건문은 <code>else</code> 가 있으므로 한줄로 쓰면 안된다.</p>
+<p><em>Don't</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Not allowed - IF statement on one line when there is an ELSE clause</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">DoThis</span><span class="p">();</span>
+<span class="k">else</span> <span class="nf">DoThat</span><span class="p">();</span>
+</code></pre></div>
+</div>
+<p>조건문의 코드가 <code>1</code> 줄이라면 중괄호 <code>{ ... }</code> 를 쓰지 않아도 된다. 하지만 어떤 프로젝트에서 중괄호를 쓰기로 약속했다면 그것을 지켜라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>다음 두 형태 모두 가능하다.</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="p">(</span><span class="n">condition</span><span class="p">)</span>
+  <span class="n">DoSomething</span><span class="p">();</span>  <span class="c1">// 2 space indent.</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">condition</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">DoSomething</span><span class="p">();</span>  <span class="c1">// 2 space indent.</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<p>하지만 <code>if-else</code> 중 어느 하나라도 중괄호를 쓰면 모두 중괄호를 붙혀라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Don't</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Not allowed - curly on IF but not ELSE</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">condition</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">foo</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">else</span>
+  <span class="n">bar</span><span class="p">;</span>
+
+<span class="c1">// Not allowed - curly on ELSE but not IF</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">condition</span><span class="p">)</span>
+  <span class="n">foo</span><span class="p">;</span>
+<span class="k">else</span> <span class="p">{</span>
+  <span class="n">bar</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Curly braces around both IF and ELSE required because</span>
+<span class="c1">// one of the clauses used braces.</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">condition</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">foo</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+  <span class="n">bar</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<h4>Loops and Switch Statements</h4>
+<p><code>switch</code> 문의 <code>case</code> 들은 공백 <code>2</code> 개로 <strong>indent</strong> 하고 모두 중괄호로 묶어라.</p>
+<p><code>case</code> 의 코드는 마찬가지로 공백 <code>2</code> 개로 <strong>indent</strong> 하면 된다.</p>
+<p><code>switch-case</code> 에는 반드시 <code>default</code> 를 둬라. 만약 <code>default</code> 가 절대로 존재해서는 안된다면 <code>assert(false)</code> 등으로 에러를 발생시켜라.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Do</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">switch</span> <span class="p">(</span><span class="n">var</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">case</span> <span class="mi">0</span><span class="o">:</span> <span class="p">{</span>  <span class="c1">// 2 space indent</span>
+    <span class="p">...</span>      <span class="c1">// 4 space indent</span>
+    <span class="k">break</span><span class="p">;</span>
+<span class="p">}</span>
+  <span class="k">case</span> <span class="mi">1</span><span class="o">:</span> <span class="p">{</span>
+    <span class="p">...</span>
+    <span class="k">break</span><span class="p">;</span>
+<span class="p">}</span>
+  <span class="k">default</span><span class="o">:</span> <span class="p">{</span>
+    <span class="n">assert</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<h4>Pointer and Reference Expressions</h4>
+<h4>Boolean Expressions</h4>
+<h4>Return Values</h4>
+<h4>Variable and Array Initialization</h4>
+<h4>Preprocessor Directives</h4>
+<h4>Class Format</h4>
+<h4>Constructor Initializer Lists</h4>
+<h4>Namespace Formatting</h4>
+<h4>Horizontal Whitespace</h4>
+<h5>General</h5>
+<h5>Loops and Conditionals</h5>
+<h5>Operators</h5>
+<h5>Templates and Casts</h5>
+<h4>Vertical Whitespace</h4>
+<hr />
+<h2 id="exceptions-to-the-rules">Exceptions to the Rules<a class="headerlink" href="#exceptions-to-the-rules" title="Permanent link">&para;</a></h2>
+<h4>Existing Non-conformant Code</h4>
+<h4>Windows Code</h4>
+<hr />
+<h2 id="parting-words">Parting Words<a class="headerlink" href="#parting-words" title="Permanent link">&para;</a></h2>
+<hr />
+<h2 id="_1">총평<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>Google C++ Style Guide 는 코딩 경험이 부족한 우리에게 전 세계 1티어 개발자들의 경험을 흡수할 수 있게 해주었다. 다른 언어 개발자도 한번쯤 읽어서 구글 개발자들의 경험적 산물을 배워갈만한 정말 좋은 가이드이다. 우리는 곧바로 <a href="https://github.com/WICWIU/WICWIU"><strong>WICWIU</strong></a> 에 Google C++ Style Guide 를 적용시키고 싶다.</p>
+<p>하지만 Google C++ Style Guide 는 이미 언급했듯이 너무 단순하고 당연해서 굳이 언급하지 않아도 되는 코딩 컨벤션은 정말로 언급하지 않았다. 가령 <code>goto</code> 문이 매우 안좋은 코드라는 것은 널리 알려져 있으므로 언급하지 않았다. 하지만 <code>goto</code> 문을 쓰지 말라는 규칙을 명시해두어야 할 정도로 우리 학부생들은 코딩 경험이 극히 부족하다. </p>
+<p>그렇기 때문에 사소하고 불필요해 보여도 안좋은 코드를 안좋은 코드라고 알리기 위하여 몇 가지 코딩 컨벤션을 추가할 필요가 있다. </p>
+<ul>
+<li>
+<p>변수를 선언할 때 모든 변수를 mutable 로 하고 예외적으로 immutable 로 선언하는 것이 아니라, 모든 변수를 immutable 로 선언하고 예외적으로 mutable 로 선언해라.</p>
+</li>
+<li>
+<p>함수와 메소드를 선언할 때 모든 함수를 non-const 로 선언하고 예외적으로 const 를 선언하는 것이 아니라 모든 함수를 const 로 선언하고 예외적으로 non-const 를 선언해라.</p>
+</li>
+<li>
+<p>클래스를 선언할 때 모든 멤버 변수를 public 으로 선언하고 예외적으로 private 으로 선언하는 것이 아니라 모든 것을 private 으로 선언하고 예외적으로 public 으로 선언해라. </p>
+</li>
+<li>
+<p>추상 클래스의 추상 메소드라면 <code>= 0;</code> 또는 <code>= delete;</code> 또는 <code>= default;</code> 로써 클래스를 생성 불가능하게 만들어라.</p>
+</li>
+<li>
+<p>하나의 함수는 하나의 기능만 해야 한다.</p>
+</li>
+<li>
+<p>매직 넘버를 사용하면 안된다. <code>0</code> 이나 <code>1</code> 까지는 허용한다. 물론 테스트 코드에서는 매직 넘버를 사용해도 좋다.</p>
+</li>
+</ul>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../step1-1/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  이전
+                </span>
+                About Coding Convention
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../../../write/markdown/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  다음
+                </span>
+                Step 1. Markdown 파일
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2018-2020 HGU DL Lab
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+        
+        
+      
+      <a href="https://github.com/WICWIU" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/vendor.6a3d08fc.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.71201edf.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "search.config.lang": "en", "search.config.pipeline": " ", "search.config.separator": "[\\s\\-]+", "search.placeholder": "\uac80\uc0c9", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../../..",
+          features: [],
+          search: Object.assign({
+            worker: "../../../assets/javascripts/worker/search.4ac00218.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.js"></script>
+      
+        <script src="../../../javascripts/config.js"></script>
+      
+        <script src="../../../javascripts/all.js"></script>
+      
+    
+  </body>
+</html>

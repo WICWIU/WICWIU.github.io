@@ -580,7 +580,7 @@ public:
 
     어쨌든 `Tensorholder` 의 아웃풋이 이 클래스 즉, `my_CNN` 이 되고, `my_CNN` 의 인풋이 텐서홀더가 된다.
 
-- 6:
+- 7:
 
     ```cpp 
     template<typename DTYPE>
@@ -629,9 +629,9 @@ public:
         }
     ```
 
-    좀 전에 생성한 `28, 28` 형상 데이터와 입력 채널 `1`, 출력 채널 `10`, $3 \times 3$ 커널, 스트라이드 $s = 1$, 패딩 $p = 0$ 으로 합성곱 계층을 만든다.
+    좀 전에 생성한 `28, 28` 형상 데이터와 입력 채널 `1`, 출력 채널 `10`, $3 \times 3$ 커널, 스트라이드 $s = 1 \times 1$, 패딩 $p = 0$ 으로 합성곱 계층을 만든다.
 
-    ```cpp 
+    ```cpp linenums="1"
     template<typename DTYPE> class ConvolutionLayer2D : public Module<DTYPE>{
         int Alloc(Operator<DTYPE> *pInput, int pNumInputChannel, int pNumOutputChannel, int pNumKernelRow, int pNumKernelCol, int pStrideRow, int pStrideCol, int pPaddingRow, int pPaddingCol, int use_bias, std::string pName) {
             this->SetInput(pInput);
@@ -657,7 +657,7 @@ public:
     
     - 5:
 
-        `\mu = 0.0, \sigma = 0.02` 로 생성된 랜덤값으로 가중치 커널을 생성한다.
+        $\mu = 0.0, \sigma = 0.02$ 로 생성된 랜덤값으로 가중치 커널을 생성한다.
     
     - 6:
 
@@ -721,3 +721,136 @@ public:
     - 12:
 
         마지막으로 `AnalyzeGraph` 를 호출하고 끝낸다.
+
+        ```cpp  linenums="1"
+        template<typename DTYPE> Operator<DTYPE> *Module<DTYPE>::AnalyzeGraph(Operator<DTYPE> *pResultOperator) {
+            Container<Operator<DTYPE> *> queue;
+            queue.Push(pResultOperator);
+
+            m_pLastOperator = pResultOperator;
+            Container<Operator<DTYPE> *> *nextOp = NULL;
+            Container<Operator<DTYPE> *> *prevOp = NULL;
+
+            int numOfInputEdge                   = 0;
+            Operator<DTYPE> *out = NULL;
+            while (queue.GetSize() > 0) {
+                out = queue.Pop();
+
+                if (!(this->IsInput(out))) {
+                    if (this->IsValid(out)) {
+                        if (out->GetIsTensorholder()) {
+                            this->SetParameter(out);
+                        } else {
+                            this->SetExecutableOperater(out);
+                        }
+
+                        nextOp         = out->GetInputContainer();
+                        numOfInputEdge = nextOp->GetSize();
+
+                        for (int i = 0; i < numOfInputEdge; i++) {
+                            prevOp = (*nextOp)[i]->GetOutputContainer();
+                            prevOp->Pop(out);
+                            queue.Push((*nextOp)[i]);
+                        }
+                    } else continue;
+                } else continue;
+            }
+            m_aaExcutableOperator->Reverse();
+            return pResultOperator;
+        }
+        ```
+
+        `AnalyzeGraph` 는 주석에 따르면 다음과 같은 기능을 한다.
+
+        !!! cite "comment"
+        
+            학습 가능한 형태로 모듈 그래프를 구성해주는 메소드
+
+            모듈의 Output에 해당하는 Operator를 매개변수로 받아 너비 우선 탐색으로 모듈 그래프를 구성한다.
+
+            매개변수로 받은 모듈의 Output에 해당하는 Operator를 시작으로 모듈의 Input에 해당하는 Operator까지 역순으로, Operator가 Input Tensor 및 학습 파라미터인 경우 Module 클래스의 Input Container 멤버 변수에 추가하고 나머지 경우에는 Module 클래스의 Excutable Operator Container 멤버 변수에 추가한다.
+
+            NeuralNetwork 클래스의 Excutable Operator Container 멤버 변수에 Operator들이 모두 추가되면 Container를 역순으로 변경한다.
+
+            Operator 탐색 순서는 너비 우선 탐색을 따르며, 매개변수로 받은 Output Operator부터 해당 Operator의 Input Operator 리스트를 너비 우선 탐색 방식을 이용해 순서대로 진행한다.
+
+            각 Operator들은 Module<DTYPE>::IsValid(Operator<DTYPE> *pOperator) 메소드를 이용하여 모듈 그래프 안에서의 중복 여부를 확인하며 중복되는 경우 그래프에 추가하지 않는다.
+
+        메소드 이름과 다르게 `this->SetExecutableOperater(out);` 는 `Set` 기능을 하는 것이 아니라 `Add` 기능, 즉 `Push` 기능을 한다. 그러므로 결국 컨테이너 `m_aaExcutableOperator` 에 실행가능한 `Operator` 를 쭉 넣어주게 된다.
+
+
+        `this->SetParameter(out);` 도 마찬가지로 파라미터인 `Operator` 를 `m_apParameter` 에 `Add` 해준다.
+
+        22:
+
+            `nextOp         = out->GetInputContainer();` 로 `out` 의 인풋 컨테이너에 존재하는 `Operator` 들을 `nextOp` 에 저장하고 다시 큐에 저장한다. 
+
+            ```cpp 
+            template<typename DTYPE> class ConvolutionLayer2D : public Module<DTYPE>{
+            int Alloc(Operator<DTYPE> *pInput, int pNumInputChannel, int pNumOutputChannel, int pNumKernelRow, int pNumKernelCol, int pStrideRow, int pStrideCol, int pPaddingRow, int pPaddingCol, int use_bias, std::string pName) {
+                this->SetInput(pInput);
+                ...
+            ```
+
+            위 코드의 `SetInput` 에서 `pInput` 이 저장된 것이 나오게 된다. `pInput` 은 `out = new ReShape<float>(x, 28, 28, "Flat2Image");` 에서 온 것이었다. 이 `pInput` 이 다시 
+
+            ```cpp 
+            out = new Convolution2D<DTYPE>(out, pWeight, pStrideRow, pStrideCol, pPaddingRow, pPaddingCol, "Convolution2D_Convolution2D_" + pName);
+            ```
+
+            로 들어갔다가 `AnalyzeGraph` 로 들어간 것이었다. 
+
+            다시.. `Convolution2D` 에서는 
+
+            ```cpp 
+            Convolution2D(Operator<DTYPE> *pInput, Operator<DTYPE> *pWeight, int stride1, int stride2, std::string pName = "NO NAME", int pLoadflag = TRUE) : Operator<DTYPE>(pInput, pWeight, pName, pLoadflag) {
+                Alloc(pInput, pWeight, stride1, stride2, 0, 0);
+            }
+            ```
+
+            이게 호출 되고, 이에 따라 `Operator` 에서 
+
+            ```cpp 
+            template<typename DTYPE> Operator<DTYPE>::Operator(Operator<DTYPE> *pInput0, Operator<DTYPE> *pInput1, std::string pName, int pLoadflag) {
+                ...
+                Alloc();
+                AddEdgebetweenOperators(2, pInput0, pInput1, pLoadflag);
+            }
+            ```
+
+            이게 호출 되고, 
+
+            ```cpp 
+            template<typename DTYPE> int Operator<DTYPE>::AddEdgebetweenOperators(Operator<DTYPE> *pInput) {
+                this->AddInputEdge(pInput);
+                pInput->AddOutputEdge(this);
+                return TRUE;
+            }
+            ```
+
+            이게 호출되고
+
+            ```cpp 
+            template<typename DTYPE> int Operator<DTYPE>::AddInputEdge(Operator<DTYPE> *pInput) {
+                ...
+                    m_apInput->Push(pInput);
+                ...
+            }
+            ```
+
+            이게 호출된다. 
+            
+            일단 `SetInput` 도 마찬가지로 `Set` 기능이 아니라 `Add` 기능을 하는 메소드였었다.
+
+            그러니까 정리하자면 맨 처음에 `ConvolutionLayer2D` 의 `SetInput` 을 통해 `ConvolutionLayer2D` 객체의 `m_apInput` 에 전달된 `ReShape` 객체인 `pInput` 이 `Push` 되었고, `Convolution2D` 의 상위클래스 `Operator` 의 생성자 속의 `AddEdgebetweenOperators` 속의 `AddInputEdge` 에 `pInput` 에 저장되어 있던 `ReShape` 객체인 `out` 전달되는데, 이것이 `Convolution2D` 객체의 `m_apInput` 에 `Push` 되고, `ReShape` 객체의 `m_apOutput` 에 `Convolution2D` 가 `Push` 된다.
+
+            !!! danger
+            
+                데이터 구조를 좀 심플하게 만들 필요가 있어보이는데, 중복으로 `Push` 하는 부분도 많아 보이고, 그래서 `isValid` 를 호출해야만 하는 것 같고,
+
+                상속 구조도 코드 분석을 난해하게 만드는 불필요한 상속관계가 많은 것 같다.k
+
+                전체적인 구조가 단순할 수 있는데, 불필요하게 너무 복잡해진 것 같고, 중복 로직이 너무 많고, 불필요한 로직도 너무 많아 보인다. 이러면 코드 관리가 계속 계속 힘들어지게 된다. 
+
+            어쨌든 결국 `Convolution2D` 의 `GetInputContainer` 를 통해 `ReShape` 객체가 나오게 된다. 
+            
